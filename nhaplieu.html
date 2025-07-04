@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dịch Vụ Nhập Liệu - Word Chuyên Nghiệp</title>
+  <meta name="description" content="Dịch vụ nhập liệu, đánh văn bản Word từ ảnh, PDF, scan, viết tay. Uy tín, chính xác, giá rẻ.">
+  <link rel="icon" href="GD.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.8), rgba(59, 130, 246, 0.8));
+      backdrop-filter: blur(8px);
+    }
+    .card-hover {
+      transition: 0.3s;
+    }
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    .nav-link {
+      position: relative;
+      cursor: pointer;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -2px;
+      left: 0;
+      background: white;
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    .btn-primary {
+      background: #2563eb;
+      transition: 0.3s;
+    }
+    .btn-primary:hover {
+      background: #1e40af;
+      transform: translateY(-2px);
+    }
+    #modal {
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+<!-- HEADER -->
+<header class="gradient-bg text-white sticky top-0 z-50 shadow-md">
+  <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+    <div class="flex items-center">
+      <img src="GD.png" alt="Logo" class="h-10 w-10 mr-3">
+      <span class="text-xl font-bold">Dịch Vụ Nhập Liệu</span>
+    </div>
+    <nav class="hidden md:block">
+      <ul class="flex space-x-8">
+        <li><a href="#home" class="nav-link px-2 py-4">Trang chủ</a></li>
+        <li><a href="#services" class="nav-link px-2 py-4">Dịch vụ</a></li>
+        <li><a href="#pricing" class="nav-link px-2 py-4">Bảng giá</a></li>
+        <li><a href="#contact" class="nav-link px-2 py-4">Liên hệ</a></li>
+      </ul>
+    </nav>
+    <button id="menu-toggle" class="md:hidden text-white focus:outline-none">
+      <i class="fas fa-bars text-2xl"></i>
+    </button>
+  </div>
+  <div id="mobile-menu" class="hidden md:hidden bg-blue-800 pb-4 px-6">
+    <a href="#home" class="block py-2 text-white">Trang chủ</a>
+    <a href="#services" class="block py-2 text-white">Dịch vụ</a>
+    <a href="#pricing" class="block py-2 text-white">Bảng giá</a>
+    <a href="#contact" class="block py-2 text-white">Liên hệ</a>
+  </div>
+</header>
+<!-- HERO -->
+<section id="home" class="text-white pt-20 pb-32 bg-cover bg-center relative" style="background-image: url('nhan-vien-nhap-lieu-2.png');">
+  <div class="absolute inset-0 bg-black bg-opacity-50 z-0"></div>
+  <div class="relative z-10 container mx-auto px-6 flex flex-col md:flex-row items-center">
+    <div class="md:w-1/2 mb-12 md:mb-0">
+      <h1 class="text-4xl md:text-5xl font-bold mb-6">DỊCH VỤ NHẬP LIỆU CHUYÊN NGHIỆP</h1>
+      <p class="text-xl mb-8">Chuyển ảnh chụp, PDF, viết tay thành Word trong vài giờ</p>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <button onclick="openModal()" class="bg-white text-blue-600 px-8 py-4 rounded-full font-bold hover:bg-blue-50 transition shadow-lg">
+          <i class="fas fa-phone-alt mr-2"></i> Liên hệ ngay
+        </button>
+        <a href="#services" class="border-2 border-white text-white px-8 py-4 rounded-full font-bold hover:bg-white hover:text-blue-600 transition">
+          <i class="fas fa-list-ul mr-2"></i> Xem dịch vụ
+        </a>
+      </div>
+    </div>
+    <div class="md:w-1/2">
+      <img src="https://placehold.co/800x600/2563eb/ffffff?text=DỊCH+VỤ+NHẬP+LIỆU" alt="Ảnh mô tả" class="rounded-xl shadow-2xl w-full transform hover:scale-105 transition duration-500">
+    </div>
+  </div>
+</section>
+<br>
+<br>
+<!-- STATS -->
+<section class="py-12 bg-white -mt-16">
+  <div class="container mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+    <div class="bg-blue-50 rounded-xl p-6">
+      <div class="text-4xl font-bold text-blue-600 counter" data-target="36">36</div>
+      <div class="text-gray-600">Trang đã xử lý</div>
+    </div>
+    <div class="bg-blue-50 rounded-xl p-6">
+      <div class="text-4xl font-bold text-blue-600 counter" data-target="99">99</div>
+      <div class="text-gray-600">Độ chính xác</div>
+    </div>
+    <div class="bg-blue-50 rounded-xl p-6">
+      <div class="text-4xl font-bold text-blue-600 counter" data-target="24">24</div>
+      <div class="text-gray-600">Hỗ trợ 24/7</div>
+    </div>
+    <div class="bg-blue-50 rounded-xl p-6">
+      <div class="text-4xl font-bold text-blue-600 counter" data-target="2">2</div>
+      <div class="text-gray-600">Xử lý nhanh nhất</div>
+    </div>
+  </div>
+</section>
+<!-- SERVICES -->
+<section id="services" class="py-20 bg-gray-50">
+  <div class="container mx-auto px-6 text-center">
+    <h2 class="text-3xl font-bold mb-4">Chúng Tôi Nhận Nhập Liệu Từ</h2>
+    <p class="text-gray-600 mb-12">Ảnh chụp, viết tay, văn bản tiếng Việt,... đảm bảo chính xác</p>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="card-hover bg-white rounded-lg shadow-md p-6" data-aos="fade-up">
+        <h3 class="text-xl font-semibold mb-4">Ảnh & PDF</h3>
+        <p class="text-gray-600">Chuyển ảnh, file PDF sang Word chính xác, đẹp mắt.</p>
+      </div>
+      <div class="card-hover bg-white rounded-lg shadow-md p-6" data-aos="fade-up" data-aos-delay="100">
+        <h3 class="text-xl font-semibold mb-4">Viết tay</h3>
+        <p class="text-gray-600">Gõ lại từ chữ viết tay rõ ràng, đầy đủ ngữ pháp.</p>
+      </div>
+      <div class="card-hover bg-white rounded-lg shadow-md p-6" data-aos="fade-up" data-aos-delay="200">
+        <h3 class="text-xl font-semibold mb-4">Văn bản khác</h3>
+        <p class="text-gray-600">Đề thi, báo cáo, giáo án, nội quy,... đều nhận làm.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- PRICING -->
+<section id="pricing" class="py-20 bg-white">
+  <div class="container mx-auto px-6 text-center">
+    <h2 class="text-3xl font-bold mb-4">Bảng Giá Dịch Vụ</h2>
+    <p class="text-gray-600 mb-12">Giá rõ ràng – Giao đúng hẹn</p>
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="price-card bg-gray-50 rounded-lg shadow-md p-6 text-left" data-aos="fade-up">
+        <h3 class="text-xl font-semibold mb-4">Dịch vụ tiêu chuẩn</h3>
+        <ul class="list-disc list-inside mb-4 text-gray-700">
+          <li>File dễ đọc: <strong>3.000đ/trang</strong></li>
+          <li>PDF rõ nét: <strong>4.000đ/trang</strong></li>
+          <li>Viết tay rõ: <strong>5.000đ/trang</strong></li>
+        </ul>
+        <p class="text-gray-600">Giảm giá khi làm số lượng lớn!</p>
+      </div>
+      <div class="price-card bg-gray-50 rounded-lg shadow-md p-6 text-left" data-aos="fade-up" data-aos-delay="100">
+        <h3 class="text-xl font-semibold mb-4">Dịch vụ gấp</h3>
+        <ul class="list-disc list-inside mb-4 text-gray-700">
+          <li>Trong 2-4 giờ: +50%</li>
+          <li>Trong ngày: +30%</li>
+          <li>Ngoài giờ: +20%</li>
+        </ul>
+        <p class="text-gray-600">Liên hệ để có giá tốt nhất!</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- CONTACT -->
+<section id="contact" class="py-20 bg-gray-50">
+  <div class="container mx-auto px-6 text-center">
+    <h2 class="text-3xl font-bold mb-4">Liên Hệ Đặt Dịch Vụ</h2>
+    <p class="text-gray-600 mb-6">Chúng tôi luôn hỗ trợ 24/7!</p>
+    <div class="bg-white rounded-lg shadow-md p-6 max-w-lg mx-auto text-left">
+      <p class="text-gray-600"><strong>Zalo:</strong> 0937 648 921</p>
+      <p class="text-gray-600"><strong>Email:</strong> vyk103736@gmail.com</p>
+      <p class="text-gray-600"><strong>Facebook:</strong> <a href="https://facebook.com/khanhpc548" class="text-blue-600">facebook.com/khanhpc548</a></p>
+    </div>
+  </div>
+</section>
+<!-- FOOTER -->
+<footer class="bg-gray-800 text-white py-6 text-center">
+  <p>&copy; <span id="year"></span> Dịch Vụ Nhập Liệu. KHANHPC.</p>
+</footer>
+<!-- MODAL -->
+<div id="modal" class="fixed hidden items-center justify-center">
+  <div class="bg-white p-6 rounded-lg shadow-lg text-center max-w-sm">
+    <h3 class="text-xl font-semibold mb-2">Liên hệ ngay</h3>
+    <p>Zalo: <strong>0937 648 921</strong></p>
+    <p>Email: <strong>vyk103736@gmail.com</strong></p>
+    <p>Facebook: <a href="https://facebook.com/khanhpc548" class="text-blue-600">khanhpc548</a></p>
+    <button onclick="closeModal()" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Đóng</button>
+  </div>
+</div>
+<!-- SCRIPTS -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init();
+  document.getElementById('menu-toggle').onclick = () => {
+    document.getElementById('mobile-menu').classList.toggle('hidden');
+  };
+  function openModal() {
+    document.getElementById('modal').style.display = 'flex';
+  }
+  function closeModal() {
+    document.getElementById('modal').style.display = 'none';
+  }
+  // Counter tăng giảm tự nhiên
+  document.addEventListener('DOMContentLoaded', () => {
+    const counters = document.querySelectorAll('.counter');
+    counters.forEach(counter => {
+      let target = +counter.dataset.target;
+      let current = target;
+      const min = target * 0.95;
+      const max = target * 1.05;
+      setInterval(() => {
+        const delta = Math.floor(Math.random() * 7) - 3;
+        current += delta;
+        if (current < min) current = min;
+        if (current > max) current = max;
+        counter.innerText = Math.round(current);
+      }, 3000);
+    });
+    document.getElementById('year').innerText = new Date().getFullYear();
+  });
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+</body>
+</html>
