@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ủng hộ KHANHPC</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="GD.png">
+  <style>
+/* NỀN VÀ BODY */
+body {
+  font-family: 'Quicksand', sans-serif;
+  background: linear-gradient(-45deg, #1f1c2c, #928dab, #2c3e50, #4b6cb7);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  color: #fff;
+  text-align: center;
+  padding: 60px 20px 100px;
+  margin: 0;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* TIÊU ĐỀ VÀ ĐOẠN MỞ */
+h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  color: #ffe600;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+p {
+  font-size: 1.2rem;
+  max-width: 700px;
+  margin: 0 auto 40px;
+  color: #f0f0f0;
+  line-height: 1.7;
+}
+
+/* NÚT BẤM */
+.button {
+  background: linear-gradient(135deg, #ffd700, #ffea61);
+  color: #000;
+  padding: 14px 36px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  box-shadow: 0 8px 16px rgba(255, 204, 0, 0.4);
+}
+
+.button:hover {
+  background: #fff700;
+  transform: scale(1.07);
+}
+
+/* MODAL POPUP */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  overflow-y: auto;
+}
+
+.modal-content {
+  background: linear-gradient(to bottom right, #2c2c3c, #3a3a4f);
+  margin: 50px auto;
+  padding: 30px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 460px;
+  animation: fadeIn 0.4s ease-out;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+/* EFFECT MODAL HIỆN LÊN */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* FORM INPUT */
+input[type="email"], input[type="text"] {
+  margin-top: 15px;
+  padding: 12px 18px;
+  width: 85%;
+  border-radius: 10px;
+  border: none;
+  font-size: 1rem;
+  outline: none;
+  background: #444;
+  color: #fff;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* QR BOX */
+.qr-option {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 25px;
+}
+
+.qr-box {
+  background: #3b3b3b;
+  padding: 14px;
+  border-radius: 14px;
+  width: 150px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.qr-box:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 12px #ffd700;
+}
+
+.qr-box img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.qr-label {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #ffe600;
+}
+
+/* ĐÓNG MODAL */
+.close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* CẢM ƠN + LỖI */
+.thankyou {
+  margin-top: 20px;
+  color: #00ffae;
+  font-weight: bold;
+  display: none;
+}
+
+.error {
+  margin-top: 10px;
+  color: #ff6666;
+  font-weight: bold;
+  display: none;
+}
+
+/* LOADER */
+.loader {
+  margin-top: 15px;
+  display: none;
+}
+
+.loader span {
+  width: 10px;
+  height: 10px;
+  margin: 0 4px;
+  background: #ffcc00;
+  border-radius: 50%;
+  display: inline-block;
+  animation: bounce 0.6s infinite alternate;
+}
+
+.loader span:nth-child(2) { animation-delay: 0.2s; }
+.loader span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+  to { transform: translateY(-10px); }
+}
+
+/* QUAY LÔ ĐỀ ẢO */
+.lottery-box {
+  margin-top: 30px;
+  background: #383858;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 0 10px #00000050;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.lottery-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.2rem;
+  margin-top: 10px;
+}
+
+.lottery-loading span {
+  width: 10px;
+  height: 10px;
+  background: #ffcc00;
+  border-radius: 50%;
+  animation: bounce 0.6s infinite alternate;
+}
+
+.lottery-loading span:nth-child(2) { animation-delay: 0.2s; }
+.lottery-loading span:nth-child(3) { animation-delay: 0.4s; }
+
+/* FOOTER */
+footer {
+  margin-top: 60px;
+  color: #bbb;
+  font-size: 0.9rem;
+}
+
+/* THANH THÔNG BÁO SCROLLING */
+@keyframes scroll-infinite {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-25%); }
+}
+#google_translate_element select {
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: none;
+  background: #ffe600;
+  font-weight: bold;
+  color: black;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+  </style>
+  <script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'vi',
+      includedLanguages: 'vi,en,ja,zh-CN,fr,de,ko,ru',
+      layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
+    }, 'google_translate_element');
+  }
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+</head>
+<body>
+
+  <div style="position: fixed; top: 0; left: 0; width: 100%; z-index: 999999;">
+    <div id="notification-bar" style="
+      width: 100%;
+      background-color: #ffcc00;
+      color: #000;
+      font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
+      height: 40px;
+      line-height: 40px;
+      border-bottom: 2px solid #cc9900;
+      box-sizing: border-box;
+      position: relative;">
+      <div id="scrolling-wrapper" style="
+        display: inline-block;
+        white-space: nowrap;
+        will-change: transform;
+        animation: scroll-infinite 30s linear infinite;">
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Đôi khi css của web sẽ bị mất. Nếu các bạn muốn làm web thì có thể liên hệ mình qua website: 
+      <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com</a>
+       © KHANHPC 2025| mọi quyền được bảo lưu
+    </span>
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Đôi khi css của web sẽ bị mất. Nếu các bạn muốn làm web thì có thể liên hệ mình qua website: 
+      <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com</a>
+       © KHANHPC 2025| mọi quyền được bảo lưu
+    </span>
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Đôi khi css của web sẽ bị mất. Nếu các bạn muốn làm web thì có thể liên hệ mình qua website: 
+      <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com</a>
+       © KHANHPC 2025| mọi quyền được bảo lưu
+    </span>
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Đôi khi css của web sẽ bị mất. Nếu các bạn muốn làm web thì có thể liên hệ mình qua website: 
+      <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com</a>
+       © KHANHPC 2025| mọi quyền được bảo lưu
+    </span>
+      </div>
+    </div>
+  </div>
+
+  <h1>Ủng hộ KHANHPC</h1>
+  <p>
+    Hãy chung tay đóng góp dù chỉ <strong>1.000đ</strong> để giúp mình phát triển những công cụ hữu ích hơn nữa cho cộng đồng.  
+    Mình sẽ gửi lời cảm ơn thật chân thành đến email của bạn! 💌
+  </p>
+<div id="google_translate_element" style="position: fixed; top: 60px; right: 10px;"></div>
+
+
+  <button class="button" onclick="openModal()">Ủng hộ ngay</button>
+
+  <!-- Modal -->
+  <div id="donateModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2>Chọn phương thức ủng hộ</h2>
+
+      <input type="email" id="emailInput" placeholder="Nhập email để nhận lời cảm ơn..." />
+      <input type="text" id="nameInput" placeholder="Tên của bạn (tùy chọn)" />
+
+      <div class="qr-option">
+<div class="qr-box" onclick="sendMail(); showQRFull('momo.png')">
+  <img src="momo.png" alt="QR Momo">
+  <div class="qr-label">Momo</div>
+</div>
+
+<div class="qr-box" onclick="sendMail(); showQRFull('MB.png')">
+  <img src="MB.png" alt="QR MB Bank">
+  <div class="qr-label">MB Bank</div>
+</div>
+
+      </div>
+
+      <div class="loader" id="loader">
+        <span></span><span></span><span></span>
+      </div>
+
+      <div class="thankyou" id="thankyou">🥰 Cảm ơn bạn! Mail cảm ơn đã được gửi!</div>
+      <div class="error" id="error"></div>
+
+      <div class="lottery-box" id="lotteryBox" style="display:none;">
+        <h3>🎰 Bốc thăm may mắn</h3>
+        <button class="button" onclick="spinWheel()">Quay ngay!</button>
+        <div id="lotteryResult">
+  <div class="lottery-loading" id="lotteryLoading" style="display:none;">
+    <span></span><span></span><span></span>
+  </div>
+  <div id="lotteryText" style="margin-top: 10px;"></div>
+</div>
+
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © KHANHPC 2025 | mọi quyền được bảo lưu
+  </footer>
+
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>
+    (function () {
+      emailjs.init("SI-SA_hjEX5usPFaU"); // Thay bằng public key thật
+    })();
+
+    function openModal() {
+      document.getElementById("donateModal").style.display = "block";
+      document.body.style.overflow = "hidden";
+      const savedEmail = localStorage.getItem("email_khanhpc");
+      if (savedEmail) document.getElementById("emailInput").value = savedEmail;
+    }
+
+    function closeModal() {
+      document.getElementById("donateModal").style.display = "none";
+      document.getElementById("thankyou").style.display = "none";
+      document.getElementById("error").style.display = "none";
+      document.getElementById("loader").style.display = "none";
+      document.getElementById("lotteryBox").style.display = "none";
+      document.getElementById("lotteryResult").innerText = "";
+      document.body.style.overflow = "auto";
+    }
+
+    function sendMail() {
+      const email = document.getElementById("emailInput").value.trim();
+      const name = document.getElementById("nameInput").value.trim() || "bạn";
+      const thankyou = document.getElementById("thankyou");
+      const error = document.getElementById("error");
+      const loader = document.getElementById("loader");
+
+      thankyou.style.display = "none";
+      error.style.display = "none";
+      loader.style.display = "inline-block";
+
+      if (!email.includes("@")) {
+        loader.style.display = "none";
+        error.innerText = "📧 Email chưa hợp lệ. Nhập lại đi bạn yêu!";
+        error.style.display = "block";
+        return;
+      }
+
+      const templateParams = {
+        email: email,
+        name: name,
+        message: "Cảm ơn bạn đã donate cho KHANHPC! 🥹"
+      };
+
+      emailjs.send("service_2nj86md", "template_3tfld2s", templateParams)
+        .then(() => {
+          loader.style.display = "none";
+          thankyou.style.display = "block";
+          document.getElementById("lotteryBox").style.display = "block";
+          localStorage.setItem("email_khanhpc", email);
+          document.getElementById("emailInput").value = "";
+          document.getElementById("nameInput").value = "";
+        }, (err) => {
+          loader.style.display = "none";
+          console.error(err);
+          error.innerText = "❌ Gửi mail thất bại rồi Khánh ơi. Thử lại sau nha!";
+          error.style.display = "block";
+        });
+    }
+
+function spinWheel() {
+  const loading = document.getElementById("lotteryLoading");
+  const resultText = document.getElementById("lotteryText");
+  const name = document.getElementById("nameInput").value.trim() || "bạn";
+
+  const prizes = [
+    "💖 Sticker 'KHANHPC siêu cấp cute'",
+    "🔥 Mã giảm giá 100% vào tim tui",
+    "🎉 Lời chúc may mắn đặc biệt từ admin",
+    "🧧 Lì xì tinh thần: 'Bạn là người tuyệt vời nhất hôm nay'",
+    "🫰 1 cái ôm ảo siêu to",
+    "🍍 Một quả dứa tình bạn (ảo nhưng ngọt)",
+    "🍬 Kẹo ngọt ảo không đường – tốt cho sức khỏe",
+    "🎶 Một bài hát KHANHPC tặng trong tưởng tượng",
+    "📸 Tấm ảnh ảo 'bạn và admin đang bắt tay'",
+    "📦 Gói quà bí ẩn (mở ra thấy... niềm vui)",
+    "🧸 Một con gấu bông pixel size 1x1",
+    "💌 Một tin nhắn crush trả lời (trong mơ)",
+    "🎲 Bạn được quay thêm lần nữa (nhưng hệ thống không cho)",
+    "🥇 Danh hiệu 'fan cứng của ngày'",
+    "🧙‍♂️ Một lời chúc phép màu từ admin pháp sư",
+    "🛸 Vé một chiều đến hành tinh KHANHPC",
+    "🖼 Chữ ký ảo 'Admin Khánh cute nhất hệ mặt trời'",
+    "👑 Vương miện ảo dành cho người chơi may mắn nhất",
+    "🐧 Một con chim cánh cụt biết nhảy (trong trí tưởng tượng)",
+    "🌈 Một cái cầu vồng không có mưa – chỉ có bạn",
+    "💎 Viên kim cương tinh thần – sáng lấp lánh lòng bạn",
+    "🎁 Thêm 1 lượt donate ảo miễn phí 😎",
+    "🥗 Một dĩa salad cảm xúc hỗn hợp: vui + tự hào",
+    "🧼 Cục xà phòng rửa trôi mọi muộn phiền",
+    "☕ Ly cà phê KHANHPC pha – không caffeine nhưng đủ tỉnh táo",
+    "🚀 Vé du hành thời gian quay lại lúc bạn chưa bấm donate",
+    "📚 1 trang bí kíp lập trình (được gió cuốn bay...)",
+    "🥁 Âm thanh trống hồi hộp nhưng không phát ra loa",
+    "👀 Cặp mắt soi code giúp bạn fix bug nhanh hơn",
+    "🧠 10% boost IQ (chưa kiểm chứng)",
+    "🫡 Cái gật đầu tôn trọng từ vũ trụ KHANHPC"
+  ];
+
+  resultText.innerText = ""; // Clear kết quả cũ
+  loading.style.display = "flex";
+
+  setTimeout(() => {
+    const random = Math.floor(Math.random() * prizes.length);
+    loading.style.display = "none";
+    resultText.innerText = `🎁 ${name} đã trúng:\n${prizes[random]}`;
+  }, 1500);
+}
+
+function showQRFull(imageSrc) {
+  document.getElementById("qrFullImage").src = imageSrc;
+  document.getElementById("qrFullModal").style.display = "block";
+  document.body.style.overflow = "hidden";
+}
+
+function closeQRModal() {
+  document.getElementById("qrFullModal").style.display = "none";
+  document.body.style.overflow = "auto";
+}
+
+  </script>
+  <!-- Modal hiển thị ảnh lớn -->
+<div id="qrFullModal" class="modal" onclick="closeQRModal()">
+  <div class="modal-content" style="max-width: 95%; max-height: 95%;">
+    <span class="close" onclick="closeQRModal()">&times;</span>
+   <img id="qrFullImage" src="" style="max-width: 90vw; max-height: 90vh; width: auto; height: auto; border-radius: 12px; transition: transform 0.2s ease;" />
+  </div>
+</div>
+<script>
+  let zoomLevel = 1;
+
+  window.onload = function () {
+    const qrImage = document.getElementById("qrFullImage");
+
+    qrImage.addEventListener("wheel", function (e) {
+      e.preventDefault();
+      const delta = Math.sign(e.deltaY);
+      if (delta < 0) {
+        zoomLevel += 0.1;
+      } else if (delta > 0) {
+        zoomLevel = Math.max(0.5, zoomLevel - 0.1);
+      }
+      qrImage.style.transform = `scale(${zoomLevel})`;
+    });
+  };
+
+  function showQRFull(imageSrc) {
+    document.getElementById("qrFullImage").src = imageSrc;
+    zoomLevel = 1; // reset lại zoom khi mở ảnh
+    document.getElementById("qrFullImage").style.transform = "scale(1)";
+    document.getElementById("qrFullModal").style.display = "block";
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeQRModal() {
+    document.getElementById("qrFullModal").style.display = "none";
+    document.body.style.overflow = "auto";
+  }
+</script>
+
+</body>
+</html>

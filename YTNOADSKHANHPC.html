@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>YT NO ADS|KHANHPC</title>
+  <script src="https://www.google.com/recaptcha/api.js?render=6Le1rRYrAAAAAKt07uCfmbqyogPZGvZlUtomhKCX&hl=vi"></script>
+  <link rel="icon" type="image/png" href="GD.png">
+  <style>
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: 'Roboto', Arial, sans-serif;
+  background: #f0f2f5;
+  color: #333;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: #3a86ff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+a:hover {
+  color: #1e6ed4;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  background: #ffffff;
+  padding: 15px 30px;
+  box-shadow:
+    5px 5px 15px #d1d9e6,
+    -5px -5px 15px #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  z-index: 10;
+  border-radius: 0 0 18px 18px;
+}
+header h1 {
+  font-weight: 800;
+  font-size: 24px;
+  color: #ef476f;
+  margin: 0;
+  user-select: none;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  filter: drop-shadow(0 1px 1px rgba(239, 71, 111, 0.25));
+}
+
+#searchForm {
+  flex: 1;
+  display: flex;
+  background: #e0e5ec;
+  border-radius: 35px;
+  box-shadow:
+    inset 5px 5px 10px #bec8d2,
+    inset -5px -5px 10px #ffffff;
+  overflow: hidden;
+}
+#query {
+  flex: 1;
+  padding: 14px 24px;
+  font-size: 16px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #4a4a4a;
+  font-weight: 500;
+}
+#query::placeholder {
+  color: #9aa5b1;
+  font-style: italic;
+}
+#query:focus {
+  box-shadow:
+    inset 2px 2px 5px #b0b8c1,
+    inset -2px -2px 5px #ffffff;
+}
+
+#searchBtn {
+  background: #ef476f;
+  border: none;
+  color: white;
+  padding: 0 28px;
+  font-weight: 700;
+  border-radius: 0 35px 35px 0;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    5px 5px 15px #d6365a,
+    -5px -5px 15px #ff7693;
+  transition: background-color 0.3s ease, transform 0.15s ease;
+}
+#searchBtn:hover {
+  background: #d63b5d;
+  box-shadow:
+    3px 3px 10px #b13051,
+    -3px -3px 10px #ff587a;
+  transform: scale(1.05);
+}
+#searchBtn:active {
+  transform: scale(0.95);
+}
+
+main {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 0 20px;
+  position: relative;
+}
+
+#player {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #121212;
+  margin-bottom: 25px;
+  display: none;
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow:
+    8px 8px 24px #0b0b0b,
+    -8px -8px 24px #1c1c1c;
+  transition: opacity 0.3s ease;
+}
+#player iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+#videos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 28px;
+}
+
+.video-item {
+  cursor: pointer;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #e0e5ec;
+  box-shadow:
+    8px 8px 15px #bec8d2,
+    -8px -8px 15px #ffffff;
+  transition: box-shadow 0.4s ease, transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+.video-item:hover {
+  box-shadow:
+    5px 5px 20px #a2afbe,
+    -5px -5px 20px #ffffff;
+  transform: translateY(-6px);
+}
+
+.thumbnail {
+  width: 100%;
+  display: block;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: #cbd3df;
+  border-bottom: 1px solid #d7dde6;
+  transition: filter 0.3s ease;
+}
+.video-item:hover .thumbnail {
+  filter: brightness(0.93);
+}
+
+.video-info {
+  padding: 16px 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.video-title {
+  font-weight: 700;
+  font-size: 17px;
+  color: #3a3a3a;
+  margin-bottom: 8px;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.3s ease;
+}
+.video-item:hover .video-title {
+  color: #ef476f;
+}
+
+.channel-title {
+  font-size: 14px;
+  color: #6e7a8a;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+#backBtn {
+  display: none;
+  cursor: pointer;
+  color: #3a86ff;
+  font-weight: 700;
+  margin-bottom: 18px;
+  user-select: none;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+#backBtn.visible {
+  display: block;
+}
+#backBtn:hover {
+  color: #1e6ed4;
+}
+
+#loading {
+  text-align: center;
+  padding: 20px;
+  font-size: 15px;
+  color: #8c95a1;
+  user-select: none;
+  font-style: italic;
+}
+
+/* Nút Top */
+#btnTop {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #ef476f;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow:
+    5px 5px 15px #d6365a,
+    -5px -5px 15px #ff7693;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  z-index: 20;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+#btnTop:hover {
+  background-color: #d63b5d;
+  transform: scale(1.1);
+}
+#btnTop:active {
+  transform: scale(0.95);
+}
+body.dark {
+  background: #121212;
+  color: #eee;
+}
+
+body.dark header {
+  background: #1f1f1f;
+  box-shadow: none;
+}
+
+body.dark #searchForm {
+  background: #2a2a2a;
+  box-shadow: none;
+}
+
+body.dark #query {
+  color: #fff;
+}
+
+body.dark #query::placeholder {
+  color: #bbb;
+}
+
+body.dark #searchBtn {
+  background: #bb2649;
+  box-shadow: none;
+}
+
+body.dark #searchBtn:hover {
+  background: #991d3b;
+}
+
+body.dark .video-item {
+  background: #2a2a2a;
+  box-shadow: none;
+}
+
+body.dark .video-title {
+  color: #fff;
+}
+
+body.dark .channel-title {
+  color: #aaa;
+}
+
+body.dark #player {
+  background: #000;
+}
+
+body.dark #btnTop {
+  background: #bb2649;
+}
+
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>YT NO ADS</h1>
+
+
+  <form id="searchForm" autocomplete="off">
+    <input id="query" type="text" placeholder="Tìm kiếm video trên YouTube..." />
+    <button id="searchBtn" type="submit">Tìm</button>
+  </form>
+  <button id="darkModeToggle" title="Chuyển chế độ sáng/tối" style="margin-left:auto; background:#ef476f; color:white; border:none; padding:10px 16px; border-radius:10px; cursor:pointer; font-weight:700;">
+  🌙 Tối
+</button>  
+</header>
+
+<main>
+  <div id="player">
+    
+    <iframe src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
+  <div id="backBtn">← Quay lại</div>
+  <div id="videos"></div>
+  <div id="loading" style="display:none;">Đang tải thêm video...</div>
+</main>
+
+<!-- Nút Top -->
+<button id="btnTop" title="Lên đầu trang">↑</button>
+
+<script>
+  const API_KEY = 'AIzaSyCtcH0CeJ4fUwPoSfdidQJDUhfU3dVMbGA'; // Thay API key của bạn
+  const form = document.getElementById('searchForm');
+  const queryInput = document.getElementById('query');
+  const videosDiv = document.getElementById('videos');
+  const playerDiv = document.getElementById('player');
+  const iframe = playerDiv.querySelector('iframe');
+  const backBtn = document.getElementById('backBtn');
+  const loadingDiv = document.getElementById('loading');
+  const btnTop = document.getElementById('btnTop');
+
+  let nextPageToken = null;
+  let currentQuery = '';
+  let isLoading = false;
+  let isSearching = false;
+
+  // Các video random: Khi load trang, ta sẽ lấy video phổ biến nhưng chọn ngẫu nhiên 24 video trong số đó mỗi lần load
+  // Mỗi lần load thêm random video, ta sẽ lấy 50 video phổ biến rồi lấy ngẫu nhiên 24 video trong đó
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    currentQuery = queryInput.value.trim();
+    nextPageToken = null;
+    videosDiv.innerHTML = '';
+    if (!currentQuery) {
+      isSearching = false;
+      loadRandomPopularVideos();
+    } else {
+      isSearching = true;
+      searchVideos(currentQuery);
+    }
+  });
+
+  backBtn.addEventListener('click', () => {
+    playerDiv.style.display = 'none';
+    videosDiv.style.display = 'grid';
+    backBtn.classList.remove('visible');
+    iframe.src = '';
+    history.pushState(null, '', location.pathname);
+  });
+
+  async function loadRandomPopularVideos() {
+    if (isLoading) return;
+    isLoading = true;
+    loadingDiv.style.display = 'block';
+    try {
+      let url = `https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=50&regionCode=VN&key=${API_KEY}`;
+      if(nextPageToken) url += `&pageToken=${nextPageToken}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.error) {
+        alert('Lỗi API: ' + data.error.message);
+        loadingDiv.style.display = 'none';
+        isLoading = false;
+        return;
+      }
+      nextPageToken = data.nextPageToken || null;
+
+      // Lấy 24 video ngẫu nhiên trong số 50 video này
+      let shuffled = data.items.sort(() => 0.5 - Math.random());
+      let selectedVideos = shuffled.slice(0, 24);
+
+      displayVideos(selectedVideos, false);
+    } catch (error) {
+      alert('Lỗi tải dữ liệu video hot.');
+      console.error(error);
+    }
+    loadingDiv.style.display = 'none';
+    isLoading = false;
+  }
+
+  async function searchVideos(query) {
+    if (isLoading) return;
+    isLoading = true;
+    loadingDiv.style.display = 'block';
+    try {
+      let url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=24&type=video&q=${encodeURIComponent(query)}&key=${API_KEY}`;
+      if(nextPageToken) url += `&pageToken=${nextPageToken}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.error) {
+        alert('Lỗi API: ' + data.error.message);
+        loadingDiv.style.display = 'none';
+        isLoading = false;
+        return;
+      }
+      nextPageToken = data.nextPageToken || null;
+
+      displayVideos(data.items, true);
+    } catch (error) {
+      alert('Lỗi tìm kiếm video.');
+      console.error(error);
+    }
+    loadingDiv.style.display = 'none';
+    isLoading = false;
+  }
+
+  function displayVideos(videos, isSearchResult) {
+    for (const video of videos) {
+      let vid, snippet;
+      if (isSearchResult) {
+        vid = video.id.videoId;
+        snippet = video.snippet;
+      } else {
+        vid = video.id;
+        snippet = video.snippet;
+      }
+      const div = document.createElement('div');
+      div.className = 'video-item';
+      div.innerHTML = `
+        <img class="thumbnail" src="${snippet.thumbnails.medium.url}" alt="${snippet.title}" />
+        <div class="video-info">
+          <div class="video-title">${snippet.title}</div>
+          <div class="channel-title">${snippet.channelTitle}</div>
+        </div>
+      `;
+      div.addEventListener('click', () => openVideo(vid));
+      videosDiv.appendChild(div);
+    }
+  }
+
+  function openVideo(videoId) {
+    playerDiv.style.display = 'block';
+    videosDiv.style.display = 'none';
+    backBtn.classList.add('visible');
+    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+    history.pushState(null, '', `?v=${videoId}`);
+  }
+
+  // Khi load trang, nếu url có ?v= thì mở video luôn, nếu không thì load random video
+  window.addEventListener('load', () => {
+    const params = new URLSearchParams(location.search);
+    const v = params.get('v');
+    if (v) {
+      openVideo(v);
+    } else {
+      isSearching = false;
+      nextPageToken = null;
+      videosDiv.innerHTML = '';
+      loadRandomPopularVideos();
+    }
+  });
+
+  // Scroll infinite load
+  window.addEventListener('scroll', () => {
+    // Hiện nút top khi cuộn > 300px
+    if(window.scrollY > 300) {
+      btnTop.style.display = 'flex';
+    } else {
+      btnTop.style.display = 'none';
+    }
+
+    if (isLoading) return;
+    if (playerDiv.style.display === 'block') return; // ko load khi đang xem video
+    if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 500)) {
+      if (isSearching) {
+        searchVideos(currentQuery);
+      } else {
+        loadRandomPopularVideos();
+      }
+    }
+  });
+
+  // Nút top
+  btnTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Bắt sự kiện back trình duyệt để thoát video
+  window.addEventListener('popstate', () => {
+    if (playerDiv.style.display === 'block') {
+      playerDiv.style.display = 'none';
+      videosDiv.style.display = 'grid';
+      backBtn.classList.remove('visible');
+      iframe.src = '';
+    }
+  });
+</script>
+<script>
+// Dark mode toggle
+const darkToggleBtn = document.getElementById('darkModeToggle');
+
+// Hàm áp dụng chế độ tối/sáng
+function applyTheme(theme) {
+  if (theme === 'dark') {
+    document.body.classList.add('dark');
+    darkToggleBtn.textContent = '☀️ Sáng';
+  } else {
+    document.body.classList.remove('dark');
+    darkToggleBtn.textContent = '🌙 Tối';
+  }
+}
+
+// Kiểm tra chế độ đã lưu
+const savedTheme = localStorage.getItem('theme') || 'light';
+applyTheme(savedTheme);
+
+// Khi người dùng nhấn nút
+darkToggleBtn.addEventListener('click', () => {
+  const newTheme = document.body.classList.contains('dark') ? 'light' : 'dark';
+  localStorage.setItem('theme', newTheme);
+  applyTheme(newTheme);
+});
+</script>
+
+</body>
+</html>

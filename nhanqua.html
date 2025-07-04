@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+    <title>Nhận Quà</title>
+      <script src="https://www.google.com/recaptcha/api.js?render=6Le1rRYrAAAAAKt07uCfmbqyogPZGvZlUtomhKCX&hl=vi"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      <link rel="icon" type="image/png" href="GD.png"/>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle, #ff758c, #ff7eb3);
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+
+        #gift-btn {
+            padding: 15px 30px;
+            font-size: 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        #gift-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        #jum-video {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            pointer-events: none;
+        }
+
+        #video-container {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            cursor: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+        }
+        /* Đối với Chrome, Safari */
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* Ẩn thanh cuộn nhưng vẫn có thể cuộn */
+html, body {
+    overflow: hidden;
+}
+
+body {
+    overflow-y: scroll;
+}
+
+    </style>
+</head>
+<body>
+
+    <button id="gift-btn">🎁 Nhận Quà Từ Khánh</button>
+
+    <div id="video-container" style="display: none;">
+        <video id="jum-video" playsinline loop disablePictureInPicture controlslist="nodownload nofullscreen noremoteplayback">
+            <source src="jum.mp4" type="video/mp4">
+            Trình duyệt không hỗ trợ video.
+        </video>
+    </div>
+<script>
+    document.getElementById("gift-btn").addEventListener("click", function() {
+        let progress = 0;
+        let randomTime = Math.floor(Math.random() * (10000 - 6000 + 1)) + 6000; // Ngẫu nhiên từ 6s - 10s
+        let stepTime = randomTime / 100; // Chia nhỏ thời gian tải thành 100 bước để hiển thị từng số %
+
+        Swal.fire({
+            title: "🎁 Đang chờ Khánh xác nhận",
+            html: '<p><i>Bạn đã nhận quà chưa!</i></p><div id="progress-container" style="width: 100%; background: #222; height: 15px; border-radius: 7px; overflow: hidden;">' +
+                  '<div id="progress-bar" style="width: 0%; height: 15px; background: #4CAF50; transition: width 0.2s;"></div></div>' +
+                  '<p id="progress-text" style="font-weight: bold; margin-top: 5px;">0%</p>',
+            showConfirmButton: false,
+            timer: randomTime,
+            didOpen: () => {
+                let interval = setInterval(() => {
+                    if (progress < 100) {
+                        progress++;
+                        document.getElementById("progress-bar").style.width = progress + "%";
+                        document.getElementById("progress-text").textContent = progress + "%";
+                    } else {
+                        clearInterval(interval);
+                    }
+                }, stepTime);
+            }
+        }).then(() => {
+            Swal.fire({
+                title: "✨ Bạn chưa nhận quà!",
+                text: "Bạn có muốn nhận món quà đầu tiên từ Khánh?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Nhận Quà 🎁",
+                cancelButtonText: "Hủy ❌"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let video = document.getElementById("jum-video");
+                    document.getElementById("video-container").style.display = "block";
+                    video.style.display = "block";
+
+                    if (document.documentElement.requestFullscreen) {
+                        document.documentElement.requestFullscreen();
+                    } else if (document.documentElement.mozRequestFullScreen) {
+                        document.documentElement.mozRequestFullScreen();
+                    } else if (document.documentElement.webkitRequestFullscreen) {
+                        document.documentElement.webkitRequestFullscreen();
+                    } else if (document.documentElement.msRequestFullscreen) {
+                        document.documentElement.msRequestFullscreen();
+                    }
+
+                    video.play();
+                }
+            });
+        });
+    });
+    document.addEventListener("keydown", function(event) {
+    if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
+    }
+}, true);
+
+</script>
+
+</body>
+</html>

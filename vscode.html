@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>VS Code Trực Tuyến KHÁNHPC</title>
+  <link rel="icon" type="image/png" href="GD.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+      font-family: 'Fira Code', monospace;
+    }
+    .tab-btn.active {
+      background-color: #2563eb !important;
+      border-bottom: 3px solid #60a5fa;
+    }
+    .editor-tab {
+      display: none;
+    }
+    .editor-tab.active {
+      display: block;
+    }
+    #console {
+      font-size: 13px;
+      background-color: #111827;
+      color: #9ca3af;
+      padding: 10px;
+      overflow-y: auto;
+      height: 100px;
+      border-top: 1px solid #374151;
+    }
+    #editorContainer {
+      transition: height 0.5s ease, opacity 0.5s ease;
+    }
+    .hidden {
+      display: none;
+    }
+    #toggleButton {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background-color: #374151;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 1000;
+      transition: transform 0.5s ease;
+    }
+    #toggleButton.active {
+      transform: rotate(360deg); /* Quay đủ 1 vòng */
+      transition: transform 0.5s ease-in-out; /* Hiệu ứng mượt */
+    }
+
+
+  </style>
+</head>
+<body class="bg-gray-900 text-white">
+
+  <div class="flex flex-col h-screen">
+    <!-- Kết quả -->
+    <div id="resultContainer" class="h-1/2 bg-white">
+      <iframe id="preview" class="w-full h-full border-none bg-white text-black"></iframe>
+    </div>
+
+    <!-- Trình soạn thảo -->
+    <div id="editorContainer" class="h-1/2 flex flex-col bg-gray-900">
+      <!-- Tabs và nút -->
+      <div class="flex items-center justify-between bg-gray-800 px-4 py-2">
+        <div class="flex space-x-2">
+          <button class="tab-btn active px-4 py-1 rounded-t text-sm" data-tab="html">index.html</button>
+          <button class="tab-btn px-4 py-1 rounded-t text-sm" data-tab="css">style.css</button>
+          <button class="tab-btn px-4 py-1 rounded-t text-sm" data-tab="js">script.js</button>
+        </div>
+        <div class="space-x-2">
+          <button onclick="updatePreview()" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded">▶️ Chạy lại</button>
+          <button onclick="resetCode()" class="px-3 py-1 bg-yellow-600 hover:bg-yellow-700 text-white text-sm rounded">🔄 Mặc định</button>
+        </div>
+      </div>
+
+      <!-- Editors -->
+      <div id="editors" class="relative flex-1">
+        <div id="html" class="editor-tab active absolute inset-0"></div>
+        <div id="css" class="editor-tab absolute inset-0"></div>
+        <div id="js" class="editor-tab absolute inset-0"></div>
+      </div>
+
+      <!-- Console -->
+      <div id="console" class="text-xs font-mono"></div>
+    </div>
+  </div>
+
+  <!-- Nút Ẩn/Hiện Code -->
+  <button id="toggleButton" onclick="toggleEditorVisibility()">🔲 Ẩn/Hiện Code</button>
+
+  <!-- Monaco Editor -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+  <script>
+    let editors = {};
+    let updatePreview;
+
+    const defaultCode = {
+      html: "<h1>Xin chào</h1> ",
+      css: "body{\nbackground: linear-gradient(135deg, #00e5ff, #ff4081, #8e24aa);\nbackground-size: 400% 400%;\nanimation: gradientBackground 5s ease infinite;\nmargin: 0;\nheight: 100vh;\ndisplay: flex;\njustify-content: center;\nalign-items: center;\noverflow-y: scroll;\n}@keyframes gradientBackground {\n0% { background-position: 0% 50%; }\n50% { background-position: 100% 50%; }\n100% { background-position: 0% 50%; }}",
+      js: "console.log('Hello!');"
+    };
+
+    const preview = document.getElementById("preview");
+    const consoleEl = document.getElementById("console");
+
+    function resetCode() {
+      Object.keys(editors).forEach(lang => {
+        editors[lang].setValue(defaultCode[lang]);
+        localStorage.removeItem("editor_" + lang);
+      });
+      updatePreview();
+    }
+
+
+    function toggleEditorVisibility() {
+      const editorContainer = document.getElementById('editorContainer');
+      const resultContainer = document.getElementById('resultContainer');
+      const toggleButton = document.getElementById('toggleButton');
+
+      // Toggle height of editor container and visibility of result
+      if (editorContainer.style.height === '0px') {
+        editorContainer.style.height = '50%';
+        resultContainer.style.height = '50%';
+      } else {
+        editorContainer.style.height = '0px';
+        resultContainer.style.height = '100%';
+      }
+
+      // Toggle active state for button (animation effect)
+      toggleButton.classList.toggle('active');
+    }
+
+    require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs' }});  
+    require(['vs/editor/editor.main'], function () {
+      ["html", "css", "js"].forEach(lang => {
+        editors[lang] = monaco.editor.create(document.getElementById(lang), {
+          value: localStorage.getItem("editor_" + lang) || defaultCode[lang],
+          language: lang === "js" ? "javascript" : lang,
+          theme: "vs-dark",
+          automaticLayout: true
+        });
+        editors[lang].onDidChangeModelContent(() => {
+          localStorage.setItem("editor_" + lang, editors[lang].getValue());
+          updatePreview();
+        });
+      });
+
+      updatePreview = function () {
+        const html = editors.html.getValue();
+        const css = `<style>${editors.css.getValue()}</style>`;
+        const jsCode = editors.js.getValue();
+        const js = `<script>
+        (function(){
+          const oldLog = console.log;
+          const log = (...args) => {
+            oldLog(...args);
+            parent.postMessage({log: args.join(" ")}, "*");
+          };
+          console.log = log;
+          try { ${jsCode} } catch(e){ log("Lỗi:", e); }
+        })();
+        <\/script>`;
+        const full = html + css + js;
+        const doc = preview.contentDocument || preview.contentWindow.document;
+        doc.open();
+        doc.write(full);
+        doc.close();
+        consoleEl.innerHTML = "";
+      };
+
+      window.addEventListener("message", e => {
+        if (e.data.log) {
+          consoleEl.innerHTML += e.data.log + "<br>";
+          consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+      });
+
+      updatePreview();
+
+      document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+          document.querySelectorAll(".editor-tab").forEach(tab => tab.classList.remove("active"));
+          btn.classList.add("active");
+          document.getElementById(btn.dataset.tab).classList.add("active");
+        });
+      });
+    });
+
+
+
+  </script>
+  
+</body>
+</html>

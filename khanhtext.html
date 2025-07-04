@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+<link rel="icon" type="image/png" href="GD.png">
+<script src="https://www.google.com/recaptcha/api.js?render=6Le1rRYrAAAAAKt07uCfmbqyogPZGvZlUtomhKCX&hl=vi"></script>
+  <title>🤖Khanhpc tạo ảnh🤖</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      background: #1e1e2f;
+      color: #f0f0f0;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Căn giữa theo chiều dọc */
+  min-height: 100vh; /* Đảm bảo không bị mất phần dưới */
+}
+h1 {
+  font-size: 36px;
+}
+
+button {
+  font-size: 18px;
+  padding: 12px 20px;
+}
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: 28px;
+      color: #72f0c7;
+    }
+.container {
+  background: #2b2b3d;
+  border-radius: 12px;
+  padding: 25px;
+  width: 90%; /* Tăng độ rộng lên 90% */
+  max-width: 1200px; /* Cho phép mở rộng tối đa */
+  box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+      color: #ccc;
+    }
+    input[type="file"],
+    input[type="text"],
+    select,
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: none;
+      font-size: 15px;
+    }
+    input[type="text"],
+    select {
+      background: #333;
+      color: #fff;
+    }
+    input[type="file"] {
+      background: #444;
+      color: #fff;
+    }
+    button {
+      background-color: #5cb6ff;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #429be2;
+    }
+    #asciiOutput {
+      background: #000;
+      color: #ddd;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 20px;
+      font-family: monospace;
+      font-size: 7px;
+      line-height: 6.5px;
+      white-space: pre;
+      overflow-x: auto;
+      display: none;
+    }
+    #copyBtn {
+      background-color: #13c68d;
+      margin-top: -10px;
+    }
+    #copyBtn:hover {
+      background-color: #0fa472;
+    }
+    #customFileBtn {
+      display: inline-block;
+      background-color: #5cb6ff;
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+      text-align: center;
+    }
+    #customFileBtn:hover {
+      background-color: #429be2;
+    }
+    #fileName {
+      display: block;
+      margin-top: 8px;
+      font-size: 14px;
+      color: #aaa;
+    }
+    #progress {
+      width: 100%;
+      height: 18px;
+      background: #444;
+      border-radius: 6px;
+      margin-top: 10px;
+      overflow: hidden;
+      display: none;
+    }
+    #bar {
+      height: 100%;
+      background: linear-gradient(90deg, #13c68d, #5cb6ff);
+      width: 0%;
+      transition: width 0.1s;
+    }
+    #notify {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e1e1e;
+      padding: 12px 20px;
+      color: #fff;
+      border-radius: 12px;
+      font-size: 15px;
+      opacity: 0;
+      transition: all 0.4s ease;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    #notify.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-20px);
+    }
+    .copyright {
+    border-radius:100px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 123, 255, 0.95);
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0px -5px 10px rgba(0,0,0,0.2);
+    transition: background 0.3s ease-in-out;
+    animation: bounce 0.5s infinite alternate ease-in-out;
+}
+
+.cat-container {
+    display: none;
+    position: absolute;
+    left: 50%;
+    bottom: 50px;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+.cat-img {
+    width: 100px;
+    animation: bounce 1s infinite alternate ease-in-out;
+}
+
+.speech-bubble {
+    background: white;
+    color: black;
+    padding: 8px 12px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    margin-top: 10px;
+}
+
+@keyframes bounce {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-5px); }
+}
+button:hover {
+  transform: scale(1.025) ;
+  text-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+}
+h1 {
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+h1:hover {
+  transform: scale(1.2) rotate(-10deg);
+  text-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(45deg, #8e24aa, #ff4081, #00e5ff, #ff9800);
+  -webkit-background-clip: text;
+}
+  </style>
+</head>
+<body>
+  <h1>🤖KHANHPC🤖</h1>
+  <h1>🖼️ Tạo ảnh bằng text</h1>
+  <div class="container">
+    <label>📷 Chọn ảnh:</label>
+    <input type="file" id="imageInput" accept="image/*" style="display: none;">
+    <label for="imageInput" id="customFileBtn">📁 Chọn tệp ảnh</label>
+    <span id="fileName">Chưa chọn ảnh</span>
+
+    <label>🔣 Ký tự để xếp ảnh (để trống sẽ random):</label>
+    <input type="text" id="charSet" placeholder="Ví dụ: @#*+=-:. ">
+
+    <label>🔍 Độ phân giải (1 = rõ nhất):</label>
+    <select id="scale">
+      <option value="1">1 (rất rõ - nặng)</option>
+      <option value="2">2</option>
+      <option value="4" selected>4</option>
+      <option value="6">6</option>
+      <option value="8">8</option>
+      <option value="10">10</option>
+    </select>
+
+    <div id="progress"><div id="bar"></div></div>
+    <br>
+
+    <button onclick="generateASCII()">✨ Tạo ASCII</button>
+    <button id="copyBtn" onclick="copyASCII()">📋 Sao chép kết quả</button>
+
+    <pre id="asciiOutput"></pre>
+  </div>
+
+
+
+  <canvas id="canvas" style="display:none;"></canvas>
+          <br>
+          <br>
+
+        <div class="copyright" id="copyright">
+    © KhanhPC 2025 - Mọi quyền được bảo lưu
+    <div class="cat-container" id="cat">
+        <img src="meo.gif" alt="Mèo đáng yêu" class="cat-img">
+        <div class="speech-bubble">Này! Tôi biết bạn đang làm gì... Đây là web của Hoàng Quốc Khánh đấy!</div>
+    </div>
+</div>
+  <script>
+    function showNotification(text) {
+      const notify = document.getElementById('notify');
+      notify.textContent = text;
+      notify.classList.add('show');
+      setTimeout(() => notify.classList.remove('show'), 2000);
+    }
+
+    function generateASCII() {
+      const imageInput = document.getElementById('imageInput');
+      const charSetInput = document.getElementById('charSet').value.trim();
+      const scale = parseInt(document.getElementById('scale').value);
+      const output = document.getElementById('asciiOutput');
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+      const chars = charSetInput || "@#W$9876543210?!abc;:+=-,._ ";
+      const bar = document.getElementById("bar");
+      const progress = document.getElementById("progress");
+
+      if (!imageInput.files[0]) {
+                Swal.fire({
+          icon: 'error',
+          title: '❌Lỗi phân tích',
+          text: 'Vui lòng tải ảnh lên',
+        });
+        return;
+      }
+
+      output.style.display = "none";
+      progress.style.display = "block";
+      bar.style.width = "0%";
+
+      let percent = 0;
+      const loading = setInterval(() => {
+        percent += Math.random() * 5;
+        bar.style.width = Math.min(percent, 100) + "%";
+        if (percent >= 100) {
+          clearInterval(loading);
+          doGenerate();
+        }
+      }, 60);
+
+      function doGenerate() {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = new Image();
+          img.onload = function() {
+            const width = Math.floor(img.width / scale);
+            const height = Math.floor(img.height / scale * 0.5);
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(img, 0, 0, width, height);
+            const imageData = ctx.getImageData(0, 0, width, height).data;
+
+            let ascii = '';
+            for (let y = 0; y < height; y++) {
+              for (let x = 0; x < width; x++) {
+                const offset = (y * width + x) * 4;
+                const r = imageData[offset];
+                const g = imageData[offset + 1];
+                const b = imageData[offset + 2];
+                const avg = (r + g + b) / 3;
+                const charIndex = Math.floor((avg / 255) * (chars.length - 1));
+                ascii += chars[charIndex];
+              }
+              ascii += '\n';
+            }
+
+            output.textContent = ascii;
+            output.style.display = "block";
+            progress.style.display = "none";
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(imageInput.files[0]);
+      }
+    }
+
+
+
+    document.getElementById('imageInput').addEventListener('change', function () {
+      const fileName = this.files[0]?.name || "Chưa chọn ảnh";
+      document.getElementById('fileName').textContent = fileName;
+    });
+    function copyASCII() {
+    const asciiText = document.getElementById("asciiOutput").textContent;
+    navigator.clipboard.writeText(asciiText).then(() => {
+        Swal.fire({
+            icon: 'success',
+            title: '✅ Sao chép thành công!',
+            text: 'ASCII Art đã được sao chép vào clipboard!',
+            showConfirmButton: false,
+            timer: 2000
+        });
+    }).catch(() => {
+        Swal.fire({
+            icon: 'error',
+            title: '❌Lỗi khi sao chép!',
+            text: 'Có gì đó không đúng. Hãy thử lại!'
+        });
+    });
+}
+            document.getElementById("copyright").addEventListener("mouseover", () => {
+    document.getElementById("cat").style.display = "block";
+});
+
+document.getElementById("copyright").addEventListener("mouseleave", () => {
+    document.getElementById("cat").style.display = "none";
+});
+function copyASCII() {
+    const asciiText = document.getElementById("asciiOutput").textContent;
+    
+    if (!asciiText.trim()) {
+        Swal.fire({
+            icon: 'error',
+            title: '❌Lỗi sao chép!',
+            text: 'Bạn còn chưa bấm tạo mà!',
+        });
+        return;
+    }
+
+    navigator.clipboard.writeText(asciiText).then(() => {
+        Swal.fire({
+            icon: 'success',
+            title: '✅Sao chép thành công!',
+            text: 'ASCII Art đã được sao chép vào clipboard!',
+            showConfirmButton: false,
+            timer: 2000
+        });
+    }).catch(() => {
+        Swal.fire({
+            icon: 'error',
+            title: '❌Lỗi khi sao chép!',
+            text: 'Có gì đó không đúng. Hãy thử lại!'
+        });
+    });
+}
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
+    }
+}, true);
+
+  </script>
+</body>
+</html>

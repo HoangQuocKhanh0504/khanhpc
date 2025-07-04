@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chuẩn hóa HTML đẹp hơn</title>
+  <link rel="icon" href="GD.png" type="image/png" />
+  <meta name="description" content="Công cụ chuẩn hóa và làm đẹp mã HTML của bạn với giao diện thân thiện và dễ sử dụng. Chỉ cần dán mã HTML xấu vào, nhấn nút và nhận kết quả ngay lập tức." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <!-- Beautify HTML library -->
+  <script src="https://cdn.jsdelivr.net/npm/js-beautify@1.14.7/js/lib/beautify-html.min.js"></script>
+  <style>
+    /* Tùy chỉnh scrollbar cho textarea */
+    textarea::-webkit-scrollbar {
+      width: 10px;
+    }
+    textarea::-webkit-scrollbar-thumb {
+      background-color: #3b82f6; /* màu xanh */
+      border-radius: 6px;
+    }
+    textarea::-webkit-scrollbar-track {
+      background: #e5e7eb; /* xám nhạt */
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-r from-blue-50 via-white to-blue-50 min-h-screen flex items-center justify-center p-6 font-sans">
+  <div class="w-full max-w-5xl bg-white rounded-xl shadow-xl p-8 space-y-6">
+    <h1 class="text-4xl font-extrabold text-blue-700 drop-shadow-md text-center">Beautify &amp; Chuẩn hóa HTML</h1>
+
+    <section>
+      <label for="input" class="block text-lg font-semibold mb-2 text-gray-700">Dán đoạn HTML cần xử lý:</label>
+      <textarea
+        id="input"
+        placeholder="Dán HTML xấu vào đây..."
+        class="w-full h-64 p-4 border-2 border-blue-300 rounded-lg resize-none focus:outline-none focus:ring-4 focus:ring-blue-400 transition"
+      ></textarea>
+    </section>
+
+    <div class="flex justify-center">
+      <button
+        onclick="beautifyHtml()"
+        class="bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg shadow-md hover:bg-blue-700 active:scale-95 transition-transform"
+      >
+        Beautify HTML
+      </button>
+    </div>
+
+    <section>
+      <h2 class="text-2xl font-semibold mb-3 text-green-600 border-b-2 border-green-400 pb-1">HTML đã chuẩn hóa:</h2>
+      <textarea
+        id="output"
+        readonly
+        class="w-full h-96 p-4 border-2 border-green-300 rounded-lg resize-none bg-green-50 font-mono text-sm text-gray-800"
+      ></textarea>
+    </section>
+    <footer style="
+  left: 0;
+  width: 100%;
+  background-color: #222;
+  color: #eee;
+  text-align: center;
+  padding: 15px 0;
+  font-weight: 600;
+  font-size: 16px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.3);
+  border-radius:10px;
+  
+">
+  © KHANHPC 2025| mọi quyền được bảo lưu
+</footer>
+  </div>
+
+
+
+  <script>
+    function beautifyHtml() {
+      const inputHtml = document.getElementById('input').value;
+
+      const beautifiedBody = html_beautify(inputHtml, {
+        indent_size: 2,
+        wrap_line_length: 120,
+        preserve_newlines: true,
+        end_with_newline: true,
+      });
+
+      const fullHtml = `<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HTML Chuẩn Hóa</title>
+</head>
+<body>
+${beautifiedBody}
+</body>
+</html>`;
+
+      document.getElementById('output').value = fullHtml;
+    }
+  </script>
+  
+</body>
+</html>

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Xoá nhiều repository GitHub</title>
+  <link rel="icon" href="GD.png">
+<iframe id="notification-frame"
+  style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    border: none;
+    z-index: 9999;
+    pointer-events: none; /* Không ảnh hưởng tới thao tác web chính */
+    overflow: hidden; /* 🔥 Dòng quan trọng để ẩn thanh cuộn */
+  "
+></iframe>
+
+<script>
+  const iframe = document.getElementById('notification-frame');
+  const doc = iframe.contentDocument || iframe.contentWindow.document;
+
+  doc.open();
+  doc.write(`
+    <style>
+      @keyframes scroll-infinite {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-25%); }
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* 🔥 Ẩn thanh cuộn bên trong iframe */
+      }
+    </style>
+    <div id="notification-bar" style="
+        width: 100%;
+        background-color: #ffcc00;
+        color: #000;
+        font-weight: bold;
+        white-space: nowrap;
+        overflow: hidden;
+        height: 40px;
+        line-height: 40px;
+        border-bottom: 2px solid #cc9900;
+        box-sizing: border-box;
+        position: relative;
+        font-family: sans-serif;
+    ">
+      <div id="scrolling-wrapper" style="
+          display: inline-block;
+          white-space: nowrap;
+          will-change: transform;
+          animation: scroll-infinite 30s linear infinite;
+      ">
+        <span style="padding-right: 50px;">
+          Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Đôi khi css của web sẽ bị mất. Nếu các bạn muốn làm web thì có thể liên hệ mình qua website: 
+          <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com</a>
+           © KHANHPC 2025| mọi quyền được bảo lưu
+        </span>
+        <span style="padding-right: 50px;">
+          Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Đôi khi css của web sẽ bị mất. Nếu các bạn muốn làm web thì có thể liên hệ mình qua website: 
+          <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com</a>
+           © KHANHPC 2025| mọi quyền được bảo lưu
+        </span>
+        <span style="padding-right: 50px;">
+          Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Đôi khi css của web sẽ bị mất. Nếu các bạn muốn làm web thì có thể liên hệ mình qua website: 
+          <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com</a>
+           © KHANHPC 2025| mọi quyền được bảo lưu
+        </span>
+        <span style="padding-right: 50px;">
+          Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Đôi khi css của web sẽ bị mất. Nếu các bạn muốn làm web thì có thể liên hệ mình qua website: 
+          <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com</a>
+           © KHANHPC 2025| mọi quyền được bảo lưu
+        </span>
+      </div>
+    </div>
+  `);
+  doc.close();
+</script>
+<br>
+<br>
+<script>
+function applyTheme(theme) {
+  if (theme === 'auto') {
+    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  } else {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }
+}
+
+
+  function changeTheme(value) {
+    localStorage.setItem('theme', value);
+    applyTheme(value);
+  }
+
+  function initTheme() {
+    const saved = localStorage.getItem('theme') || 'auto';
+    document.getElementById('themeSelector').value = saved;
+    applyTheme(saved);
+
+    // Nếu là auto, cập nhật realtime theo OS
+    if (saved === 'auto') {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        applyTheme('auto');
+      });
+    }
+  }
+
+  // Gọi khi load trang
+  document.addEventListener('DOMContentLoaded', initTheme);
+</script>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class'
+  };
+</script>
+
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-thumb { background: #9ca3af; border-radius: 4px; }
+    ::-webkit-scrollbar-track { background: #f3f4f6; }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-blue-100 to-green-100 dark:from-gray-900 dark:to-black text-gray-800 dark:text-gray-100 min-h-screen p-6">
+    <!-- Modal xem repo -->
+<div id="previewModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center z-50 overflow-y-auto">
+  <div class="bg-white dark:bg-gray-800 text-black dark:text-white rounded-xl max-w-xl w-full mt-10 shadow-lg p-6 relative">
+    <button onclick="togglePreview()" class="absolute top-2 right-2 text-xl font-bold text-red-500">&times;</button>
+    <h2 class="text-xl font-bold mb-4">🔍 Xem trước repository</h2>
+    <div id="previewContent" class="space-y-3 text-sm"></div>
+  </div>
+</div>
+
+  <div class="max-w-3xl mx-auto bg-white dark:bg-gray-800 shadow-2xl p-8 rounded-2xl border border-gray-200 dark:border-gray-700">
+    <h1 class="text-3xl font-bold mb-6 text-center">🗑️ Xoá nhiều repository GitHub</h1>
+
+    <div class="space-y-4">
+      <input id="username" type="text" placeholder="👤 Nhập GitHub username"
+        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+      <input id="token" type="password" placeholder="🔑 Nhập Personal Access Token (PAT)"
+        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+        <div class="text-right mt-2">
+  <button onclick="toggleToken()" class="text-sm text-blue-500 hover:underline">👁️ Hiện/Ẩn Token</button>
+</div>
+    </div>
+
+    <div class="flex flex-wrap gap-3 mt-6 justify-center">
+      <button onclick="loadRepos()" class="bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-700 shadow">📂 Tải repo</button>
+      <button onclick="toggleGuide()" class="bg-gray-600 text-white px-5 py-2 rounded-full hover:bg-gray-700 shadow">📘 Hướng dẫn PAT</button>
+      <button onclick="toggleUsage()" class="bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700 shadow">📖 Hướng dẫn sử dụng</button>
+            <select id="themeSelector" onchange="changeTheme(this.value)"
+        class="bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 border border-gray-300 dark:border-gray-600 px-4 py-2 rounded-full shadow focus:outline-none">
+        <option value="auto">⚙️ Tự động</option>
+        <option value="light">🌞 Sáng</option>
+        <option value="dark">🌙 Tối</option>
+      </select>
+    </div>
+
+    <!-- Chọn tất cả -->
+    <div class="flex items-center justify-between mt-6 mb-2">
+      <label class="flex items-center gap-2">
+        <input type="checkbox" id="checkAll" class="form-checkbox text-blue-600 dark:bg-gray-700" onchange="toggleAllCheckboxes(this)">
+        <span class="text-sm">Chọn tất cả</span>
+      </label>
+      <span class="text-sm">🔢 Đã chọn: <span id="selectedCount">0</span></span>
+      <span class="text-sm">📦 Tổng: <span id="totalCount">0</span></span>
+    </div>
+<div class="mt-6">
+  <input type="text" id="filterInput" placeholder="🔍 Lọc repo theo từ khoá..."
+    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+    oninput="filterRepos()" />
+</div>
+
+    <!-- Danh sách repo -->
+    <div id="repoList" class="space-y-3 bg-gray-50 dark:bg-gray-900 p-4 rounded-lg max-h-[400px] overflow-y-auto border border-gray-200 dark:border-gray-700 shadow-inner"></div>
+
+    <button onclick="deleteSelectedRepos()" class="mt-6 w-full bg-red-600 text-white px-5 py-3 rounded-lg hover:bg-red-700 shadow-lg">❌ Xoá tất cả repo đã chọn</button>
+    <button onclick="backupRepos()" class="mt-3 w-full bg-indigo-600 text-white px-5 py-2 rounded-lg hover:bg-indigo-700 shadow">📁 Backup danh sách repo</button>
+  </div>
+
+    <!-- Modal hướng dẫn lấy PAT -->
+<div id="guideModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex justify-center z-50 overflow-y-auto">
+  <div class="bg-white dark:bg-gray-800 text-black dark:text-white pt-0 px-6 pb-6 rounded-xl max-w-2xl w-full overflow-y-auto max-h-screen mt-6 shadow-xl">
+    <h2 class="text-xl font-bold sticky top-0 z-10 py-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-600">
+      📘 Hướng dẫn lấy Personal Access Token (PAT)
+    </h2>
+      <ol class="list-decimal pl-6 space-y-4 text-sm mt-4">
+        <li>Truy cập <a href="https://github.com/settings/tokens" target="_blank" class="text-blue-500 underline">https://github.com/settings/tokens</a><br><img src="1.png" class="mt-2 rounded border"></li>
+        <li>Nhấn <strong>Generate new token</strong><br><img src="2.png" class="mt-2 rounded border"></li>
+        <li>Chọn <strong>Generate new token (classic)</strong><br><img src="3.png" class="mt-2 rounded border"></li>
+        <li>Đăng nhập GitHub<br><img src="4.png" class="mt-2 rounded border"></li>
+        <li>Nhập tên, chọn <strong>No expiration</strong><br><img src="5.png" class="mt-2 rounded border"></li>
+        <li>Tích quyền:<ul class="list-disc pl-5"><li><strong>repo</strong> (tất cả mục con)</li><li><strong>delete_repo</strong></li></ul><img src="6.png" class="mt-2 rounded border"><img src="6.1.png" class="mt-2 rounded border"></li>
+        <li>Nhấn <strong>Generate token</strong><br><img src="7.png" class="mt-2 rounded border"></li>
+        <li><strong>Sao chép token ngay</strong><br><img src="8.png" class="mt-2 rounded border"></li>
+        <li>Bắt đầu sử dụng web(nếu không biết có thể xem)<br><img src="9.png" class="mt-2 rounded border"></li>
+      </ol>
+      <div class="mt-6 text-right">
+        <button onclick="toggleGuide()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Đã hiểu!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal hướng dẫn sử dụng -->
+<div id="usageModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex justify-center z-50 overflow-y-auto">
+  <div class="bg-white dark:bg-gray-800 text-black dark:text-white pt-0 px-6 pb-6 rounded-xl max-w-2xl w-full overflow-y-auto max-h-screen mt-6 shadow-xl">
+    <h2 class="text-xl font-bold sticky top-0 z-10 py-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-600">
+      📖 Hướng dẫn sử dụng web
+    </h2>
+    <ol class="list-decimal pl-6 space-y-4 text-sm mt-4">
+      <li>Nhập GitHub <strong>username</strong> và <strong>PAT</strong></li>
+      <img src="10.png" class="mt-2 rounded border dark:border-gray-600">
+      <li>Nhấn nút <strong>📂 Tải danh sách repo</strong></li>
+      <img src="11.png" class="mt-2 rounded border dark:border-gray-600">
+      <li>Tích chọn repo cần xoá</li>
+      <img src="12.png" class="mt-2 rounded border dark:border-gray-600">
+      <li>Nhấn nút <strong>❌ Xoá tất cả repo đã chọn</strong></li>
+      <img src="13.png" class="mt-2 rounded border dark:border-gray-600">
+      <li>Nếu chưa có PAT, nhấn <strong>📘 Hướng dẫn lấy PAT</strong></li>
+      <img src="14.png" class="mt-2 rounded border dark:border-gray-600">
+    </ol>
+    <div class="mt-6 text-right">
+      <button onclick="toggleUsage()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Đã hiểu!</button>
+    </div>
+  </div>
+</div>
+
+
+  <script>
+    function toggleGuide() {
+      document.getElementById('guideModal')?.classList.toggle('hidden');
+      document.getElementById('guideModal')?.classList.toggle('flex');
+    }
+
+    function toggleUsage() {
+      document.getElementById('usageModal')?.classList.toggle('hidden');
+      document.getElementById('usageModal')?.classList.toggle('flex');
+    }
+
+    let repos = [];
+
+    async function loadRepos() {
+        document.getElementById('totalCount').textContent = repos.length;
+      const username = document.getElementById('username').value;
+      const token = document.getElementById('token').value;
+      if (!username || !token) return alert("Vui lòng nhập username và token!");
+
+      let page = 1;
+      repos = [];
+      let allLoaded = false;
+      document.getElementById('repoList').innerHTML = '<p class="text-gray-600 dark:text-gray-300">🔄 Đang tải danh sách repo...</p>';
+
+      while (!allLoaded) {
+        const res = await fetch(`https://api.github.com/user/repos?per_page=100&page=${page}`, {
+          headers: { Authorization: `token ${token}` }
+        });
+        const data = await res.json();
+        if (data.length === 0) allLoaded = true;
+        else { repos = repos.concat(data); page++; }
+      }
+
+      const list = document.getElementById('repoList');
+      list.innerHTML = '';
+      repos.forEach(repo => {
+        const div = document.createElement('div');
+        div.className = "flex items-center justify-between bg-white dark:bg-gray-800 p-3 rounded border dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition";
+div.innerHTML = `
+  <label class="flex items-center gap-2 cursor-pointer">
+    <input type="checkbox" data-fullname="${repo.full_name}" class="form-checkbox text-blue-600 dark:bg-gray-700" onchange="updateSelectedCount()">
+    <span>${repo.full_name}</span>
+  </label>
+  <button onclick='previewRepo(${JSON.stringify(repo)})' class="text-blue-500 hover:underline text-sm">📄 Xem</button>
+`;
+
+        list.appendChild(div);
+      });
+
+      updateSelectedCount();
+    }
+
+    function toggleAllCheckboxes(source) {
+      const checkboxes = document.querySelectorAll('#repoList input[type="checkbox"]');
+      checkboxes.forEach(cb => cb.checked = source.checked);
+      updateSelectedCount();
+    }
+
+    function updateSelectedCount() {
+      const checked = document.querySelectorAll('#repoList input[type="checkbox"]:checked');
+      document.getElementById('selectedCount').textContent = checked.length;
+
+      // cập nhật checkbox "chọn tất cả"
+      const all = document.querySelectorAll('#repoList input[type="checkbox"]');
+      const checkAll = document.getElementById('checkAll');
+      checkAll.checked = all.length > 0 && checked.length === all.length;
+      checkAll.indeterminate = checked.length > 0 && checked.length < all.length;
+    }
+
+    async function deleteSelectedRepos() {
+      const token = document.getElementById('token').value;
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+      if (checkboxes.length === 0) return alert("Bạn chưa chọn repo nào để xoá!");
+      if (!confirm("⚠️ Bạn có chắc chắn muốn xoá " + checkboxes.length + " repo?")) return;
+
+      for (const checkbox of checkboxes) {
+        const repoFullName = checkbox.getAttribute('data-fullname');
+        const res = await fetch(`https://api.github.com/repos/${repoFullName}`, {
+          method: 'DELETE',
+          headers: { Authorization: `token ${token}` }
+        });
+
+        if (res.status === 204) {
+          checkbox.parentElement.innerHTML += ' ✅ Đã xoá';
+        } else {
+          checkbox.parentElement.innerHTML += ` ❌ (${res.status})`;
+        }
+      }
+
+      alert("✅ Xoá xong! Tải lại danh sách nếu muốn kiểm tra.");
+      updateSelectedCount();
+    }
+    function toggleToken() {
+  const input = document.getElementById('token');
+  input.type = input.type === 'password' ? 'text' : 'password';
+}
+function filterRepos() {
+  const keyword = document.getElementById('filterInput').value.toLowerCase();
+  const items = document.querySelectorAll('#repoList > div');
+  items.forEach(item => {
+    const name = item.textContent.toLowerCase();
+    item.style.display = name.includes(keyword) ? '' : 'none';
+  });
+}
+function backupRepos() {
+  const blob = new Blob([JSON.stringify(repos, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "backup_repos.json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+function togglePreview() {
+  document.getElementById('previewModal').classList.toggle('hidden');
+  document.getElementById('previewModal').classList.toggle('flex');
+}
+
+function previewRepo(repo) {
+  const div = document.getElementById('previewContent');
+  div.innerHTML = `
+    <p><strong>📦 Tên:</strong> ${repo.full_name}</p>
+    <p><strong>📝 Mô tả:</strong> ${repo.description || 'Không có mô tả'}</p>
+    <p><strong>💻 Ngôn ngữ:</strong> ${repo.language || 'Không rõ'}</p>
+    <p><strong>🌟 Sao:</strong> ${repo.stargazers_count}</p>
+    <p><strong>🕒 Tạo lúc:</strong> ${new Date(repo.created_at).toLocaleString()}</p>
+    <p><strong>🔄 Cập nhật:</strong> ${new Date(repo.updated_at).toLocaleString()}</p>
+    <p><strong>🔗 Link:</strong> <a href="${repo.html_url}" target="_blank" class="text-blue-500 underline">Truy cập repo</a></p>
+  `;
+  togglePreview();
+}
+
+  </script>
+</body>
+</html>

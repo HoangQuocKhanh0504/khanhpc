@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mô phỏng tay 3D|KHANHPC</title>
+<script src="https://www.google.com/recaptcha/api.js?render=6Le1rRYrAAAAAKt07uCfmbqyogPZGvZlUtomhKCX&hl=vi"></script>
+<link rel="icon" type="image/png" href="GD.png">
+<style>
+  body {
+    margin: 0;
+    background: #111;
+    color: white;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #webcam-container {
+    position: relative;
+    width: 640px;
+    height: 480px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  #video, #canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 640px;
+    height: 480px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  #threejs-container {
+    width: 640px;
+    height: 300px;
+    background: #000;
+    border-radius: 10px;
+    position: relative;
+    user-select: none; /* tránh chọn text khi kéo */
+  }
+  #btn-create-item {
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #ff5722;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  }
+  #btn-create-item:hover {
+    background-color: #e64a19;
+  }
+</style>
+</head>
+<body>
+
+  <div id="webcam-container">
+    <video id="video" autoplay playsinline></video>
+    <canvas id="canvas"></canvas>
+  </div>
+
+  <button id="btn-create-item">Tạo vật phẩm ảo</button>
+
+  <div id="threejs-container"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.153.0/build/three.min.js"></script>
+
+<script>
+  // --- Setup MediaPipe Hands ---
+  const videoElement = document.getElementById('video');
+  const canvasElement = document.getElementById('canvas');
+  const canvasCtx = canvasElement.getContext('2d');
+
+  const hands = new Hands({
+    locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+  });
+
+  hands.setOptions({
+    maxNumHands: 2,
+    modelComplexity: 1,
+    minDetectionConfidence: 0.7,
+    minTrackingConfidence: 0.7
+  });
+
+  hands.onResults(onResults);
+
+  const camera = new Camera(videoElement, {
+    onFrame: async () => {
+      await hands.send({image: videoElement});
+    },
+    width: 640,
+    height: 480
+  });
+  camera.start();
+
+  videoElement.addEventListener('loadedmetadata', () => {
+    canvasElement.width = videoElement.videoWidth;
+    canvasElement.height = videoElement.videoHeight;
+  });
+
+  // --- Setup Three.js for 3D hands ---
+  const threeContainer = document.getElementById('threejs-container');
+  const scene = new THREE.Scene();
+
+  const camera3D = new THREE.PerspectiveCamera(45, 640 / 300, 0.1, 10);
+  camera3D.position.set(0, 0, 1);
+  camera3D.lookAt(0, 0, 0);
+
+  const renderer = new THREE.WebGLRenderer({antialias: true});
+  renderer.setSize(640, 300);
+  threeContainer.appendChild(renderer.domElement);
+
+  // Lighting
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+  directionalLight.position.set(0, 1, 1);
+  scene.add(directionalLight);
+  scene.add(new THREE.AmbientLight(0x404040));
+
+  // Create spheres for 42 landmarks (2 hands * 21 points)
+  const spheres = [];
+  const sphereGeo = new THREE.SphereGeometry(0.02, 16, 16);
+  const sphereMat = new THREE.MeshStandardMaterial({color: 0x00ff00}); // xanh lá
+
+  for (let i = 0; i < 42; i++) {
+    const sphere = new THREE.Mesh(sphereGeo, sphereMat);
+    sphere.visible = false;  // ẩn mặc định
+    scene.add(sphere);
+    spheres.push(sphere);
+  }
+
+  // Hand connections for lines
+  const HAND_CONNECTIONS = [
+    [0,1],[1,2],[2,3],[3,4],
+    [0,5],[5,6],[6,7],[7,8],
+    [5,9],[9,10],[10,11],[11,12],
+    [9,13],[13,14],[14,15],[15,16],
+    [13,17],[17,18],[18,19],[19,20],
+    [0,17]
+  ];
+
+  const lineMat = new THREE.LineBasicMaterial({color: 0xffa500}); // màu cam
+  const positionsLeft = new Float32Array(HAND_CONNECTIONS.length * 2 * 3);
+  const positionsRight = new Float32Array(HAND_CONNECTIONS.length * 2 * 3);
+
+  const lineGeoLeft = new THREE.BufferGeometry();
+  lineGeoLeft.setAttribute('position', new THREE.BufferAttribute(positionsLeft, 3));
+  const linesLeft = new THREE.LineSegments(lineGeoLeft, lineMat);
+  linesLeft.visible = false; // ẩn mặc định
+  scene.add(linesLeft);
+
+  const lineGeoRight = new THREE.BufferGeometry();
+  lineGeoRight.setAttribute('position', new THREE.BufferAttribute(positionsRight, 3));
+  const linesRight = new THREE.LineSegments(lineGeoRight, lineMat);
+  linesRight.visible = false; // ẩn mặc định
+  scene.add(linesRight);
+
+  // Hàm cập nhật vị trí và trạng thái hiển thị 3D bàn tay
+  function update3DHands(landmarks, handIndex) {
+    const offset = handIndex * 21;
+
+    if (!landmarks) {
+      // Ẩn sphere và line nếu không có bàn tay
+      for (let i = 0; i < 21; i++) {
+        spheres[offset + i].visible = false;
+      }
+      if (handIndex === 0) linesLeft.visible = false;
+      else linesRight.visible = false;
+      return;
+    }
+
+    // Có bàn tay: hiện sphere và line, cập nhật vị trí
+    for (let i = 0; i < 21; i++) {
+      const lm = landmarks[i];
+      const x = lm.x - 0.5;
+      const y = 0.5 - lm.y;
+      const z = -lm.z * 0.5;
+      spheres[offset + i].position.set(x, y, z);
+      spheres[offset + i].visible = true;
+    }
+
+    const positions = handIndex === 0 ? positionsLeft : positionsRight;
+    for (let i = 0; i < HAND_CONNECTIONS.length; i++) {
+      const [startIdx, endIdx] = HAND_CONNECTIONS[i];
+      const start = spheres[offset + startIdx].position;
+      const end = spheres[offset + endIdx].position;
+      positions[i * 6 + 0] = start.x;
+      positions[i * 6 + 1] = start.y;
+      positions[i * 6 + 2] = start.z;
+      positions[i * 6 + 3] = end.x;
+      positions[i * 6 + 4] = end.y;
+      positions[i * 6 + 5] = end.z;
+    }
+
+    if (handIndex === 0) {
+      lineGeoLeft.attributes.position.needsUpdate = true;
+      linesLeft.visible = true;
+    } else {
+      lineGeoRight.attributes.position.needsUpdate = true;
+      linesRight.visible = true;
+    }
+  }
+
+  // ----------- Tạo vật phẩm ảo và kéo thả bằng chuột -----------
+
+  const virtualItems = [];
+
+  function createVirtualItem() {
+    const geo = new THREE.BoxGeometry(0.1, 0.1, 0.1);
+    const mat = new THREE.MeshStandardMaterial({color: 0xff0000});
+    const mesh = new THREE.Mesh(geo, mat);
+
+    mesh.position.set(0, 0, 0);
+    mesh.rotation.set(Math.random()*0.5, Math.random()*0.5, 0);
+
+    scene.add(mesh);
+    virtualItems.push(mesh);
+  }
+
+  document.getElementById('btn-create-item').addEventListener('click', () => {
+    createVirtualItem();
+  });
+
+  // Kéo thả chuột
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
+  let selectedItem = null;
+  let offset = new THREE.Vector3();
+
+  function getMousePosition(event) {
+    const rect = renderer.domElement.getBoundingClientRect();
+    return {
+      x: ((event.clientX - rect.left) / rect.width) * 2 - 1,
+      y: -((event.clientY - rect.top) / rect.height) * 2 + 1
+    };
+  }
+
+  function onPointerDown(event) {
+    const pos = getMousePosition(event);
+    mouse.x = pos.x;
+    mouse.y = pos.y;
+
+    raycaster.setFromCamera(mouse, camera3D);
+    const intersects = raycaster.intersectObjects(virtualItems);
+
+    if (intersects.length > 0) {
+      selectedItem = intersects[0].object;
+
+      const intersectionPoint = intersects[0].point;
+      offset.copy(intersectionPoint).sub(selectedItem.position);
+    }
+  }
+
+  function onPointerMove(event) {
+    if (!selectedItem) return;
+
+    const pos = getMousePosition(event);
+    mouse.x = pos.x;
+    mouse.y = pos.y;
+
+    raycaster.setFromCamera(mouse, camera3D);
+    // Tạo mặt phẳng gần camera để kéo vật thể
+    const planeZ = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+    const intersectionPoint = new THREE.Vector3();
+    raycaster.ray.intersectPlane(planeZ, intersectionPoint);
+
+    if (intersectionPoint) {
+      selectedItem.position.copy(intersectionPoint.sub(offset));
+    }
+  }
+
+  function onPointerUp() {
+    selectedItem = null;
+  }
+
+  renderer.domElement.addEventListener('pointerdown', onPointerDown);
+  window.addEventListener('pointermove', onPointerMove);
+  window.addEventListener('pointerup', onPointerUp);
+
+  // ----------- Tương tác kéo vật phẩm bằng ngón tay (nắm) -----------
+
+  // Lưu trạng thái vật phẩm đang được nắm kéo
+  let grabbedItem = null;
+
+  // Hàm tính khoảng cách Euclid 3D giữa hai điểm
+  function dist3D(a, b) {
+    return Math.sqrt(
+      (a.x - b.x)**2 + (a.y - b.y)**2 + (a.z - b.z)**2
+    );
+  }
+
+  // Hàm kiểm tra 2 điểm Landmark (MediaPipe) có gần nhau hay không (ngón tay cái và trỏ)
+  function fingersPinched(landmarks) {
+    if (!landmarks) return false;
+    const thumbTip = landmarks[4];
+    const indexTip = landmarks[8];
+    if (!thumbTip || !indexTip) return false;
+    // Khoảng cách ngón tay cái và ngón trỏ nhỏ hơn 0.04 coi như nắm
+    const d = dist3D(thumbTip, indexTip);
+    return d < 0.07;
+  }
+
+  // Hàm lấy vị trí 3D của điểm landmark (quy về tọa độ Three.js)
+  function getLandmarkPosition(lm) {
+    return new THREE.Vector3(
+      lm.x - 0.5,
+      0.5 - lm.y,
+      -lm.z * 0.5
+    );
+  }
+
+  // Cập nhật vị trí vật phẩm đang bị nắm kéo theo vị trí ngón tay
+  function updateGrabbedItem(handLandmarks) {
+    if (!grabbedItem) return;
+
+    const pinchPoint = getLandmarkPosition(handLandmarks[8]); // Ngón trỏ đầu ngón
+    grabbedItem.position.copy(pinchPoint);
+  }
+
+  // Kiểm tra nếu nắm và gần vật phẩm, "bắt" vật phẩm
+  function checkGrab(handLandmarks) {
+    if (!handLandmarks) return;
+
+    if (fingersPinched(handLandmarks)) {
+      // Nếu chưa có vật phẩm bị nắm kéo, kiểm tra gần vật phẩm nào nhất
+      if (!grabbedItem) {
+        const pinchPoint = getLandmarkPosition(handLandmarks[8]);
+        let nearest = null;
+        let minDist = 0.15; // ngưỡng khoảng cách bắt vật phẩm
+        for (const item of virtualItems) {
+          const d = item.position.distanceTo(pinchPoint);
+          if (d < minDist) {
+            minDist = d;
+            nearest = item;
+          }
+        }
+        if (nearest) grabbedItem = nearest;
+      } else {
+        // Đã có vật phẩm nắm kéo, cập nhật vị trí
+        updateGrabbedItem(handLandmarks);
+      }
+    } else {
+      // Ngón tay không nắm nữa, thả vật phẩm
+      grabbedItem = null;
+    }
+  }
+
+  // ----------------- Xử lý kết quả MediaPipe Hands --------------------
+
+  let latestHands = [null, null]; // lưu 2 bàn tay hiện tại (landmarks)
+
+  function onResults(results) {
+    // Vẽ camera + landmarks
+    canvasCtx.save();
+    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+    canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+
+    if (results.multiHandLandmarks && results.multiHandedness) {
+      for (let i = 0; i < results.multiHandLandmarks.length; i++) {
+        const landmarks = results.multiHandLandmarks[i];
+        const classification = results.multiHandedness[i].label;
+        drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, {color: classification === "Left" ? "#00FF00" : "#FF0000", lineWidth: 4});
+        drawLandmarks(canvasCtx, landmarks, {color: "#FF0000", lineWidth: 2});
+      }
+    }
+    canvasCtx.restore();
+
+    // Cập nhật vị trí 3D spheres + lines
+    latestHands = [null, null];
+    if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+      results.multiHandLandmarks.forEach((landmarks, i) => {
+        update3DHands(landmarks, i);
+        latestHands[i] = landmarks;
+      });
+    } else {
+      update3DHands(null, 0);
+      update3DHands(null, 1);
+    }
+
+    // Tương tác vật phẩm kéo thả bằng ngón tay - ưu tiên tay 0 (tay phải) nếu có
+    if (latestHands[0]) checkGrab(latestHands[0]);
+    else if (latestHands[1]) checkGrab(latestHands[1]);
+  }
+
+  // ----------- Animation loop -----------
+  function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera3D);
+  }
+  animate();
+
+</script>
+
+
+</body>
+</html>

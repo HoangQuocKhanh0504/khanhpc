@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tra cứu video YouTube|KHANHPC</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="GD.png">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-fadeIn {
+      animation: fadeIn 0.35s ease-out forwards;
+    }
+    .toast-success, .toast-error {
+      min-width: 280px;
+      max-width: 380px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      padding: 0.85rem 1.5rem;
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: white;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      user-select: none;
+      border: 1px solid transparent;
+      transition: background-color 0.3s ease;
+    }
+    .toast-success {
+      background-color: rgba(34, 197, 94, 0.85);
+      border-color: rgba(34, 197, 94, 1);
+    }
+    .toast-success:hover {
+      background-color: rgba(34, 197, 94, 1);
+    }
+    .toast-error {
+      background-color: rgba(239, 68, 68, 0.85);
+      border-color: rgba(239, 68, 68, 1);
+    }
+    .toast-error:hover {
+      background-color: rgba(239, 68, 68, 1);
+    }
+    .toast-close-btn {
+      margin-left: auto;
+      background: transparent;
+      border: none;
+      color: white;
+      font-weight: bold;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+    .toast-close-btn:hover {
+      color: #ddd;
+    }
+    .toast-close-btn svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-blue-200 via-white to-pink-100 min-h-screen flex items-center justify-center px-6 py-10">
+  <div id="toast-container" class="fixed bottom-5 right-5 flex flex-col gap-3 z-50"></div>
+  <div class="w-full max-w-3xl bg-white rounded-3xl shadow-2xl p-10 animate-fadeIn">
+    <h1 class="text-4xl font-bold text-center text-blue-800 mb-8">🔎 Tra cứu video YouTube|KHANHPC</h1>
+    <div class="flex flex-col gap-4">
+      <input
+        id="channelLink"
+        type="text"
+        placeholder="Dán link kênh YouTube (ví dụ: https://youtube.com/@tenkenh)"
+        class="w-full p-4 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+      <button
+        onclick="getVideos()"
+        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-2xl transition duration-300 shadow-md hover:shadow-lg"
+      >
+        🚀 Tra cứu
+      </button>
+    </div>
+    <div id="result" class="mt-8 space-y-4 text-gray-800 text-[15px] leading-relaxed"></div>
+  </div>
+  <script>
+    const API_KEY = "AIzaSyCtcH0CeJ4fUwPoSfdidQJDUhfU3dVMbGA"; // ← Thay bằng API key thật
+
+    async function getVideos() {
+      const link = document.getElementById("channelLink").value.trim();
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = "<p class='text-gray-500'>⏳ Đang tra cứu thời gian tra cứu sẽ bị ảnh hưởng bởi số lượng video</p>";
+
+      const channelId = await getChannelIdFromLink(link);
+      if (!channelId) {
+        resultDiv.innerHTML = "<p class='text-red-500'>❌ Không tìm được ID kênh. Kiểm tra lại đường dẫn.</p>";
+        return;
+      }
+
+      const playlistId = await getUploadsPlaylistId(channelId);
+      if (!playlistId) {
+        resultDiv.innerHTML = "<p class='text-red-500'>❌ Không lấy được danh sách video từ kênh.</p>";
+        return;
+      }
+
+      const videos = await getVideosFromPlaylist(playlistId);
+      if (videos.length === 0) {
+        resultDiv.innerHTML = "<p class='text-gray-500'>⚠️ Kênh này chưa có video hoặc video bị ẩn.</p>";
+        return;
+      }
+
+      let allLinksOnly = videos.map((v) => `https://www.youtube.com/watch?v=${v.id}`).join("\n");
+      let allTitlesWithLinks = videos
+        .map((v) => `${v.title}: https://www.youtube.com/watch?v=${v.id}`)
+        .join("\n");
+
+      resultDiv.innerHTML = `
+        <div class="flex flex-col sm:flex-row sm:justify-between gap-3 mb-4">
+          <h2 class="text-xl font-semibold text-blue-700">📺 Danh sách video(${videos.length} video)</h2>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="copyText(\`${allLinksOnly.replace(/`/g, "\\`")}\`)" class="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-xl text-sm">📋 Copy tất cả link</button>
+            <button id="copyAllTitlesBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-xl text-sm">📋 Copy tất cả tiêu đề + link</button>
+          </div>
+        </div>
+        <div id="videoList" class="space-y-3"></div>
+      `;
+document.getElementById("copyAllTitlesBtn").addEventListener("click", () => {
+  copyText(allTitlesWithLinks);
+  
+});
+
+      const videoList = document.getElementById("videoList");
+
+      videos.forEach((video) => {
+        const link = `https://www.youtube.com/watch?v=${video.id}`;
+        const title = video.title.replace(/'/g, "\\'");
+        const container = document.createElement("div");
+        container.className = "bg-gray-50 p-3 rounded-xl hover:bg-gray-100 transition";
+
+        container.innerHTML = `
+          <div class="mb-2">🎬 <strong>${title}</strong>: 
+            <a href="${link}" target="_blank" class="text-blue-600 hover:underline">${link}</a>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="copyText('${link}')"
+                    class="bg-gray-300 hover:bg-gray-400 text-black px-3 py-1 rounded-md text-sm">📋 Copy link</button>
+            <button onclick="copyText('${title}: ${link}')"
+                    class="bg-gray-400 hover:bg-gray-500 text-white px-3 py-1 rounded-md text-sm">📋 Copy tiêu đề + link</button>
+          </div>
+        `;
+        videoList.appendChild(container);
+      });
+    }
+
+    async function getChannelIdFromLink(link) {
+      try {
+        const url = new URL(link);
+        const path = url.pathname;
+
+        if (path.startsWith("/channel/")) {
+          return path.split("/")[2];
+        }
+
+        if (path.startsWith("/@")) {
+          const username = path.substring(1);
+          const res = await fetch(
+            `https://www.googleapis.com/youtube/v3/channels?part=id&forHandle=${username}&key=${API_KEY}`
+          );
+          const data = await res.json();
+          return data.items?.[0]?.id;
+        }
+      } catch {
+        return null;
+      }
+      return null;
+    }
+
+    async function getUploadsPlaylistId(channelId) {
+      const res = await fetch(
+        `https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=${channelId}&key=${API_KEY}`
+      );
+      const data = await res.json();
+      return data.items?.[0]?.contentDetails?.relatedPlaylists?.uploads;
+    }
+
+    async function getVideosFromPlaylist(playlistId) {
+      let videos = [];
+      let nextPageToken = "";
+      do {
+        const res = await fetch(
+          `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&maxResults=50&pageToken=${nextPageToken}&key=${API_KEY}`
+        );
+        const data = await res.json();
+        const items = data.items || [];
+        items.forEach((item) => {
+          videos.push({
+            id: item.snippet.resourceId.videoId,
+            title: item.snippet.title,
+          });
+        });
+        nextPageToken = data.nextPageToken || "";
+      } while (nextPageToken);
+      return videos;
+    }
+
+    // Toast notification đẹp hơn với icon SVG cho nút đóng
+    function showToast(message, type = "success") {
+      const container = document.getElementById("toast-container");
+      const toast = document.createElement("div");
+
+      toast.className = `toast-${type} animate-fadeIn`;
+      toast.setAttribute("role", "alert");
+      toast.setAttribute("aria-live", "assertive");
+      toast.setAttribute("aria-atomic", "true");
+
+      toast.innerHTML = `
+        <span>${message}</span>
+        <button class="toast-close-btn" aria-label="Đóng thông báo" title="Đóng">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      `;
+
+      const closeBtn = toast.querySelector(".toast-close-btn");
+      closeBtn.addEventListener("click", () => toast.remove());
+
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.add("animate-fadeOut");
+        toast.addEventListener("animationend", () => toast.remove());
+      }, 3500);
+    }
+
+    function copyText(text) {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+
+      try {
+        const successful = document.execCommand("copy");
+        if (successful) {
+          showToast("📋 Đã sao chép vào clipboard!", "success");
+        } else {
+          showToast("❌ Không thể sao chép!", "error");
+        }
+      } catch (err) {
+        showToast("❌ Lỗi khi sao chép!", "error");
+      }
+
+      document.body.removeChild(textarea);
+    }
+    // Hàm lấy thông tin kênh: avatar, tên, số người đăng ký
+async function getChannelInfo(channelId) {
+  const res = await fetch(
+    `https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id=${channelId}&key=${API_KEY}`
+  );
+  const data = await res.json();
+  if (data.items && data.items.length > 0) {
+    const channel = data.items[0];
+    return {
+      title: channel.snippet.title,
+      avatar: channel.snippet.thumbnails.default.url,
+      subscriberCount: channel.statistics.hiddenSubscriberCount
+        ? "Ẩn"
+        : Number(channel.statistics.subscriberCount).toLocaleString("vi-VN"),
+    };
+  }
+  return null;
+}
+  </script>
+  
+<!-- Nút Go to Bottom -->
+<button id="goToBottomBtn" title="Xuống cuối trang" 
+  class="fixed bottom-5 right-5 bg-pink-600 hover:bg-pink-700 text-white p-3 rounded-full shadow-lg z-50"
+>
+  ↓
+</button>
+  <button id="backToTopBtn" title="Lên đầu trang" 
+  class="fixed bottom-5 right-5 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg hidden z-50 transition-opacity duration-300">
+  ↑
+</button>
+
+<script>
+  // Nút Back to Top
+  const backToTopBtn = document.getElementById("backToTopBtn");
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+      backToTopBtn.classList.remove("hidden");
+      backToTopBtn.classList.add("opacity-100");
+    } else {
+      backToTopBtn.classList.add("hidden");
+      backToTopBtn.classList.remove("opacity-100");
+    }
+  });
+
+  backToTopBtn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+</script>
+<script>
+  // Nút Back to Top
+  const goToBottomBtn = document.getElementById("goToBottomBtn");
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY <= 300) {
+      goToBottomBtn.classList.remove("hidden");
+      goToBottomBtn.classList.add("opacity-100");
+    } else {
+      goToBottomBtn.classList.add("hidden");
+      goToBottomBtn.classList.remove("opacity-100");
+    }
+  });
+  // Cuộn xuống cuối trang khi bấm nút Go to Bottom
+  goToBottomBtn.addEventListener("click", () => {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+  });
+</script>
+</body>
+</html>

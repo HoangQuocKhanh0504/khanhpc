@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="GD.png"/>
+  <script src="https://www.google.com/recaptcha/api.js?render=6Le1rRYrAAAAAKt07uCfmbqyogPZGvZlUtomhKCX&hl=vi"></script>
+    <title>Tạo chữ đẹp theo tên</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    margin-top: 50px;
+    background: linear-gradient(135deg, #ff4081, #00e5ff);
+    background-size: 400% 400%;
+    animation: gradientBackground 5s ease infinite;
+    color: white;
+}
+
+/* Hiệu ứng nền động */
+@keyframes gradientBackground {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Tiêu đề */
+h1 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Textarea */
+textarea {
+    width: 80%;
+    height: 120px;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    resize: none;
+}
+
+/* Thanh chỉnh cỡ chữ */
+input[type="range"] {
+    width: 50%;
+    margin: 10px 0;
+    accent-color: #ff9800;
+}
+
+/* Nút bấm */
+button {
+    background: linear-gradient(45deg, #ff4081, #ff9800);
+    color: white;
+    font-size: 18px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Hiệu ứng hover cho nút */
+button:hover {
+    transform: scale(1.1);
+    background: linear-gradient(45deg, #ff9800, #00e5ff);
+}
+/* Tùy chỉnh dropdown */
+select {
+    width: 50%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.2);
+    color: black;
+    font-family: 'Poppins', sans-serif;
+    appearance: none; /* Ẩn giao diện mặc định của trình duyệt */
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Hiệu ứng khi di chuột */
+select:hover {
+    background: rgba(255, 255, 255, 0.4);
+    border-color: white ;
+}
+
+/* Nâng cấp nhãn chọn */
+label {
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 10px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+    </style>
+</head>
+<body>
+    <h1>Nhập nội dung để tạo chữ đẹp theo tên</h1>
+    <textarea id="inputText"></textarea>
+    <br>
+    <label for="fontSize">Chỉnh cỡ chữ: </label>
+    <input type="range" id="fontSize" min="10" max="200" value="80">
+    <br>
+<label for="fontFamily">Chọn kiểu chữ: </label>
+<select id="fontFamily">
+    <option value="Arial, sans-serif">Arial</option>
+    <option value="Poppins, sans-serif">Poppins</option>
+    <option value="Courier New, monospace">Courier New</option>
+    <option value="Georgia, serif">Georgia</option>
+    <option value="Times New Roman, serif">Times New Roman</option>
+    <option value="Verdana, sans-serif">Verdana</option>
+    <option value="Roboto, sans-serif">Roboto</option>
+    <option value="Montserrat, sans-serif">Montserrat</option>
+    <option value="Lobster, cursive">Lobster</option>
+    <option value="Playfair Display, serif">Playfair Display</option>
+    <option value="Raleway, sans-serif">Raleway</option>
+    <option value="Dancing Script, cursive">Dancing Script</option>
+    <option value="Oswald, sans-serif">Oswald</option>
+    <option value="Merriweather, serif">Merriweather</option>
+</select>
+
+<!-- Import Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins&family=Roboto&family=Montserrat&family=Lobster&family=Playfair+Display&family=Raleway&family=Dancing+Script&family=Oswald&family=Merriweather&display=swap" rel="stylesheet">
+
+<br>
+<br>
+    <button onclick="generateWeb()">Tạo Web</button>
+
+<script>
+function generateWeb() {
+    let inputText = document.getElementById("inputText").value;
+    let fontSize = document.getElementById("fontSize").value;
+    let fontFamily = document.getElementById("fontFamily").value;
+
+    if (!inputText.trim()) {
+        Swal.fire({
+            icon: "error",
+            title: "Lỗi!",
+            text: "Vui lòng nhập nội dung trước khi tạo.",
+            confirmButtonText: "OK"
+        });
+        return;
+    }
+
+    let countdown = 6;
+    Swal.fire({
+        icon: "success",
+        title: "Thành công!",
+        html: `Tên bạn sẽ hiện sau <b>${countdown}</b> giây`,
+        showConfirmButton: false,
+        timer: (countdown + 1) * 1000,
+        didOpen: () => {
+            const timerInterval = setInterval(() => {
+                countdown--;
+                Swal.getHtmlContainer().innerHTML = `Tên bạn sẽ hiện sau <b>${countdown}</b> giây`;
+                if (countdown === 0) {
+                    clearInterval(timerInterval);
+                }
+            }, 1000);
+        }
+    }).then(() => {
+        let lines = inputText.split("\n");
+        let bodyContent = lines.map(line => `<h1 style="font-size: ${fontSize}px; font-family: ${fontFamily};">${line}</h1>`).join("\n");
+
+        let newWindow = window.open("", "_blank");
+        newWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html lang="vi">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                          
+                        <title>Hiệu ứng Chữ KHANHPC</title>
+                        <link rel="icon" type="image/png" href="GD.png"/>
+                        
+                        <style>
+                            
+                            body {
+                              background: linear-gradient(135deg, #00e5ff, #ff4081, #8e24aa);
+                              background-size: 400% 400%;
+                              animation: gradientBackground 5s ease infinite;
+                              margin: 0;
+                              padding: 0;
+                              height: 100vh;
+                              display: flex;
+                              justify-content: center;
+                              align-items: center;
+                              font-family: 'Arial', sans-serif;
+                            }
+
+                            h1 {
+                              font-size: ${fontSize}px;
+                              color: #ffffff;
+                              text-transform: uppercase;
+                              letter-spacing: 5px;
+                              transition: all 0.3s ease;
+                              cursor: pointer;
+                              background: linear-gradient(45deg, #ff4081, #ff9800, #00e5ff, #8e24aa);
+                              -webkit-background-clip: text;
+                              color: transparent;
+                            }
+
+                            h1:hover {
+                              transform: scale(1.2) rotate(-10deg);
+                              color: #ffffff;
+                              text-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+                              background: linear-gradient(45deg, #8e24aa, #ff4081, #00e5ff, #ff9800);
+                              -webkit-background-clip: text;
+                            }
+
+                            h1:active {
+                              transform: scale(1) rotate(0deg);
+                              color: #ffffff;
+                              text-shadow: none;
+                              background: #00e5ff;
+                              -webkit-background-clip: text;
+                            }
+
+                            @keyframes gradientBackground {
+                              0% {
+                                background-position: 0% 50%;
+                              }
+                              50% {
+                                background-position: 100% 50%;
+                              }
+                              100% {
+                                background-position: 0% 50%;
+                              }
+                            }
+                            /* Đối với Chrome, Safari */
+                            ::-webkit-scrollbar {
+                                display: none;
+                            }
+
+                            /* Ẩn thanh cuộn nhưng vẫn có thể cuộn */
+                            html, body {
+                                overflow: hidden;
+                            }
+
+                            body {
+                                overflow-y: scroll;
+                            }
+
+                        </style>
+                    </head>
+                    <body>
+                        ${bodyContent}
+                    </body>
+                    </html>
+        `);
+        newWindow.document.close();
+    });
+}
+
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
+    }
+}, true);
+
+</script>
+
+
+</body>
+</html>

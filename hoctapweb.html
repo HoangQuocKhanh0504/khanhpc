@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://www.google.com/recaptcha/api.js?render=6Le1rRYrAAAAAKt07uCfmbqyogPZGvZlUtomhKCX&hl=vi"></script>
+  <link rel="icon" type="image/png" href="GD.png" />
+  <title>Học web khanhpc</title>
+  <link rel="stylesheet" href="hct.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.33.0/min/vs/loader.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+
+</head>
+
+<!-- Popup quảng cáo -->
+<div id="ad-popup" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div class="bg-white p-6 rounded-2xl shadow-2xl max-w-md w-full text-center relative animate-fade-in">
+    <img src="ADS.png" alt="Quảng cáo" class="w-full h-auto rounded-lg mb-4 shadow-md">
+    <h3 class="text-xl font-bold mb-2 text-pink-600">🌟 Khám phá thêm tại web của Khánh! 🌟</h3>
+    <div class="flex justify-center gap-4 mt-4">
+      <a href="https://khanhpc-five.vercel.app/imc.html" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl font-semibold shadow">Truy cập ngay</a>
+      <button onclick="closeAdPopup()" class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-xl font-semibold shadow">Đóng</button>
+    </div>
+  </div>
+</div>
+
+<script src="time.js"></script>
+
+<body class="bg-gradient-to-br from-blue-100 to-purple-200 min-h-screen p-4">
+  <h1 class="text-4xl font-extrabold text-center text-indigo-700 mb-6 drop-shadow-md animate-fade-in transition-transform duration-500 ease-in-out hover:scale-110 hover:-rotate-3 glow-effect attention-glow" id="learn-header">
+    ✨ Học web cùng khánh nào ✨
+  </h1>  
+
+  <div class="editor-container flex gap-4 h-[calc(100vh-6rem)] animate-fade-in">
+    <div class="w-1/2 bg-white p-4 rounded-2xl shadow-xl flex flex-col">
+      <h2 class="text-2xl font-bold text-blue-700 mb-4">Nhập mã nguồn</h2>
+      <div class="tabs flex border-b-2 border-gray-300 mb-4">
+        <div id="html-tab" class="tab active cursor-pointer px-4 py-2">HTML</div>
+        <div id="css-tab" class="tab cursor-pointer px-4 py-2">CSS</div>
+        <div id="js-tab" class="tab cursor-pointer px-4 py-2">JavaScript</div>
+      </div>
+      <div class="tab-content active flex-1 flex flex-col" id="html-content">
+        <div id="html-code" class="code-editor"></div>
+      </div>
+      <div class="tab-content flex-1 flex-col hidden" id="css-content">
+        <div id="css-code" class="code-editor"></div>
+      </div>
+      <div class="tab-content flex-1 flex-col hidden" id="js-content">
+        <div id="js-code" class="code-editor"></div>
+      </div>
+    </div>
+
+    <div class="w-1/2 bg-white p-4 rounded-2xl shadow-xl flex flex-col">
+      <h2 class="text-2xl font-bold text-green-700 mb-4">Kết quả</h2>
+      <iframe id="preview" class="flex-1 border border-gray-300 rounded-xl shadow-inner bg-white"></iframe>
+    </div>
+  </div>
+
+  <script src="jscodehc.js"></script>
+  <div id="user-info"></div>
+</body>
+</html>

@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://www.google.com/recaptcha/api.js?render=6Le1rRYrAAAAAKt07uCfmbqyogPZGvZlUtomhKCX&hl=vi"></script>
+    <title>Danh Sách Thư Viện Python</title>
+    <link rel="icon" type="image/png" href="GD.png">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+.copyright-bar:hover {
+  height: 80px;
+  line-height: 80px;
+  background-color: #444; /* Có thể thay đổi nếu muốn màu khi hover */
+}
+body {
+              font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+              background: linear-gradient(135deg, #00e5ff, #ff4081, #8e24aa);
+                
+
+  height: 100%;
+  position: relative;
+              padding-bottom: 90px; /* Chừa khoảng trống để tránh bị che (cao hơn chiều cao hover) */
+}
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .library-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 20px;
+        }
+
+        .library-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .library-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .library-card h2 {
+            font-size: 1.5em;
+            color: #333;
+        }
+
+        .library-card p {
+            color: #555;
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2em;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        /* Hiệu ứng fade-in */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(30px); /* Di chuyển nhẹ từ dưới lên */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0); /* Trở về vị trí ban đầu */
+  }
+}
+
+/* Áp dụng hiệu ứng cho .library-card */
+.library-card {
+  background-color: #f0f4f8; /* Màu nền sáng nhẹ nhàng */
+  border-radius: 10px; /* Bo góc 10px */
+  padding: 20px;
+  margin: 10px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng khi hover */
+  font-family: 'Arial', sans-serif;
+  animation: fadeIn 1s ease-out; /* Áp dụng hiệu ứng fade-in */
+}
+
+.library-card:hover {
+  transform: translateY(-5px); /* Di chuyển nhẹ lên khi hover */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Tăng bóng khi hover */
+}
+
+.library-card h2 {
+  font-size: 26px; /* Kích thước chữ tiêu đề lớn hơn */
+  font-weight: bold;
+  color: #2196F3; /* Màu xanh dương tươi sáng cho tiêu đề */
+  margin-bottom: 10px;
+}
+
+.library-card p {
+  font-size: 18px; /* Kích thước chữ mô tả lớn hơn */
+  color: #333333; /* Màu chữ xám đậm dễ đọc */
+  margin-bottom: 15px;
+  font-weight: bold; /* In đậm cho nội dung trong thẻ p */
+}
+
+.library-card button {
+  background-color: #4CAF50; /* Màu xanh lá cho nút */
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px; /* Bo góc cho nút */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Hiệu ứng nút */
+}
+
+.library-card button:hover {
+  background-color: #388E3C; /* Màu xanh lá đậm khi hover */
+  transform: translateY(-2px); /* Di chuyển nhẹ lên khi hover */
+}
+
+.library-card button:active {
+  transform: translateY(0); /* Hủy bỏ hiệu ứng hover khi bấm */
+}
+h1 {
+  font-size: 36px; /* Kích thước chữ lớn */
+  font-weight: bold;
+  color: white; /* Màu chữ bên trong */
+  -webkit-text-stroke: 2px black; /* Viền chữ với độ dày 2px và màu đen */
+}
+.library-card h2 {
+  font-size: 26px; /* Kích thước chữ tiêu đề */
+  font-weight: bold;
+  color: #2196F3; /* Màu xanh dương tươi sáng */
+  margin-bottom: 10px;
+  transition: transform 0.3s ease; /* Thêm hiệu ứng chuyển động */
+}
+
+.library-card h2:hover {
+  transform: rotate(-8deg); /* Nghiêng nhẹ sang trái khi hover */
+}
+.library-card button {
+  background-color: #4CAF50; /* Màu xanh lá cho nút */
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px; /* Bo góc cho nút */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Hiệu ứng khi hover */
+}
+
+.library-card button:hover {
+  background-color: #388E3C; /* Màu xanh lá đậm khi hover */
+  transform: translateY(-2px) rotate(10deg); /* Di chuyển nhẹ lên và xoay nút 10 độ khi hover */
+}
+
+.library-card button:active {
+  transform: translateY(0) rotate(0); /* Quay trở lại vị trí ban đầu khi bấm */
+}
+
+.library-card p {
+  font-size: 18px;
+  font-weight: bold;
+  color: #444;
+  transition: transform 0.3s ease; /* Hiệu ứng mượt */
+}
+
+.library-card p:hover {
+  transform: rotate(3deg); /* Nghiêng nhẹ khi hover */
+}
+
+
+h1 {
+  font-size: 80px;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  background: linear-gradient(45deg, #ff4081, #ff9800, #00e5ff, #8e24aa);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+h1:hover {
+  transform: scale(1.2) rotate(-10deg);
+  color: #ffffff;
+  text-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(45deg, #8e24aa, #ff4081, #00e5ff, #ff9800);
+  -webkit-background-clip: text;
+}
+
+h1:active {
+  transform: scale(1) rotate(0deg);
+  color: #ffffff;
+  text-shadow: none;
+  background: #00e5ff;
+
+}
+
+@keyframes gradientBackground {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+
+.copyright {
+    border-radius:100px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 123, 255, 0.95);
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0px -5px 10px rgba(0,0,0,0.2);
+    transition: background 0.3s ease-in-out;
+    animation: bounce 0.5s infinite alternate ease-in-out;
+}
+
+.cat-container {
+    display: none;
+    position: absolute;
+    left: 50%;
+    bottom: 50px;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+.cat-img {
+    width: 100px;
+    animation: bounce 1s infinite alternate ease-in-out;
+}
+
+.speech-bubble {
+    background: white;
+    color: black;
+    padding: 8px 12px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    margin-top: 10px;
+}
+
+@keyframes bounce {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-5px); }
+}
+
+    </style>
+</head>
+<body>
+
+    <h1>Danh Sách Thư Viện Python</h1>
+    <div style="text-align:center; margin-bottom: 20px;">
+        <input type="text" id="searchInput" placeholder="Tìm kiếm thư viện Python..." 
+               style="width: 50%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;" 
+               onkeyup="searchLibraries()">
+      </div>
+      
+      <div class="library-list">
+        <!-- Các thư viện -->
+        <div class="library-card">
+        <h2>numpy</h2>
+        <p>Hỗ trợ tính toán mảng, đại số tuyến tính, biến đổi Fourier, v.v.</p>
+        <button onclick="copyCode('pip install numpy')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>pandas</h2>
+        <p>Phân tích dữ liệu với cấu trúc DataFrame giống bảng tính Excel.</p>
+        <button onclick="copyCode('pip install pandas')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>matplotlib</h2>
+        <p>Vẽ biểu đồ 2D như line, bar, scatter,... dễ dàng.</p>
+        <button onclick="copyCode('pip install matplotlib')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>seaborn</h2>
+        <p>Vẽ biểu đồ thống kê đẹp mắt dựa trên matplotlib.</p>
+        <button onclick="copyCode('pip install seaborn')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>scikit-learn</h2>
+        <p>Thư viện học máy phổ biến cho phân loại, hồi quy, phân cụm,...</p>
+        <button onclick="copyCode('pip install scikit-learn')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>tensorflow</h2>
+        <p>Học sâu và trí tuệ nhân tạo của Google, hỗ trợ GPU.</p>
+        <button onclick="copyCode('pip install tensorflow')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>keras</h2>
+        <p>Xây dựng mô hình học sâu dễ dàng, API cao của TensorFlow.</p>
+        <button onclick="copyCode('pip install keras')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>pytorch</h2>
+        <p>Framework học sâu mạnh mẽ của Facebook, dynamic graph.</p>
+        <button onclick="copyCode('pip install torch')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>xgboost</h2>
+        <p>Mô hình tăng cường độ dốc, tối ưu cho Kaggle.</p>
+        <button onclick="copyCode('pip install xgboost')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>lightgbm</h2>
+        <p>Boosting rất nhanh và nhẹ, của Microsoft.</p>
+        <button onclick="copyCode('pip install lightgbm')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>catboost</h2>
+        <p>Boosting tối ưu cho dữ liệu phân loại, của Yandex.</p>
+        <button onclick="copyCode('pip install catboost')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>flask</h2>
+        <p>Web framework nhỏ gọn, linh hoạt.</p>
+        <button onclick="copyCode('pip install flask')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>django</h2>
+        <p>Framework mạnh mẽ để xây dựng web đầy đủ tính năng.</p>
+        <button onclick="copyCode('pip install django')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>fastapi</h2>
+        <p>API nhanh, hỗ trợ async, tự động sinh docs.</p>
+        <button onclick="copyCode('pip install fastapi')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>requests</h2>
+        <p>Gửi HTTP request cực kỳ đơn giản.</p>
+        <button onclick="copyCode('pip install requests')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>httpx</h2>
+        <p>HTTP client hỗ trợ async.</p>
+        <button onclick="copyCode('pip install httpx')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>beautifulsoup4</h2>
+        <p>Trích xuất dữ liệu HTML dễ dàng.</p>
+        <button onclick="copyCode('pip install beautifulsoup4')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>scrapy</h2>
+        <p>Framework crawl dữ liệu mạnh mẽ.</p>
+        <button onclick="copyCode('pip install scrapy')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>sqlalchemy</h2>
+        <p>ORM phổ biến để kết nối cơ sở dữ liệu SQL.</p>
+        <button onclick="copyCode('pip install sqlalchemy')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>pymongo</h2>
+        <p>Kết nối Python với MongoDB.</p>
+        <button onclick="copyCode('pip install pymongo')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>nltk</h2>
+        <p>Xử lý ngôn ngữ tự nhiên cổ điển, nhiều công cụ.</p>
+        <button onclick="copyCode('pip install nltk')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>spacy</h2>
+        <p>NLP tốc độ cao, thích hợp cho sản phẩm thực tế.</p>
+        <button onclick="copyCode('pip install spacy')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>gensim</h2>
+        <p>Mô hình chủ đề, word2vec, biểu diễn văn bản.</p>
+        <button onclick="copyCode('pip install gensim')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>textblob</h2>
+        <p>Phân tích cảm xúc, từ loại dễ dùng.</p>
+        <button onclick="copyCode('pip install textblob')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>pytest</h2>
+        <p>Kiểm thử tự động đơn giản và mạnh mẽ.</p>
+        <button onclick="copyCode('pip install pytest')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>mock</h2>
+        <p>Tạo đối tượng giả trong unit test.</p>
+        <button onclick="copyCode('pip install mock')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>coverage</h2>
+        <p>Đo độ bao phủ mã của test.</p>
+        <button onclick="copyCode('pip install coverage')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>tox</h2>
+        <p>Kiểm thử trên nhiều phiên bản Python.</p>
+        <button onclick="copyCode('pip install tox')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>joblib</h2>
+        <p>Lưu mô hình, xử lý song song đơn giản.</p>
+        <button onclick="copyCode('pip install joblib')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>openpyxl</h2>
+        <p>Đọc ghi file Excel (xlsx).</p>
+        <button onclick="copyCode('pip install openpyxl')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>xlrd</h2>
+        <p>Đọc dữ liệu từ file Excel (.xls, .xlsx).</p>
+        <button onclick="copyCode('pip install xlrd')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>xlwt</h2>
+        <p>Ghi dữ liệu vào file Excel (.xls).</p>
+        <button onclick="copyCode('pip install xlwt')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>openai</h2>
+        <p>Tương tác với API OpenAI như ChatGPT, DALL·E.</p>
+        <button onclick="copyCode('pip install openai')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>transformers</h2>
+        <p>Thư viện NLP của HuggingFace, hỗ trợ BERT, GPT, T5,...</p>
+        <button onclick="copyCode('pip install transformers')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>sentence-transformers</h2>
+        <p>Embedding câu dùng BERT, hiệu quả cao.</p>
+        <button onclick="copyCode('pip install sentence-transformers')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>langchain</h2>
+        <p>Xây dựng ứng dụng AI với LLM dễ dàng.</p>
+        <button onclick="copyCode('pip install langchain')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>faiss-cpu</h2>
+        <p>Tìm kiếm gần đúng (ANN) với tốc độ cao.</p>
+        <button onclick="copyCode('pip install faiss-cpu')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>weaviate-client</h2>
+        <p>Kết nối với cơ sở dữ liệu vector Weaviate.</p>
+        <button onclick="copyCode('pip install weaviate-client')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>pinecone-client</h2>
+        <p>Tương tác với Pinecone vector database.</p>
+        <button onclick="copyCode('pip install pinecone-client')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>supabase</h2>
+        <p>Kết nối ứng dụng Python với Supabase backend.</p>
+        <button onclick="copyCode('pip install supabase')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>firebase-admin</h2>
+        <p>Quản lý Firebase từ server-side.</p>
+        <button onclick="copyCode('pip install firebase-admin')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>streamlit</h2>
+        <p>Tạo giao diện web nhanh chóng cho dự án ML.</p>
+        <button onclick="copyCode('pip install streamlit')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>gradio</h2>
+        <p>Tạo UI tương tác trực tiếp cho mô hình AI.</p>
+        <button onclick="copyCode('pip install gradio')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>dash</h2>
+        <p>Xây dựng dashboard tương tác bằng Python.</p>
+        <button onclick="copyCode('pip install dash')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>plotly</h2>
+        <p>Biểu đồ tương tác đẹp, hỗ trợ 3D.</p>
+        <button onclick="copyCode('pip install plotly')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>bokeh</h2>
+        <p>Vẽ biểu đồ tương tác động cho trình duyệt.</p>
+        <button onclick="copyCode('pip install bokeh')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>altair</h2>
+        <p>Biểu đồ thống kê với cú pháp đơn giản, đẹp.</p>
+        <button onclick="copyCode('pip install altair')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>geopandas</h2>
+        <p>Xử lý dữ liệu không gian (GIS) với pandas.</p>
+        <button onclick="copyCode('pip install geopandas')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>folium</h2>
+        <p>Vẽ bản đồ tương tác với Leaflet.js.</p>
+        <button onclick="copyCode('pip install folium')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>shapely</h2>
+        <p>Xử lý hình học (giao, giao cắt, vùng bao,...).</p>
+        <button onclick="copyCode('pip install shapely')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>pillow</h2>
+        <p>Xử lý ảnh cơ bản như crop, resize, filter.</p>
+        <button onclick="copyCode('pip install pillow')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>opencv-python</h2>
+        <p>Xử lý ảnh/video mạnh mẽ với OpenCV.</p>
+        <button onclick="copyCode('pip install opencv-python')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>imageio</h2>
+        <p>Đọc ghi ảnh và video đơn giản.</p>
+        <button onclick="copyCode('pip install imageio')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>pyautogui</h2>
+        <p>Tự động hóa chuột, bàn phím, màn hình.</p>
+        <button onclick="copyCode('pip install pyautogui')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>keyboard</h2>
+        <p>Ghi nhận và điều khiển bàn phím.</p>
+        <button onclick="copyCode('pip install keyboard')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>mouse</h2>
+        <p>Điều khiển và lắng nghe sự kiện chuột.</p>
+        <button onclick="copyCode('pip install mouse')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>pyttsx3</h2>
+        <p>Chuyển văn bản thành giọng nói offline.</p>
+        <button onclick="copyCode('pip install pyttsx3')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>speechrecognition</h2>
+        <p>Nhận diện giọng nói từ mic hoặc file.</p>
+        <button onclick="copyCode('pip install SpeechRecognition')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>pydub</h2>
+        <p>Xử lý âm thanh, hỗ trợ nhiều định dạng file.</p>
+        <button onclick="copyCode('pip install pydub')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>moviepy</h2>
+        <p>Chỉnh sửa video, xử lý video mạnh mẽ.</p>
+        <button onclick="copyCode('pip install moviepy')">Sao chép mã cài đặt</button>
+        </div>
+        
+        
+        
+        
+        <div class="library-card">
+        <h2>scipy</h2>
+        <p>Thư viện khoa học tính toán, giải quyết bài toán toán học phức tạp.</p>
+        <button onclick="copyCode('pip install scipy')">Sao chép mã cài đặt</button>
+        </div>
+        
+        
+        
+        
+        
+        
+        
+        <div class="library-card">
+        <h2>optuna</h2>
+        <p>Tối ưu hóa siêu tham số cho mô hình học máy.</p>
+        <button onclick="copyCode('pip install optuna')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>hyperopt</h2>
+        <p>Tối ưu hóa siêu tham số với thuật toán bayesian optimization.</p>
+        <button onclick="copyCode('pip install hyperopt')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>tqdm</h2>
+        <p>Hiển thị tiến độ vòng lặp.</p>
+        <button onclick="copyCode('pip install tqdm')">Sao chép mã cài đặt</button>
+        </div>
+        
+        <div class="library-card">
+        <h2>pickle</h2>
+        <p>Chuyển đối tượng Python thành dữ liệu có thể lưu trữ và tải lại.</p>
+        <button onclick="copyCode('pip install pickle')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>sqlite3</h2>
+        <p>Thư viện cơ sở dữ liệu SQLite cho Python.</p>
+        <button onclick="copyCode('pip install sqlite3')">Sao chép mã cài đặt</button>
+        </div>
+        
+        <div class="library-card">
+        <h2>psycopg2</h2>
+        <p>Kết nối Python với cơ sở dữ liệu PostgreSQL.</p>
+        <button onclick="copyCode('pip install psycopg2')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>mysql-connector-python</h2>
+        <p>Kết nối Python với cơ sở dữ liệu MySQL.</p>
+        <button onclick="copyCode('pip install mysql-connector-python')">Sao chép mã cài đặt</button>
+        </div>
+        
+        <div class="library-card">
+        <h2>redis</h2>
+        <p>Hỗ trợ kết nối và làm việc với Redis (cơ sở dữ liệu key-value).</p>
+        <button onclick="copyCode('pip install redis')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>celery</h2>
+        <p>Thư viện xử lý tác vụ bất đồng bộ, hàng đợi tác vụ.</p>
+        <button onclick="copyCode('pip install celery')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>rq</h2>
+        <p>Hệ thống quản lý hàng đợi tác vụ bất đồng bộ trong Python.</p>
+        <button onclick="copyCode('pip install rq')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>fabric</h2>
+        <p>Tự động hóa quản trị hệ thống và triển khai ứng dụng.</p>
+        <button onclick="copyCode('pip install fabric')">Sao chép mã cài đặt</button>
+        </div>
+        
+        <div class="library-card">
+        <h2>unittest</h2>
+        <p>Thư viện kiểm thử chuẩn của Python.</p>
+        <button onclick="copyCode('pip install unittest')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>nose2</h2>
+        <p>Thư viện kiểm thử, mở rộng cho unittest.</p>
+        <button onclick="copyCode('pip install nose2')">Sao chép mã cài đặt</button>
+        </div>
+        
+        
+        
+        <div class="library-card">
+        <h2>djangorestframework</h2>
+        <p>Thư viện xây dựng REST API cho Django.</p>
+        <button onclick="copyCode('pip install djangorestframework')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>flask_sqlalchemy</h2>
+        <p>Hỗ trợ ORM cho Flask với SQLAlchemy.</p>
+        <button onclick="copyCode('pip install flask_sqlalchemy')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>flask_login</h2>
+        <p>Quản lý đăng nhập người dùng trong Flask.</p>
+        <button onclick="copyCode('pip install flask_login')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>flask_wtf</h2>
+        <p>Hỗ trợ làm việc với biểu mẫu trong Flask.</p>
+        <button onclick="copyCode('pip install flask_wtf')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>gunicorn</h2>
+        <p>Server WSGI hiệu suất cao cho ứng dụng Python.</p>
+        <button onclick="copyCode('pip install gunicorn')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>uwsgi</h2>
+        <p>Server WSGI cho Python, hỗ trợ triển khai ứng dụng.</p>
+        <button onclick="copyCode('pip install uwsgi')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>jinja2</h2>
+        <p>Template engine cho Python, sử dụng trong Flask.</p>
+        <button onclick="copyCode('pip install jinja2')">Sao chép mã cài đặt</button>
+        </div>
+        
+        
+        <div class="library-card">
+        <h2>lxml</h2>
+        <p>Thư viện phân tích và tạo XML, HTML.</p>
+        <button onclick="copyCode('pip install lxml')">Sao chép mã cài đặt</button>
+        </div>
+        
+        <div class="library-card">
+        <h2>selenium</h2>
+        <p>Tự động hóa trình duyệt web, hỗ trợ kiểm thử giao diện.</p>
+        <button onclick="copyCode('pip install selenium')">Sao chép mã cài đặt</button>
+        </div>
+        
+        
+        <div class="library-card">
+        <h2>speech_recognition</h2>
+        <p>Chuyển giọng nói thành văn bản (Speech-to-Text).</p>
+        <button onclick="copyCode('pip install SpeechRecognition')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>pyserial</h2>
+        <p>Giao tiếp qua cổng nối tiếp (Serial Port).</p>
+        <button onclick="copyCode('pip install pyserial')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>pygame</h2>
+        <p>Thư viện phát triển trò chơi 2D.</p>
+        <button onclick="copyCode('pip install pygame')">Sao chép mã cài đặt</button>
+        </div>
+        
+        
+        <div class="library-card">
+        <h2>pyqrcode</h2>
+        <p>Tạo mã QR trong Python.</p>
+        <button onclick="copyCode('pip install pyqrcode')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>qrcode</h2>
+        <p>Thư viện tạo mã QR với nhiều tùy chọn tùy chỉnh.</p>
+        <button onclick="copyCode('pip install qrcode')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>cryptography</h2>
+        <p>Thư viện mã hóa và giải mã bảo mật.</p>
+        <button onclick="copyCode('pip install cryptography')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>pycryptodome</h2>
+        <p>Thư viện mã hóa thay thế cho pycrypto.</p>
+        <button onclick="copyCode('pip install pycryptodome')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>paramiko</h2>
+        <p>Thư viện SSH2 cho Python, hỗ trợ SCP và SFTP.</p>
+        <button onclick="copyCode('pip install paramiko')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>fabric3</h2>
+        <p>Thư viện tự động hóa quản trị hệ thống, phiên bản của Fabric cho Python 3.</p>
+        <button onclick="copyCode('pip install fabric3')">Sao chép mã cài đặt</button>
+        </div>
+        
+        <div class="library-card">
+        <h2>rich</h2>
+        <p>In văn bản màu sắc, bảng, cây thư mục, thanh tiến trình... trong terminal cực đẹp.</p>
+        <button onclick="copyCode('pip install rich')">Sao chép mã cài đặt</button>
+        </div>
+        <div class="library-card">
+        <h2>typer</h2>
+        <p>Tạo CLI (command line interface) hiện đại dễ dàng, dựa trên type hints.</p>
+        <button onclick="copyCode('pip install typer')">Sao chép mã cài đặt</button>
+        </div><div class="library-card"><h2>loguru</h2><p>Logging nâng cao, đơn giản và đẹp.</p><button onclick="copyCode('pip install loguru')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>pydantic</h2><p>Xác thực và phân tích dữ liệu mạnh mẽ.</p><button onclick="copyCode('pip install pydantic')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>aiohttp</h2><p>HTTP client/server hỗ trợ async.</p><button onclick="copyCode('pip install aiohttp')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>fastparquet</h2><p>Ghi/đọc file Parquet cực nhanh.</p><button onclick="copyCode('pip install fastparquet')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>pyyaml</h2><p>Xử lý file YAML dễ dàng.</p><button onclick="copyCode('pip install pyyaml')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>watchdog</h2><p>Theo dõi thay đổi file hệ thống.</p><button onclick="copyCode('pip install watchdog')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>tabulate</h2><p>Hiển thị bảng dữ liệu đẹp trong terminal.</p><button onclick="copyCode('pip install tabulate')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>email-validator</h2><p>Xác thực địa chỉ email.</p><button onclick="copyCode('pip install email-validator')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>python-decouple</h2><p>Quản lý biến môi trường.</p><button onclick="copyCode('pip install python-decouple')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>arrow</h2><p>Xử lý ngày giờ dễ dàng hơn datetime.</p><button onclick="copyCode('pip install arrow')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>pyee</h2><p>EventEmitter cho Python, tương tự Node.js.</p><button onclick="copyCode('pip install pyee')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>colorama</h2><p>In màu trong terminal đa nền tảng.</p><button onclick="copyCode('pip install colorama')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>python-dotenv</h2><p>Tải biến môi trường từ file .env.</p><button onclick="copyCode('pip install python-dotenv')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>validators</h2><p>Bộ công cụ kiểm tra tính hợp lệ của dữ liệu.</p><button onclick="copyCode('pip install validators')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>httpagentparser</h2><p>Nhận diện trình duyệt từ user-agent.</p><button onclick="copyCode('pip install httpagentparser')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>itsdangerous</h2><p>Ký và xác thực dữ liệu an toàn.</p><button onclick="copyCode('pip install itsdangerous')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>blinker</h2><p>Hệ thống signal đơn giản cho Python.</p><button onclick="copyCode('pip install blinker')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>markdown</h2><p>Chuyển đổi Markdown sang HTML.</p><button onclick="copyCode('pip install markdown')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>schedule</h2><p>Lập lịch chạy tác vụ định kỳ dễ dàng.</p><button onclick="copyCode('pip install schedule')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>yarl</h2><p>Thư viện URL cho Python với cú pháp hiện đại.</p><button onclick="copyCode('pip install yarl')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>iso8601</h2><p>Phân tích cú pháp ngày giờ định dạng ISO 8601.</p><button onclick="copyCode('pip install iso8601')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>multidict</h2><p>Dict nhiều giá trị, dùng trong aiohttp.</p><button onclick="copyCode('pip install multidict')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>ujson</h2><p>Thư viện JSON siêu nhanh.</p><button onclick="copyCode('pip install ujson')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>msgpack</h2><p>Serialization dữ liệu nhị phân.</p><button onclick="copyCode('pip install msgpack')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>python-slugify</h2><p>Chuyển đổi text sang định dạng URL (slug).</p><button onclick="copyCode('pip install python-slugify')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>pyfiglet</h2><p>In chữ nghệ thuật trong terminal.</p><button onclick="copyCode('pip install pyfiglet')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>termcolor</h2><p>Tô màu chữ trong terminal.</p><button onclick="copyCode('pip install termcolor')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>fire</h2><p>Tạo CLI từ hàm Python cực nhanh.</p><button onclick="copyCode('pip install fire')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>boltons</h2><p>Bộ công cụ nhỏ hữu ích mở rộng Python.</p><button onclick="copyCode('pip install boltons')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>humanize</h2><p>Hiển thị thời gian và số theo cách thân thiện.</p><button onclick="copyCode('pip install humanize')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>numexpr</h2><p>Tính toán biểu thức số học rất nhanh.</p><button onclick="copyCode('pip install numexpr')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>pyinstrument</h2><p>Profiler cho ứng dụng Python.</p><button onclick="copyCode('pip install pyinstrument')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>blessings</h2><p>Thư viện in đẹp và kiểm soát terminal.</p><button onclick="copyCode('pip install blessings')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>hug</h2><p>Tạo API với Python 3 hiện đại, nhanh chóng.</p><button onclick="copyCode('pip install hug')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>email-validator</h2><p>Kiểm tra tính hợp lệ của email.</p><button onclick="copyCode('pip install email-validator')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>phonenumbers</h2><p>Xử lý và định dạng số điện thoại quốc tế.</p><button onclick="copyCode('pip install phonenumbers')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>freezegun</h2><p>Đóng băng thời gian để test dễ hơn.</p><button onclick="copyCode('pip install freezegun')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>arrow</h2><p>Thư viện xử lý ngày giờ dễ dùng.</p><button onclick="copyCode('pip install arrow')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>pygments</h2><p>Tô màu cú pháp mã nguồn.</p><button onclick="copyCode('pip install pygments')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>xxhash</h2><p>Thuật toán băm siêu nhanh.</p><button onclick="copyCode('pip install xxhash')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>pyotp</h2><p>Tạo mã xác thực OTP.</p><button onclick="copyCode('pip install pyotp')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>zxcvbn</h2><p>Đánh giá độ mạnh mật khẩu.</p><button onclick="copyCode('pip install zxcvbn')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>py-cpuinfo</h2><p>Lấy thông tin CPU bằng Python.</p><button onclick="copyCode('pip install py-cpuinfo')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>pyjokes</h2><p>In câu nói đùa từ Python.</p><button onclick="copyCode('pip install pyjokes')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>icecream</h2><p>In giá trị biến để debug dễ hơn.</p><button onclick="copyCode('pip install icecream')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>texttable</h2><p>Tạo bảng văn bản đẹp mắt.</p><button onclick="copyCode('pip install texttable')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>orjson</h2><p>Thư viện JSON siêu nhanh hỗ trợ datetime.</p><button onclick="copyCode('pip install orjson')">Sao chép mã cài đặt</button></div><div class="library-card"><h2>toml</h2><p>Đọc ghi file TOML.</p><button onclick="copyCode('pip install toml')">Sao chép mã cài đặt</button></div></div>
+        <div class="copyright" id="copyright">
+    © KhanhPC 2025 - Mọi quyền được bảo lưu
+    <div class="cat-container" id="cat">
+        <img src="meo.gif" alt="Mèo đáng yêu" class="cat-img">
+        <div class="speech-bubble">Này! Tôi biết bạn đang làm gì... Đây là web của Hoàng Quốc Khánh đấy!</div>
+    </div>
+</div>
+
+    </div>
+
+    <script>
+        document.body.style.overflow = 'auto'; // Cho phép cuộn
+  document.body.style.scrollbarWidth = 'none'; // Firefox
+  const style = document.createElement("style");
+  style.innerHTML = `
+    ::-webkit-scrollbar {
+      display: none; /* Chrome, Safari */
+    }
+  `;
+  document.head.appendChild(style);
+
+
+        function copyCode(command) {
+            navigator.clipboard.writeText(command).then(function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Sao chép thành công!',
+                    text: 'Đã sao chép mã lệnh: ' + command
+                });
+            });
+        }
+        
+            document.getElementById("copyright").addEventListener("mouseover", () => {
+    document.getElementById("cat").style.display = "block";
+});
+
+document.getElementById("copyright").addEventListener("mouseleave", () => {
+    document.getElementById("cat").style.display = "none";
+});
+
+
+
+    </script>
+<script>
+    function searchLibraries() {
+      const input = document.getElementById("searchInput").value.toLowerCase();
+      const cards = document.querySelectorAll(".library-card");
+    
+      cards.forEach(card => {
+        const title = card.querySelector("h2").textContent.toLowerCase();
+        const desc = card.querySelector("p").textContent.toLowerCase();
+    
+        if (title.includes(input) || desc.includes(input)) {
+          card.style.display = "block";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    }
+    </script>
+    
+</body>
+</html>

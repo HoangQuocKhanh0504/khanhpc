@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chống lừa đảo</title>
+  <link rel="icon" href="GD.png" />
+  <script src="https://www.google.com/recaptcha/api.js?render=6Le1rRYrAAAAAKt07uCfmbqyogPZGvZlUtomhKCX&hl=vi"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    };
+  </script>
+  <style>
+    .overlay {
+      background: rgba(0, 0, 0, 0.5);
+    }
+    #imageModal {
+      display: none;
+      position: fixed;
+      z-index: 60;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.3s ease;
+    }
+    #imageModal.active {
+      display: flex;
+    }
+    .loader {
+      border-top-color: #ef4444;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-r from-red-50 via-white to-red-50 dark:from-gray-900 dark:to-gray-800 min-h-screen flex items-center justify-center px-6 transition-all duration-500">
+
+  <!-- Dark mode toggle -->
+  <button onclick="toggleDark()" class="fixed top-4 right-4 z-50 bg-gray-800 text-white px-3 py-2 rounded-xl shadow-md hover:bg-gray-700 transition">
+    🌙/☀️
+  </button>
+
+  <!-- Loading -->
+  <div id="loadingOverlay" class="hidden fixed inset-0 flex items-center justify-center overlay z-50">
+    <div class="loader rounded-full h-14 w-14 border-4 border-gray-300 border-t-4"></div>
+  </div>
+
+  <!-- Giao diện chính -->
+  <main class="bg-white dark:bg-gray-900 max-w-3xl w-full p-10 rounded-3xl shadow-2xl space-y-8 transition-all duration-500">
+
+    <h1 class="text-4xl font-extrabold text-center text-red-600 dark:text-red-400 mb-6 select-none">🔐 Kiểm Tra Độ An Toàn Website</h1>
+
+    <section class="flex gap-4">
+      <input id="urlInput" type="text" placeholder="Nhập đường link website..."
+        class="flex-1 text-lg px-5 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-red-400 transition focus:border-red-500 dark:bg-gray-800 dark:text-white"
+        autocomplete="off" spellcheck="false" />
+      <button onclick="checkSafety()"
+        class="bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-semibold px-8 rounded-2xl shadow-lg transition-transform active:scale-95 select-none">
+        Kiểm tra
+      </button>
+    </section>
+
+    <section id="result" class="hidden space-y-6">
+      <div class="flex flex-col md:flex-row gap-8 items-center md:items-start">
+        <div class="flex-1 text-center md:text-left">
+          <h2 class="text-xl font-semibold mb-3 dark:text-white">Ảnh preview:</h2>
+          <img id="previewImg" src="" alt="Preview"
+            class="rounded-3xl border border-gray-300 shadow-lg max-w-full cursor-pointer transition-transform hover:scale-105 hidden"
+            onclick="openModal()" title="Bấm để xem ảnh lớn" />
+        </div>
+        <div class="flex-1 space-y-3 text-gray-700 dark:text-gray-200 text-lg font-medium hidden" id="infoBlock">
+          <div><strong>🌐 Tên miền:</strong> <span id="domain"></span></div>
+          <div><strong>⚠️ Trạng thái:</strong> <span id="statusText" class="font-extrabold"></span></div>
+        </div>
+      </div>
+
+      <button onclick="reportSite()"
+        class="w-full bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-600 text-black font-semibold py-3 rounded-3xl shadow-md select-none transition-transform active:scale-95">
+        🚩 Báo cáo website này
+      </button>
+
+<div id="historyBlock" class="pt-4 space-y-2">
+  <div class="flex items-center justify-between">
+    <h2 class="text-lg font-semibold dark:text-white">🔁 Lịch sử kiểm tra:</h2>
+    <button onclick="clearHistory()" class="text-sm text-red-600 dark:text-red-400 hover:underline focus:outline-none">
+      🗑️ Xóa lịch sử
+    </button>
+  </div>
+  <ul id="historyList" class="list-disc list-inside text-sm text-gray-700 dark:text-gray-300 space-y-1"></ul>
+</div>
+
+        <br>
+        <br>
+        <br>
+        <br>
+    </section>
+
+  </main>
+
+  <!-- Popup ảnh lớn -->
+  <div id="imageModal" onclick="closeModal()" role="dialog" aria-modal="true">
+    <div class="relative max-w-4xl w-full mx-6">
+      <button onclick="closeModal()"
+        class="absolute top-4 right-4 text-white bg-black bg-opacity-70 rounded-full w-10 h-10 flex items-center justify-center hover:bg-opacity-90 transition select-none">
+        ✕
+      </button>
+      <img id="modalImg" src="" alt="Ảnh lớn" class="rounded-3xl max-h-[85vh] w-auto mx-auto shadow-2xl" />
+    </div>
+  </div>
+  <!-- Popup alert -->
+  <div id="popupAlert" class="hidden fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-green-600 text-white font-semibold px-6 py-3 rounded-xl shadow-lg z-50 animate-bounce">
+    ✅ Đã kiểm tra xong!
+  </div>
+<footer style="
+  position: fixed;
+  bottom: 20px;  /* cách đáy màn hình 20px cho thoáng */
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 600px;
+  width: calc(100% - 40px);
+  background: #2a9d8f;
+  color: #fff;
+  font-size: 15px;
+  text-align: center;
+  padding: 12px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(42, 157, 143, 0.4);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  user-select: none;
+">
+  <span style="font-size: 20px;">🔒</span>
+  &copy; 2025 KHANHPC | luôn coi trọng sự an toàn của bạn.
+</footer>
+
+  <script>
+    // Khởi tạo trạng thái dark mode từ localStorage
+    (function initDarkMode() {
+      const darkModeStored = localStorage.getItem('darkModeEnabled');
+      if (darkModeStored === 'true') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+
+    // Hàm bật/tắt dark mode và lưu trạng thái
+    function toggleDark() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('darkModeEnabled', isDark);
+    }
+
+    // Lấy lịch sử kiểm tra từ localStorage
+    function getHistory() {
+      try {
+        const history = JSON.parse(localStorage.getItem('urlCheckHistory'));
+        if (Array.isArray(history)) return history;
+        return [];
+      } catch {
+        return [];
+      }
+    }
+
+    // Lưu lịch sử vào localStorage (giới hạn 20 mục)
+    function saveHistory(url) {
+      let history = getHistory();
+      // Không lưu trùng link liên tiếp
+      if (history.length === 0 || history[history.length - 1] !== url) {
+        history.push(url);
+        if (history.length > 20) history.shift(); // Giới hạn 20 mục gần nhất
+        localStorage.setItem('urlCheckHistory', JSON.stringify(history));
+      }
+      renderHistory();
+    }
+
+    // Hiển thị lịch sử trên UI
+    function renderHistory() {
+      const historyList = document.getElementById('historyList');
+      const historyBlock = document.getElementById('historyBlock');
+      const history = getHistory();
+
+      if (history.length === 0) {
+        historyList.innerHTML = '<li class="italic text-gray-500 dark:text-gray-400">Chưa có lịch sử kiểm tra.</li>';
+      } else {
+        historyList.innerHTML = '';
+        // Hiển thị link gần nhất lên trên (đảo ngược mảng)
+        [...history].reverse().forEach(item => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = item;
+          a.textContent = item;
+          a.target = "_blank";
+          a.rel = "noopener noreferrer";
+          a.className = "hover:underline text-red-600 dark:text-red-400";
+          li.appendChild(a);
+          historyList.appendChild(li);
+        });
+      }
+      historyBlock.classList.remove('hidden');
+    }
+
+    // Khi tải trang, hiển thị lịch sử
+    window.addEventListener('DOMContentLoaded', () => {
+      renderHistory();
+    });
+
+    function checkSafety() {
+      const urlInput = document.getElementById("urlInput");
+      let url = urlInput.value.trim();
+      const preview = document.getElementById("previewImg");
+      const result = document.getElementById("result");
+      const loading = document.getElementById("loadingOverlay");
+      const domainSpan = document.getElementById("domain");
+      const statusText = document.getElementById("statusText");
+      const infoBlock = document.getElementById("infoBlock");
+
+      if (!url) return alert("Vui lòng nhập link website.");
+      if (!url.startsWith("http")) url = "https://" + url;
+
+      result.classList.remove("hidden");
+      preview.classList.add("hidden");
+      infoBlock.classList.add("hidden");
+      loading.classList.remove("hidden");
+
+      const previewURL = `https://api.microlink.io/?url=${encodeURIComponent(url)}&screenshot=true&meta=false&embed=screenshot.url`;
+      preview.src = previewURL;
+      document.getElementById("modalImg").src = previewURL;
+
+      const nguyHiemCao = ["phishing", "malware", "hack", "danger"];
+      const nguyHiemTrungBinh = ["login", "pay", "secure"];
+      const lowerURL = url.toLowerCase();
+
+      try {
+        const domain = new URL(url).hostname;
+        domainSpan.textContent = domain;
+      } catch {
+        domainSpan.textContent = "(không hợp lệ)";
+      }
+
+      if (nguyHiemCao.some(kw => lowerURL.includes(kw))) {
+        statusText.textContent = "Nguy hiểm cao";
+        statusText.className = "text-red-600 font-extrabold";
+      } else if (nguyHiemTrungBinh.some(kw => lowerURL.includes(kw))) {
+        statusText.textContent = "Nguy hiểm trung bình";
+        statusText.className = "text-yellow-500 font-extrabold";
+      } else {
+        statusText.textContent = "An toàn: không phát hiện từ khóa xấu";
+        statusText.className = "text-green-600 font-extrabold";
+      }
+
+      // Lưu lịch sử
+      saveHistory(url);
+    }
+
+    function hideLoading() {
+      document.getElementById("loadingOverlay").classList.add("hidden");
+      document.getElementById("previewImg").classList.remove("hidden");
+      document.getElementById("infoBlock").classList.remove("hidden");
+
+      document.getElementById("popupAlert").classList.remove("hidden");
+      setTimeout(() => {
+        document.getElementById("popupAlert").classList.add("hidden");
+      }, 3000);
+    }
+
+    function reportSite() {
+      const url = document.getElementById("urlInput").value.trim();
+      alert("Cảm ơn bạn đã báo cáo! Chúng tôi sẽ xem xét: " + url);
+    }
+
+    function openModal() {
+      document.getElementById("imageModal").classList.add("active");
+    }
+
+    function closeModal() {
+      document.getElementById("imageModal").classList.remove("active");
+    }
+
+    document.getElementById("previewImg").addEventListener("load", hideLoading);
+// Xóa toàn bộ lịch sử kiểm tra
+function clearHistory() {
+  localStorage.removeItem('urlCheckHistory');
+  renderHistory();
+}
+function clearHistory() {
+  const darkMode = localStorage.getItem('darkModeEnabled'); // lưu tạm
+  localStorage.clear(); // xóa toàn bộ
+  if (darkMode !== null) {
+    localStorage.setItem('darkModeEnabled', darkMode); // khôi phục dark mode
+  }
+  renderHistory();
+  alert('🗑️ Đã xóa lịch sử và làm mới bộ nhớ (trừ dark mode)!');
+}
+
+  </script>
+
+</body>
+</html>

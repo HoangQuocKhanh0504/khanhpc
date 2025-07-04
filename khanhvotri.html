@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="https://www.google.com/recaptcha/api.js?render=6Le1rRYrAAAAAKt07uCfmbqyogPZGvZlUtomhKCX&hl=vi"></script>
+    <link rel="icon" type="image/png" href="GD.png">
+  <title>Khánh Vô Tri</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #1a1a1a;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+
+    h1 {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 32px;
+      text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.5);
+    }
+
+    .scene {
+      width: 300px;
+      height: 300px;
+      perspective: 800px;
+    }
+
+    .cube {
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease;
+    }
+
+    .face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 2px solid #fff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+      backface-visibility: hidden;
+    }
+
+    .front  { transform: rotateY(  0deg) translateZ(150px); background-color: #f00; }
+    .back   { transform: rotateY(180deg) translateZ(150px); background-color: #0f0; }
+    .left   { transform: rotateY(-90deg) translateZ(150px); background-color: #00f; }
+    .right  { transform: rotateY( 90deg) translateZ(150px); background-color: #ff0; }
+    .top    { transform: rotateX( 90deg) translateZ(150px); background-color: #0ff; }
+    .bottom { transform: rotateX(-90deg) translateZ(150px); background-color: #f0f; }
+
+    @media (max-width: 768px) {
+      .scene {
+        width: 60vw;
+        height: 60vw;
+        perspective: 160vw;
+      }
+
+      .front  { transform: rotateY(  0deg) translateZ(30vw); }
+      .back   { transform: rotateY(180deg) translateZ(30vw); }
+      .left   { transform: rotateY(-90deg) translateZ(30vw); }
+      .right  { transform: rotateY( 90deg) translateZ(30vw); }
+      .top    { transform: rotateX( 90deg) translateZ(30vw); }
+      .bottom { transform: rotateX(-90deg) translateZ(30vw); }
+    }
+    /* Đối với Chrome, Safari */
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* Ẩn thanh cuộn nhưng vẫn có thể cuộn */
+html, body {
+    overflow: hidden;
+}
+
+body {
+    overflow-y: scroll;
+}
+
+  </style>
+</head>
+<body>
+  <h1>Khánh Vô Tri</h1>
+  <div class="scene">
+    <div class="cube">
+      <div class="face front"></div>
+      <div class="face back"></div>
+      <div class="face left"></div>
+      <div class="face right"></div>
+      <div class="face top"></div>
+      <div class="face bottom"></div>
+    </div>
+  </div>
+
+  <script>
+    let cube = document.querySelector('.cube');
+    let lastX, lastY;
+
+    document.addEventListener('mousemove', (e) => {
+      let mouseX = e.clientX;
+      let mouseY = e.clientY;
+
+      let rotateX = (mouseY / window.innerHeight) * 360 - 180;
+      let rotateY = (mouseX / window.innerWidth) * 360 - 180;
+
+      cube.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    document.addEventListener('touchmove', (e) => {
+      let touch = e.touches[0];
+      let touchX = touch.clientX;
+      let touchY = touch.clientY;
+
+      if (lastX !== undefined && lastY !== undefined) {
+        let rotateX = (touchY - lastY) / window.innerHeight * 360;
+        let rotateY = (touchX - lastX) / window.innerWidth * 360;
+
+        cube.style.transform += `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      }
+
+      lastX = touchX;
+      lastY = touchY;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://www.google.com/recaptcha/api.js?render=6Le1rRYrAAAAAKt07uCfmbqyogPZGvZlUtomhKCX&hl=vi"></script>
+  <link rel="icon" type="image/png" href="GD.png">
+  <title>Hoàng Quốc Khánh - Giới Thiệu Bản Thân</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <style>
+
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      
+    }
+
+    /* Viền sáng glow */
+    .glow-border {
+      box-shadow: 0 0 10px #6366f1;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from {
+        box-shadow: 0 0 10px #6366f1;
+      }
+      to {
+        box-shadow: 0 0 25px #4f46e5, 0 0 50px #60a5fa;
+      }
+    }
+
+    /* Hiệu ứng hover mượt */
+    .hover-effect {
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .hover-effect:hover {
+      transform: scale(1.02);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+    .copyright {
+    border-radius:100px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 123, 255, 0.95);
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0px -5px 10px rgba(0,0,0,0.2);
+    transition: background 0.3s ease-in-out;
+    animation: bounce 0.5s infinite alternate ease-in-out;
+}
+
+.cat-container {
+    display: none;
+    position: absolute;
+    left: 50%;
+    bottom: 50px;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+.cat-img {
+    width: 100px;
+    animation: bounce 1s infinite alternate ease-in-out;
+}
+
+.speech-bubble {
+    background: #EAE0C8;
+    color: black;
+    padding: 8px 12px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    margin-top: 10px;
+}
+
+@keyframes bounce {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-5px); }
+}
+
+  </style>
+</head>
+<body class="bg-gradient-to-br from-blue-100 to-indigo-200 min-h-screen text-gray-800">
+
+  <header class="text-center py-10" data-aos="zoom-in">
+    <h1 class="text-5xl font-extrabold text-indigo-700 drop-shadow-lg mb-2 hover:scale-110 hover:rotate-1 transition duration-300">Hoàng Quốc Khánh</h1>
+    <p class="text-xl text-gray-700 hover:scale-105 transition duration-300">Sinh ngày: 5/4/2008</p>
+  </header>
+
+  <section class="max-w-4xl mx-auto px-6 py-8 bg-white shadow-2xl rounded-3xl mb-10 hover-effect glow-border" data-aos="fade-up">
+    <h2 class="text-3xl font-semibold mb-4">👋 Giới thiệu</h2>
+    <p class="text-lg leading-relaxed">
+      Xin chào! Mình là <strong>Hoàng Quốc Khánh</strong>, sinh ngày <strong>05/04/2008</strong>.<br>
+      Mình yêu thích công nghệ, sáng tạo và luôn cố gắng học tập mỗi ngày để trở thành phiên bản tốt hơn của chính mình.
+    </p>
+  </section>
+
+  <section class="max-w-4xl mx-auto px-6 py-8 bg-white shadow-2xl rounded-3xl mb-10 hover-effect glow-border" data-aos="fade-left">
+    <h2 class="text-3xl font-semibold mb-4">🎯 Mục tiêu</h2>
+    <ul class="list-disc pl-5 space-y-2 text-lg">
+      <li>Học giỏi và đạt thành tích cao trong học tập</li>
+      <li>Phát triển kỹ năng lập trình, thiết kế web</li>
+      <li>Trở thành một người có ích cho xã hội và gia đình</li>
+    </ul>
+  </section>
+
+  <section class="max-w-4xl mx-auto px-6 py-8 bg-white shadow-2xl rounded-3xl mb-10 hover-effect glow-border" data-aos="zoom-in-up">
+    <h2 class="text-3xl font-semibold mb-4">📍 Nơi mình đang học</h2>
+    <div class="rounded-xl overflow-hidden shadow-xl border-4 border-indigo-400 hover:scale-105 transition-all duration-500">
+      <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62695.327275550735!2d106.55715522167964!3d10.852730999999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317529798a06bc69%3A0xc1c961c2fe6bde91!2sIMC!5e0!3m2!1svi!2s!4v1745200512271!5m2!1svi!2s" 
+        width="100%" 
+        height="450" 
+        style="border:0; transition: transform 0.4s ease;" 
+        allowfullscreen="" 
+        loading="lazy" 
+        referrerpolicy="no-referrer-when-downgrade"
+        onmouseover="this.style.transform='scale(1.01)'"
+        onmouseout="this.style.transform='scale(1)'"
+      ></iframe>
+    </div>
+  </section>
+
+  <section class="text-center mb-10" data-aos="fade-up">
+    <p class="text-sm text-gray-500">© 2025 Hoàng Quốc Khánh</p>
+  </section>
+        <div class="copyright" id="copyright">
+    © KhanhPC 2025 - Mọi quyền được bảo lưu
+    <div class="cat-container" id="cat">
+        <img src="meo.gif" alt="Mèo đáng yêu" class="cat-img">
+        <div class="speech-bubble">Này! Tôi biết bạn đang làm gì... Đây là web của Hoàng Quốc Khánh đấy!</div>
+    </div>
+</div>
+
+  <!-- AOS script -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 1200,
+      once: false
+    });
+    document.documentElement.style.scrollbarWidth = "none"; // Firefox
+document.documentElement.style.overflow = "auto";       // Đảm bảo vẫn cuộn được
+
+// Chrome, Safari, Edge
+const style = document.createElement("style");
+style.textContent = `
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
+document.head.appendChild(style);
+            document.getElementById("copyright").addEventListener("mouseover", () => {
+    document.getElementById("cat").style.display = "block";
+});
+
+document.getElementById("copyright").addEventListener("mouseleave", () => {
+    document.getElementById("cat").style.display = "none";
+});
+  </script>
+</body>
+</html>

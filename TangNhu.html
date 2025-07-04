@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>💘 Tặng bé như</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="GD.png">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 360px;
+      animation: pop 0.5s ease-out;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: 28px;
+      color: #d63384;
+      margin-bottom: 30px;
+    }
+
+    .btn {
+      padding: 14px 28px;
+      font-size: 16px;
+      border: none;
+      border-radius: 999px;
+      margin: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    #yesBtn {
+      background-color: #ff4d94;
+      color: white;
+    }
+
+    #noBtn {
+      background-color: #f1f1f1;
+      color: #333;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
+
+    #message {
+      margin-top: 20px;
+      font-size: 20px;
+      color: #d63384;
+      animation: fadeIn 0.6s ease-in-out;
+      display: none;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .heart {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      transform: rotate(45deg);
+      animation: floatUp 2s linear forwards;
+    }
+
+    .heart::before, .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Như cóa yêu khánh hơm ạ? 🥺</h1>
+    <button id="yesBtn" class="btn">Có chứ ❤️</button>
+    <button id="noBtn" class="btn">Không 😳</button>
+    <div id="message"></div>
+  </div>
+
+<script>
+  const yesBtn = document.getElementById('yesBtn');
+  const noBtn = document.getElementById('noBtn');
+  const message = document.getElementById('message');
+
+  yesBtn.addEventListener('click', () => {
+    message.innerText = 'Biết ngay mà! Khánh yêu Như lắm ❤️';
+    message.style.display = 'block';
+    generateHearts();
+  });
+
+  noBtn.addEventListener('click', moveNoButtonFar);
+  noBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault(); // Không để delay cảm ứng
+    moveNoButtonFar();
+  });
+
+  function moveNoButtonFar() {
+    const btnWidth = noBtn.offsetWidth;
+    const btnHeight = noBtn.offsetHeight;
+    const padding = 20;
+
+    const maxX = window.innerWidth - btnWidth - padding;
+    const maxY = window.innerHeight - btnHeight - padding;
+
+    const randX = Math.random() * maxX;
+    const randY = Math.random() * maxY;
+
+    noBtn.style.position = 'fixed';
+    noBtn.style.transition = 'none'; // Không hiệu ứng
+    noBtn.style.left = `${randX}px`;
+    noBtn.style.top = `${randY}px`;
+  }
+
+  function generateHearts() {
+    for (let i = 0; i < 30; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.top = '100vh';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 2000);
+    }
+  }
+</script>
+
+</body>
+</html>
