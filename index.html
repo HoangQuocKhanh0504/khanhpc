@@ -138,24 +138,30 @@
     "fa-wand-magic-sparkles", "fa-terminal", "fa-shield-alt", 
     "fa-brain", "fa-key", "fa-eye", "fa-microchip"
   ];
-  const isAdmin = location.hash.includes("admin"); // Kiểm tra quyền admin
+  const isAdmin = location.hash.includes("admin");
   const hiddenTools = JSON.parse(localStorage.getItem("hiddenTools") || "[]");
+  const list = document.getElementById("tool-list");
   fetch(GITHUB_API)
     .then(res => res.json())
     .then(files => {
       const htmlFiles = files.filter(f => f.name.endsWith(".html") && f.name !== "index.html");
-      const list = document.getElementById("tool-list");
       htmlFiles.forEach((file, i) => {
         const url = `https://khanhpc-five.vercel.app/${file.name}`;
         const icon = iconList[i % iconList.length];
         const id = file.name;
-        // Nếu đã bị ẩn thì bỏ qua
+        // Nếu đã bị ẩn bằng localStorage thì bỏ qua
         if (hiddenTools.includes(id)) return;
         fetch(url)
           .then(res => res.text())
           .then(html => {
             const titleMatch = html.match(/<title>(.*?)<\/title>/i);
             const title = titleMatch ? titleMatch[1] : file.name.replace(".html", "");
+            // Ẩn tự động nếu tiêu đề chứa các từ nhạy cảm
+            const lowerTitle = title.toLowerCase();
+            const forbidden = ["tặng bé như", "như", "chúii"];
+            const isForbidden = forbidden.some(keyword => lowerTitle.includes(keyword));
+            // Nếu không phải admin và tiêu đề chứa từ cấm thì bỏ qua
+            if (!isAdmin && isForbidden) return;
             const card = document.createElement("div");
             card.className = `
               bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-5 
@@ -167,7 +173,7 @@
               <h3 class="text-lg font-semibold mb-2">${title}</h3>
               <a href="${url}" target="_blank" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full text-sm transition">Dùng ngay</a>
             `;
-            // Chỉ admin mới được ẩn tool bằng chuột phải
+            // Chuột phải để ẩn (chỉ admin mới thấy)
             if (isAdmin) {
               card.addEventListener("contextmenu", e => {
                 e.preventDefault();
