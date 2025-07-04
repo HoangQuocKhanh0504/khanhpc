@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>KHANHVIPPRO - HellMode Unlock</title>
+    <link id="favicon" rel="icon" href="favicon.png" type="image/png">
+  <style>
+    body {
+      background: #0f2027;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 30px;
+      transition: background 0.3s;
+    }
+    .step {
+      display: none;
+      padding: 20px;
+      background: #1c1c1c;
+      border-radius: 12px;
+      margin: 20px auto;
+      max-width: 600px;
+    }
+    .step.active { display: block; }
+    button {
+      padding: 10px 20px;
+      background: #00f2fe;
+      color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 10px;
+    }
+    input {
+      padding: 10px;
+      width: 80%;
+      border-radius: 6px;
+      border: none;
+      margin-top: 10px;
+    }
+    .hidden-pass {
+      font-size: 24px;
+      background: black;
+      padding: 10px;
+      border-radius: 10px;
+      display: inline-block;
+      margin-top: 10px;
+      user-select: all;
+      cursor: pointer;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      50% { transform: translateX(10px); }
+      75% { transform: translateX(-10px); }
+    }
+    .shake { animation: shake 0.4s ease-in-out 3; }
+
+    #error-box {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ff4d4d;
+      color: white;
+      padding: 15px 25px;
+      border-radius: 10px;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      z-index: 9999;
+      transition: all 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔐 Mở khóa pass KHANHVIPPRO HellMode™</h1>
+
+  <!-- Các bước -->
+  <div class="step active" id="step1">
+    <p>1️⃣ Mở YouTube & đăng ký kênh</p>
+    <button onclick="openYT()">Mở kênh</button>
+    <div id="yt-confirm" style="display:none">
+      <p>✅ Bạn đã đăng ký chưa?</p>
+      <button onclick="nextStep(2)">Tôi đã đăng ký</button>
+    </div>
+  </div>
+
+  <div class="step" id="step2">
+    <p>2️⃣ Nhập tiêu đề video vừa xem</p>
+    <input id="video"><br>
+    <button onclick="checkVideo()">Tiếp tục</button>
+  </div>
+
+  <div class="step" id="step3">
+    <p>3️⃣ Tên thật của Khánh?</p>
+    <input id="realname"><br>
+    <button onclick="checkName()">Xác nhận</button>
+  </div>
+
+  <div class="step" id="step4">
+    <p>4️⃣ Chọn 1 ô duy nhất đúng</p>
+    <div id="grid"></div>
+  </div>
+
+  <div class="step" id="step5">
+    <p>5️⃣ Nhập mã xác thực</p>
+    <div id="code" style="font-size: 20px;"></div>
+    <input id="captcha"><br>
+    <button onclick="checkCaptcha()">Xác nhận</button>
+  </div>
+
+  <div class="step" id="step6">
+    <p>6️⃣ Gõ đúng câu: <b>TÔI MUỐN LẤY PASS</b></p>
+    <input id="quote"><br>
+    <button onclick="checkQuote()">Tiếp tục</button>
+  </div>
+
+  <div class="step" id="step7">
+    <p>7️⃣ Bạn có like bài viết fanpage chưa?</p>
+    <button onclick="nextStep(8)">Tôi đã like</button>
+  </div>
+
+  <div class="step" id="step8">
+    <p>8️⃣ Comment KHANHPRO vào đây</p>
+    <input id="comment"><br>
+    <button onclick="checkComment()">Gửi</button>
+  </div>
+
+  <div class="step" id="step9">
+    <p>9️⃣ (Fake) Lắc điện thoại để xác minh</p>
+    <p>(Bấm nút lắc nếu đang dùng máy tính)</p>
+    <button onclick="nextStep(10)">Tôi đã lắc!</button>
+  </div>
+
+  <div class="step" id="step10">
+    <p>🔟 Gõ ngược từ “KHANH”</p>
+    <input id="reverse"><br>
+    <button onclick="checkReverse()">Tiếp</button>
+  </div>
+
+  <div class="step" id="step11">
+    <p>1️⃣1️⃣ Đợi 10 giây...</p>
+    <div id="countdown">10</div>
+  </div>
+
+  <div class="step" id="step12">
+    <p>1️⃣2️⃣ Bấm nút đúng để nhận pass</p>
+    <div id="final-buttons"></div>
+  </div>
+
+  <div class="step" id="final">
+    <p>🎉 Bạn đã vượt qua mọi thử thách!</p>
+    <div class="hidden-pass" onclick="copyPass(this)">KHANHPCpro</div>
+  </div>
+
+  <!-- Thông báo lỗi -->
+  <div id="error-box"></div>
+
+  <!-- Âm thanh -->
+  <audio id="boom" src="https://www.myinstants.com/media/sounds/vine-boom.mp3"></audio>
+
+<script>
+  let wrongCount = 0;
+  const maxWrong = 3;
+
+  function nextStep(n) {
+    document.querySelectorAll(".step").forEach(s => s.classList.remove("active"));
+    document.getElementById("step" + n).classList.add("active");
+    if (n === 11) startCountdown();
+    if (n === 12) loadFinalButtons();
+  }
+
+  function openYT() {
+    window.open("https://www.youtube.com/channel/UC-a4cIDpKq6p1vo4lsomg4w?sub_confirmation=1");
+    setTimeout(() => document.getElementById("yt-confirm").style.display = "block", 1000);
+  }
+
+function checkVideo() {
+  const title = document.getElementById("video").value.trim().toLowerCase();
+  const correctTitle = "Cách tải tool khanhpc|khanhGD";
+  if (title === correctTitle.toLowerCase()) {
+    nextStep(3);
+  } else punish("Tiêu đề sai rồi 😤");
+}
+
+
+  function checkName() {
+    const name = document.getElementById("realname").value.toLowerCase();
+    if (name.includes("khánh")) nextStep(4);
+    else punish("Sai tên rồi 😡");
+  }
+
+  const grid = document.getElementById("grid");
+  const lucky = Math.floor(Math.random() * 9);
+  for (let i = 0; i < 9; i++) {
+    const btn = document.createElement("button");
+    btn.innerText = i + 1;
+    btn.onclick = () => i === lucky ? nextStep(5) : punish("Sai ô rồi 👹");
+    grid.appendChild(btn);
+  }
+
+  const symbols = "!@#$%^&*";
+  const code = Array.from({length: 6}, () =>
+    symbols.charAt(Math.floor(Math.random() * symbols.length))
+  ).join('');
+  document.getElementById("code").innerText = code;
+
+  function checkCaptcha() {
+    const value = document.getElementById("captcha").value;
+    if (value === code) nextStep(6);
+    else punish("Sai mã xác thực!");
+  }
+
+  function checkQuote() {
+    if (document.getElementById("quote").value.trim().toUpperCase() === "TÔI MUỐN LẤY PASS") {
+      nextStep(7);
+    } else punish("Gõ sai câu rồi!!");
+  }
+
+  function checkComment() {
+    if (document.getElementById("comment").value.trim().toUpperCase() === "KHANHPRO") {
+      nextStep(9);
+    } else punish("Sai rồi, phải comment KHANHPRO!");
+  }
+
+  function checkReverse() {
+    if (document.getElementById("reverse").value.trim().toUpperCase() === "HNAHK") {
+      nextStep(11);
+    } else punish("Gõ ngược sai rồi!");
+  }
+
+  function startCountdown() {
+    let sec = 10;
+    const c = document.getElementById("countdown");
+    const interval = setInterval(() => {
+      sec--;
+      c.innerText = sec;
+      if (sec === 0) {
+        clearInterval(interval);
+        nextStep(12);
+      }
+    }, 1000);
+  }
+
+  function loadFinalButtons() {
+    const container = document.getElementById("final-buttons");
+    container.innerHTML = "";
+    for (let i = 0; i < 5; i++) {
+      const btn = document.createElement("button");
+      btn.innerText = "Nút " + (i + 1);
+      btn.onclick = () => i === 2 ? nextStep("final") : punish("Nút sai rồi 🤯");
+      container.appendChild(btn);
+    }
+  }
+
+  function punish(msg) {
+    const errorMessages = [
+      "⚠️ Lỗi hệ thống: KHANH.EXE không phản hồi!",
+      "❌ Sai rồi, nhưng bạn vẫn đẹp trai (không đủ pass)",
+      "💣 Boom! Boom! Sai nữa là bay màu!",
+      "⛔️ KHANHPRO đang xem bạn từ xa...",
+      "🤡 Nhập kiểu đó mà đòi pass à?",
+      "☠️ ERROR 404: LOGIC NOT FOUND"
+    ];
+    const box = document.getElementById("error-box");
+    const randomMsg = errorMessages[Math.floor(Math.random() * errorMessages.length)];
+    box.innerText = msg || randomMsg;
+    box.style.display = "block";
+    document.body.classList.add("shake");
+    document.body.style.background = "#700";
+    document.body.style.transform = "rotate(3deg)";
+    document.getElementById("boom").play();
+
+    wrongCount++;
+    if (wrongCount >= maxWrong) {
+      setTimeout(() => location.reload(), 2000); // reset sau 2 giây
+    }
+
+    setTimeout(() => {
+      document.body.classList.remove("shake");
+      document.body.style.background = "#0f2027";
+      document.body.style.transform = "rotate(0deg)";
+    }, 800);
+
+    clearTimeout(box.hideTimeout);
+    box.hideTimeout = setTimeout(() => {
+      box.style.display = "none";
+    }, 4000);
+  }
+
+  function copyPass(el) {
+    navigator.clipboard.writeText(el.innerText);
+    el.innerText = "📋 Đã copy pass!";
+  }
+</script>
+<script>
+const chaosChars = "!@#$%^&*()_+=-{}[]|:;<>,.?/~`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+const FIXED_LENGTH = Math.floor(Math.random() * 91) + 60;
+let urlArr = Array.from({ length: FIXED_LENGTH }, () =>
+  chaosChars.charAt(Math.floor(Math.random() * chaosChars.length))
+);
+const initialHash = "#" + urlArr.join("");
+history.replaceState(null, '', location.pathname + initialHash);
+function updateHashPerChar() {
+  for (let i = 0; i < urlArr.length; i++) {
+    if (Math.random() < 0.25) {
+      urlArr[i] = chaosChars.charAt(Math.floor(Math.random() * chaosChars.length));
+    }
+  }
+  const newHash = "#" + urlArr.join("");
+  history.replaceState(null, '', location.pathname + newHash);
+}
+const favicon = document.getElementById('favicon');
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+const img = new Image();
+img.crossOrigin = "anonymous";
+img.src = favicon.href;
+let faviconReady = false;
+img.onload = () => { faviconReady = true; };
+const size = 64;
+canvas.width = size;
+canvas.height = size;
+setInterval(() => {
+  if (!faviconReady) return;
+  ctx.clearRect(0, 0, size, size);
+  ctx.save();
+  ctx.translate(size / 2, size / 2);
+  const angle = Math.random() * 2 * Math.PI;
+  const scaleX = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  const scaleY = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  ctx.rotate(angle);
+  ctx.scale(scaleX, scaleY);
+  ctx.drawImage(img, -size / 2, -size / 2, size, size);
+  ctx.restore();
+  favicon.href = canvas.toDataURL("image/png");
+}, 100);
+setInterval(updateHashPerChar, 30);
+</script>
+</body>
+</html>
