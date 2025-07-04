@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>KHÁNHPC - Danh sách tool</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    body { background: #111827; color: white; }
+  </style>
+</head>
+<body class="p-6">
+  <h1 class="text-3xl font-bold mb-6">🛠️ Danh sách Tool / Trang HTML có trong thư mục</h1>
+  <div id="file-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+  <script>
+    // Auto fetch current directory
+    fetch('.').then(res => res.text()).then(html => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const links = Array.from(doc.querySelectorAll('a'))
+        .map(a => a.getAttribute('href'))
+        .filter(href => href && href.endsWith('.html') && !href.includes('index.html'));
+
+      const container = document.getElementById('file-list');
+      links.forEach(link => {
+        const name = decodeURIComponent(link.replace('.html', ''));
+        const div = document.createElement('div');
+        div.className = "bg-gray-800 rounded-xl p-4 hover:bg-gray-700 transition";
+        div.innerHTML = `
+          <h3 class="text-lg font-semibold mb-1">${name}</h3>
+          <a href="${link}" class="text-indigo-400 hover:underline text-sm">🔗 Xem trang</a>
+        `;
+        container.appendChild(div);
+      });
+    });
+  </script>
+</body>
+</html>
