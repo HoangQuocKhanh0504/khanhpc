@@ -4,7 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dịch Vụ Nhập Liệu | KHANHPC</title>
-  <meta name="description" content="Dịch vụ nhập liệu, đánh văn bản Word từ ảnh, PDF, scan, viết tay. Uy tín, chính xác, giá rẻ.">
+  <meta name="robots" content="index, follow" />
+<meta property="og:title" content="Dịch Vụ Nhập Liệu | KHANHPC" />
+<meta property="og:description" content="Dịch vụ nhập liệu, đánh văn bản Word từ ảnh, PDF, scan, viết tay. Uy tín, chính xác, giá rẻ." />
+<meta property="og:image" content="https://khanhpc-five.vercel.app/preview.jpg" />
+<meta property="og:url" content="https://khanhpc-five.vercel.app/nhaplieu.html" />
   <link rel="icon" href="GD.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,6 +16,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     html { scroll-behavior: smooth; }
     body {
@@ -122,6 +128,8 @@
         <li><a href="#pricing" class="nav-link px-2 py-4">Bảng giá</a></li>
         <li><a href="#contact" class="nav-link px-2 py-4">Liên hệ</a></li>
         <li><a onclick="openIntroModal()" class="nav-link px-2 py-4">Giới thiệu</a></li>
+        <li><a onclick="showDonDaDat()" class="nav-link px-2 py-4">📋 Xem đơn</a></li>
+        <li><a onclick="openFormPopup()" class="nav-link px-2 py-4">📥 Đặt dịch vụ</a></li>
       </ul>
     </nav>
     <button id="menu-toggle" class="md:hidden text-white focus:outline-none">
@@ -134,6 +142,8 @@
     <a href="#pricing" class="block py-2 text-white">Bảng giá</a>
     <a href="#contact" class="block py-2 text-white">Liên hệ</a>
     <a onclick="openIntroModal()" class="block py-2 text-white">Giới thiệu</a>
+    <a onclick="showDonDaDat()" class="block py-2 text-white">📋 Xem đơn</a>
+    <a onclick="openFormPopup()" class="block py-2 text-white">📥 Đặt dịch vụ</a>
   </div>
 </header>
   <div id="notification-bar" style="
@@ -305,7 +315,7 @@
       <h2 class="text-2xl font-bold text-indigo-400 text-center">
         ✨ Giới thiệu về <span class="text-white">KHANHPC</span>
       </h2>
-      <button onclick="closeIntroModal()" class="absolute top-3 right-4 text-gray-400 hover:text-white text-4xl">&times;</button>
+      <button onclick="closeIntroModal()" class="absolute top-3 right-4 text-gray-400 hover:text-white text-4xl cursor-pointer">&times;</button>
     </div>
     <!-- Nội dung -->
     <div class="px-6 py-6 space-y-6">
@@ -384,6 +394,41 @@
     </div>
   </div>
 </div>
+<div id="formPopup" class="fixed hidden inset-0 z-[1001] bg-black bg-opacity-50 flex items-center justify-center">
+  <div class="bg-white p-6 rounded-xl shadow-2xl max-w-xl w-full relative">
+    <button onclick="closeFormPopup()" class="absolute top-3 right-4 text-gray-500 hover:text-red-500 text-2xl">&times;</button>
+    <h2 class="text-2xl font-bold mb-4 text-blue-600 text-center">📥 Đặt Dịch Vụ Nhập Liệu</h2>
+    <form id="dichVuForm" class="space-y-4" onsubmit="submitForm(event)">
+      <div>
+        <label class="block font-semibold">Zalo (số điện thoại) *</label>
+        <input required type="tel" name="zalo" id="zalo" class="w-full border rounded px-3 py-2" placeholder="Ví dụ: 0937648921" />
+      </div>
+      <div>
+        <label class="block font-semibold">Email *</label>
+        <input required type="email" name="email" id="email" class="w-full border rounded px-3 py-2" placeholder="Nhập email của bạn" />
+      </div>
+      <div>
+        <label class="block font-semibold">Họ tên *</label>
+        <input required type="text" name="hoten" id="hoten" class="w-full border rounded px-3 py-2" placeholder="Nguyễn Văn A..." />
+      </div>
+      <div>
+        <label class="block font-semibold">Yêu cầu *</label>
+        <textarea required name="yeucau" id="yeucau" class="w-full border rounded px-3 py-2" rows="4" placeholder="Mô tả bạn cần gì..."></textarea>
+      </div>
+      <div>
+        <label class="block font-semibold">Tải ảnh (nếu có)</label>
+        <input type="file" name="anh" id="images" multiple class="w-full border rounded px-3 py-2" />
+      </div>
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 font-semibold">Gửi yêu cầu</button>
+    </form>
+  </div>
+</div>
+<!-- POPUP xem đơn -->
+<div id="popupXemDon" class="fixed top-20 right-4 bg-white border shadow-lg rounded-xl p-4 w-[90vw] max-w-xl z-[1000] hidden">
+  <h3 class="text-lg font-bold mb-2 text-blue-600">📦 Đơn đã đặt</h3>
+  <div id="donContent"></div>
+  <button onclick="document.getElementById('popupXemDon').classList.add('hidden')" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Đóng</button>
+</div>
 <script>
   AOS.init();
   document.getElementById('menu-toggle').onclick = () => {
@@ -429,6 +474,992 @@
 function closeIntroModal() {
   document.getElementById('introModal').style.display = 'none';
 }
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const dropArea = document.getElementById("drop-area");
+  const fileInput = document.getElementById("images");
+  const preview = document.getElementById("preview");
+  dropArea.addEventListener("click", () => fileInput.click());
+  dropArea.addEventListener("dragover", e => {
+    e.preventDefault();
+    dropArea.classList.add("bg-blue-50");
+  });
+  dropArea.addEventListener("dragleave", () => {
+    dropArea.classList.remove("bg-blue-50");
+  });
+  dropArea.addEventListener("drop", e => {
+    e.preventDefault();
+    dropArea.classList.remove("bg-blue-50");
+    fileInput.files = e.dataTransfer.files;
+    showPreview(fileInput.files);
+  });
+  fileInput.addEventListener("change", () => {
+    showPreview(fileInput.files);
+  });
+  function showPreview(files) {
+    preview.innerHTML = "";
+    [...files].forEach(file => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = document.createElement("img");
+        img.src = reader.result;
+        img.className = "w-20 h-20 object-cover rounded border";
+        preview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+  // Hiển thị đơn đã lưu
+  if (localStorage.getItem("dichvu")) {
+    const data = JSON.parse(localStorage.getItem("dichvu"));
+    document.body.insertAdjacentHTML("beforeend", `
+      <div id="popupXemDon" class="fixed top-20 right-4 bg-white border shadow-lg rounded-xl p-4 w-[90vw] max-w-xl z-[1000] hidden">
+        <h3 class="text-lg font-bold mb-2 text-blue-600">📦 Đơn đã đặt</h3>
+        <p><strong>📱 Zalo:</strong> ${data.zalo}</p>
+        <p><strong>📧 Email:</strong> ${data.email}</p>
+        <p><strong>👤 Họ tên:</strong> ${data.hoten}</p>
+        <p><strong>📄 Yêu cầu:</strong><br>${data.yeucau.replace(/\n/g, "<br>")}</p>
+        ${data.images.length > 0 ? `<div class="mt-2 flex flex-wrap gap-2">${data.images.map(url => `<img src="${url}" class="w-20 h-20 object-cover border rounded">`).join("")}</div>` : ''}
+        <button onclick="document.getElementById('popupXemDon').classList.add('hidden')" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Đóng</button>
+      </div>
+    `);
+  }
+});
+function submitForm(e) {
+  e.preventDefault();
+  const zalo = document.getElementById("zalo").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const hoten = document.getElementById("hoten").value.trim();
+  const yeucau = document.getElementById("yeucau").value.trim();
+  const files = document.getElementById("images").files;
+  const images = [];
+  if (files.length > 0) {
+    for (let file of files) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        images.push(reader.result);
+        if (images.length === files.length) {
+          saveData();
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  } else {
+    saveData();
+  }
+function saveData() {
+  const data = { zalo, email, hoten, yeucau, images, time: new Date().toLocaleString() };
+  const old = JSON.parse(localStorage.getItem("donHang") || "[]");
+  old.push(data);
+  localStorage.setItem("donHang", JSON.stringify(old));
+  Swal.fire({
+    icon: "success",
+    title: "✅ Đơn hàng đã được lưu!",
+    html: `Vui lòng tải <strong>PDF</strong> và gửi cho Admin <a href="https://www.facebook.com/khanhpc548" target="_blank" style="color:#2563eb; text-decoration:underline; font-weight:500;">tại đây</a>.`,
+    confirmButtonText: "OK",
+  }).then(() => location.reload());
+}
+}
+</script>
+<script>
+// Hiển thị form đặt dịch vụ
+function openFormPopup() {
+  const form = document.getElementById("formPopup");
+  if (form) form.classList.remove("hidden");
+}
+// Ẩn form đặt dịch vụ
+function closeFormPopup() {
+  const form = document.getElementById("formPopup");
+  if (form) form.classList.add("hidden");
+}
+</script>
+<script>
+function showDonDaDat() {
+  const danhSach = JSON.parse(localStorage.getItem("donHang") || "[]");
+  const donContent = document.getElementById("donContent");
+  if (danhSach.length === 0) {
+    donContent.innerHTML = "<p class='text-gray-500 italic'>Chưa có đơn nào.</p>";
+    document.getElementById("popupXemDon").classList.remove("hidden");
+    return;
+  }
+  // Tạo danh sách đơn
+  let html = "<ul class='space-y-2'>";
+  danhSach.forEach((don, index) => {
+    html += `
+      <li class="border rounded p-3 hover:bg-gray-100 cursor-pointer" onclick="xemChiTietDon(${index})">
+        <div class="font-semibold text-blue-600">Đơn #${index + 1}</div>
+        <div><strong>📧 Email:</strong> ${don.email}</div>
+        <div class="text-sm text-gray-500 italic">${don.time || ''}</div>
+      </li>
+    `;
+  });
+  html += "</ul>";
+  donContent.innerHTML = html;
+  document.getElementById("popupXemDon").classList.remove("hidden");
+}
+function xemChiTietDon(index) {
+  const danhSach = JSON.parse(localStorage.getItem("donHang") || "[]");
+  if (!Array.isArray(danhSach) || index < 0 || index >= danhSach.length) {
+    alert("Đơn hàng không tồn tại!");
+    return;
+  }
+  const don = danhSach[index];
+  const donContent = document.getElementById("donContent");
+  if (!donContent) return;
+  const htmlHinhAnh = don.images && don.images.length
+    ? `<div class="mt-2 flex flex-wrap gap-2">
+         ${don.images.map(url => `<img src="${url}" class="w-20 h-20 object-cover border rounded" alt="Ảnh đính kèm">`).join("")}
+       </div>`
+    : "";
+  donContent.innerHTML = `
+    <h4 class="text-lg font-bold text-blue-700">📄 Chi tiết đơn #${index + 1}</h4>
+    <p><strong>📱 Zalo:</strong> ${don.zalo || 'Không có'}</p>
+    <p><strong>📧 Email:</strong> ${don.email || 'Không có'}</p>
+    <p><strong>👤 Họ tên:</strong> ${don.hoten || 'Không có'}</p>
+    <p><strong>📄 Yêu cầu:</strong><br>${(don.yeucau || '').replace(/\n/g, "<br>")}</p>
+    <p class="text-sm text-gray-500 italic">🕒 Gửi lúc: ${don.time || 'Không rõ'}</p>
+    ${htmlHinhAnh}
+    <div class="flex gap-2 mt-4">
+      <button onclick="showDonDaDat()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">🔙 Quay lại</button>
+      <button onclick="huyDon(${index})" class="px-4 py-2 bg-red-200 text-red-700 rounded hover:bg-red-300">❌ Hủy đơn</button>
+     <button onclick="taiPDF(${index})"
+  class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md shadow transition duration-200">
+  ⬇️ Tải PDF
+</button>
+    </div>
+  `;
+}
+</script>
+<script>
+function huyDon(index) {
+  Swal.fire({
+    title: "Bạn có chắc muốn hủy đơn này?",
+    text: "Thao tác này không thể hoàn tác!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Đồng ý",
+    cancelButtonText: "Không",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const danhSach = JSON.parse(localStorage.getItem("donHang") || "[]");
+      danhSach.splice(index, 1);
+      localStorage.setItem("donHang", JSON.stringify(danhSach));
+      Swal.fire({
+        icon: "success",
+        title: "🗑️ Đơn đã được hủy!",
+        html: `Vui lòng thông báo cho Admin rằng bạn đã hủy đơn <a href="https://www.facebook.com/khanhpc548" target="_blank" style="color:#2563eb;text-decoration:underline;font-weight:500;">thông báo cho Admin rằng bạn đã hủy đơn tại đây</a>.`,
+        confirmButtonText: "Đã hiểu",
+      }).then(() => location.reload());
+    }
+  });
+}
+</script>
+<!-- jsPDF + Roboto -->
+<!-- Thư viện jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- Font Roboto hỗ trợ Unicode tiếng Việt -->
+<script src="https://unpkg.com/jspdf@2.5.1/dist/fonts/Roboto-Regular-normal.js"></script>
+<script>
+  // Hàm loại bỏ dấu tiếng Việt
+  function boDau(str) {
+    return str.normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "") // bỏ dấu
+      .replace(/đ/g, "d").replace(/Đ/g, "D");
+  }
+  async function taiPDF(index) {
+    const danhSach = JSON.parse(localStorage.getItem("donHang") || "[]");
+    const don = danhSach[index];
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF("p", "mm", "a4");
+    pdf.setFont("Times", "normal"); // Dùng font mặc định có hỗ trợ UTF-8
+    let y = 20;
+    const lineHeight = 8;
+    const margin = 20;
+    // ✅ Tự động bỏ dấu ở đây
+    function themDong(text, bold = false) {
+      text = boDau(text); // <<< Tự động bỏ dấu
+      pdf.setFont("Times", bold ? "bold" : "normal");
+      const splitText = pdf.splitTextToSize(text, 170);
+      pdf.text(splitText, margin, y);
+      y += splitText.length * lineHeight;
+    }
+    // Nội dung chữ (không cần chỉnh gì thêm)
+themDong(`Chi tiet don #${index + 1}`, true);
+themDong(`Zalo: ${don.zalo || "Khong co"}`);
+themDong(`Email: ${don.email || "Khong co"}`);
+themDong(`Ho ten: ${don.hoten || "Khong co"}`);
+themDong(`Yeu cau:\n${don.yeucau || "Khong co"}`);
+themDong(`Gui luc: ${don.time || "Khong ro"}`);
+    // Ảnh đính kèm
+    if (don.images && don.images.length) {
+      themDong(`Ảnh đính kèm:`, true);
+      for (let url of don.images) {
+        try {
+          const img = await taiAnhBase64(url);
+          const imgWidth = 160;
+          const imgHeight = (img.height / img.width) * imgWidth;
+          if (y + imgHeight > 290) {
+            pdf.addPage();
+            y = 20;
+          }
+          pdf.addImage(img.data, "JPEG", margin, y, imgWidth, imgHeight);
+          y += imgHeight + 10;
+        } catch (err) {
+          themDong("[Không thể tải ảnh]");
+        }
+      }
+    }
+    pdf.save(`don-${index + 1}.pdf`);
+  }
+  // Tải ảnh từ URL thành base64
+  async function taiAnhBase64(url) {
+    const res = await fetch(url, { mode: "cors" });
+    const blob = await res.blob();
+    const data = await new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.readAsDataURL(blob);
+    });
+    const img = new Image();
+    img.src = data;
+    await new Promise((resolve) => {
+      img.onload = () => resolve();
+    });
+    return { data, width: img.width, height: img.height };
+  }
+</script>
+</body>
+</html><!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dịch Vụ Nhập Liệu | KHANHPC</title>
+  <meta name="robots" content="index, follow" />
+<meta property="og:title" content="Dịch Vụ Nhập Liệu | KHANHPC" />
+<meta property="og:description" content="Dịch vụ nhập liệu, đánh văn bản Word từ ảnh, PDF, scan, viết tay. Uy tín, chính xác, giá rẻ." />
+<meta property="og:image" content="https://khanhpc-five.vercel.app/preview.jpg" />
+<meta property="og:url" content="https://khanhpc-five.vercel.app/nhaplieu.html" />
+  <link rel="icon" href="GD.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.8), rgba(59, 130, 246, 0.8));
+      backdrop-filter: blur(8px);
+    }
+    .card-hover {
+      transition: 0.3s;
+    }
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    .nav-link {
+      position: relative;
+      cursor: pointer;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -2px;
+      left: 0;
+      background: white;
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    .btn-primary {
+      background: #2563eb;
+      transition: 0.3s;
+    }
+    .btn-primary:hover {
+      background: #1e40af;
+      transform: translateY(-2px);
+    }
+    #modal {
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Chrome, Edge, Opera */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent; /* Track trong suốt */
+}
+::-webkit-scrollbar-thumb {
+  background-color: #2563ebcc; /* Màu xanh có độ trong suốt */
+  border-radius: 9999px;
+  border: 2px solid transparent; /* Viền để tạo khoảng cách ảo */
+  background-clip: content-box;  /* Đảm bảo màu không lan ra viền */
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #2563eb; /* Khi hover thì hiện rõ hơn */
+}
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2563eb transparent;
+}
+  </style>
+<style>
+@keyframes scroll-infinite {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-25%);
+  }
+}
+</style>
+<style>
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE/Edge */
+    scrollbar-width: none;     /* Firefox */
+  }
+</style>
+</head>
+<body>
+<!-- HEADER -->
+<header class="gradient-bg text-white sticky top-0 z-50 shadow-md">
+  <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+    <div class="flex items-center">
+      <img src="GD.png" alt="Logo" class="h-10 w-10 mr-3">
+      <span class="text-xl font-bold">Dịch Vụ Nhập Liệu | KHANHPC</span>
+    </div>
+    <nav class="hidden md:block">
+      <ul class="flex space-x-8">
+        <li><a href="#home" class="nav-link px-2 py-4">Trang chủ</a></li>
+        <li><a href="#services" class="nav-link px-2 py-4">Dịch vụ</a></li>
+        <li><a href="#pricing" class="nav-link px-2 py-4">Bảng giá</a></li>
+        <li><a href="#contact" class="nav-link px-2 py-4">Liên hệ</a></li>
+        <li><a onclick="openIntroModal()" class="nav-link px-2 py-4">Giới thiệu</a></li>
+        <li><a onclick="showDonDaDat()" class="nav-link px-2 py-4">📋 Xem đơn</a></li>
+        <li><a onclick="openFormPopup()" class="nav-link px-2 py-4">📥 Đặt dịch vụ</a></li>
+      </ul>
+    </nav>
+    <button id="menu-toggle" class="md:hidden text-white focus:outline-none">
+      <i class="fas fa-bars text-2xl"></i>
+    </button>
+  </div>
+  <div id="mobile-menu" class="hidden md:hidden bg-blue-800 pb-4 px-6">
+    <a href="#home" class="block py-2 text-white">Trang chủ</a>
+    <a href="#services" class="block py-2 text-white">Dịch vụ</a>
+    <a href="#pricing" class="block py-2 text-white">Bảng giá</a>
+    <a href="#contact" class="block py-2 text-white">Liên hệ</a>
+    <a onclick="openIntroModal()" class="block py-2 text-white">Giới thiệu</a>
+    <a onclick="showDonDaDat()" class="block py-2 text-white">📋 Xem đơn</a>
+    <a onclick="openFormPopup()" class="block py-2 text-white">📥 Đặt dịch vụ</a>
+  </div>
+</header>
+  <div id="notification-bar" style="
+    width: 100%;
+    background-color: #ffcc00;
+    color: #000;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 2px solid #cc9900;
+    box-sizing: border-box;
+    position: relative;
+">
+  <div id="scrolling-wrapper" style="
+      display: inline-block;
+      white-space: nowrap;
+      will-change: transform;
+      animation: scroll-infinite 30s linear infinite;
+  ">
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Chi tiết xin liên hệ qua facebook hoặc: 
+      <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com </a>
+       Xin chân thành cảm ơn |© KHANHPC 2025| mọi quyền được bảo lưu
+    </span>
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Chi tiết xin liên hệ qua facebook hoặc: 
+      <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com </a>
+       Xin chân thành cảm ơn |© KHANHPC 2025| mọi quyền được bảo lưu
+    </span>
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Chi tiết xin liên hệ qua facebook hoặc: 
+      <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com </a>
+       Xin chân thành cảm ơn |© KHANHPC 2025| mọi quyền được bảo lưu
+    </span>
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Chi tiết xin liên hệ qua facebook hoặc: 
+      <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com </a>
+       Xin chân thành cảm ơn |© KHANHPC 2025| mọi quyền được bảo lưu
+    </span>
+  </div>
+</div>
+<!-- HERO -->
+<section id="home" class="text-white pt-20 pb-32 bg-cover bg-center relative" style="background-image: url('nhan-vien-nhap-lieu-2.png');">
+  <div class="absolute inset-0 bg-black bg-opacity-50 z-0"></div>
+  <div class="relative z-10 container mx-auto px-6 flex flex-col md:flex-row items-center">
+    <div class="md:w-1/2 mb-12 md:mb-0">
+      <h1 class="text-4xl md:text-5xl font-bold mb-6">DỊCH VỤ NHẬP LIỆU CHUYÊN NGHIỆP</h1>
+      <p class="text-xl mb-8">Chuyển ảnh chụp, PDF, viết tay thành Word trong vài giờ</p>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <button onclick="openModal()" class="bg-white text-blue-600 px-8 py-4 rounded-full font-bold hover:bg-blue-50 transition shadow-lg">
+          <i class="fas fa-phone-alt mr-2"></i> Liên hệ ngay
+        </button>
+        <a href="#services" class="border-2 border-white text-white px-8 py-4 rounded-full font-bold hover:bg-white hover:text-blue-600 transition">
+          <i class="fas fa-list-ul mr-2"></i> Xem dịch vụ
+        </a>
+      </div>
+    </div>
+    <div class="md:w-1/2">
+      <img src="https://placehold.co/800x600/2563eb/ffffff?text=DỊCH+VỤ+NHẬP+LIỆU" alt="Ảnh mô tả" class="rounded-xl shadow-2xl w-full transform hover:scale-105 transition duration-500">
+    </div>
+  </div>
+</section>
+<br>
+<br>
+<!-- STATS -->
+<section class="py-12 bg-white -mt-16">
+  <div class="container mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+    <div class="bg-blue-50 rounded-xl p-6">
+      <div class="text-4xl font-bold text-blue-600 counter" data-target="36">36</div>
+      <div class="text-gray-600">Trang đã xử lý</div>
+    </div>
+    <div class="bg-blue-50 rounded-xl p-6">
+      <div class="text-4xl font-bold text-blue-600 counter" data-target="99">99</div>
+      <div class="text-gray-600">Độ chính xác</div>
+    </div>
+    <div class="bg-blue-50 rounded-xl p-6">
+      <div class="text-4xl font-bold text-blue-600 counter" data-target="24">24</div>
+      <div class="text-gray-600">Hỗ trợ 24/7</div>
+    </div>
+    <div class="bg-blue-50 rounded-xl p-6">
+      <div class="text-4xl font-bold text-blue-600 counter" data-target="2">2</div>
+      <div class="text-gray-600">Xử lý nhanh nhất</div>
+    </div>
+  </div>
+</section>
+<!-- SERVICES -->
+<section id="services" class="py-20 bg-gray-50">
+  <div class="container mx-auto px-6 text-center">
+    <h2 class="text-3xl font-bold mb-4">Chúng Tôi Nhận Nhập Liệu Từ</h2>
+    <p class="text-gray-600 mb-12">Ảnh chụp, viết tay, văn bản tiếng Việt,... đảm bảo chính xác</p>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="card-hover bg-white rounded-lg shadow-md p-6" data-aos="fade-up">
+        <h3 class="text-xl font-semibold mb-4">Ảnh & PDF</h3>
+        <p class="text-gray-600">Chuyển ảnh, file PDF sang Word chính xác, đẹp mắt.</p>
+      </div>
+      <div class="card-hover bg-white rounded-lg shadow-md p-6" data-aos="fade-up" data-aos-delay="100">
+        <h3 class="text-xl font-semibold mb-4">Viết tay</h3>
+        <p class="text-gray-600">Gõ lại từ chữ viết tay rõ ràng, đầy đủ ngữ pháp.</p>
+      </div>
+      <div class="card-hover bg-white rounded-lg shadow-md p-6" data-aos="fade-up" data-aos-delay="200">
+        <h3 class="text-xl font-semibold mb-4">Văn bản khác</h3>
+        <p class="text-gray-600">Đề thi, báo cáo, giáo án, nội quy,... đều nhận làm.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- PRICING -->
+<section id="pricing" class="py-20 bg-white">
+  <div class="container mx-auto px-6 text-center">
+    <h2 class="text-3xl font-bold mb-4">Bảng Giá Dịch Vụ</h2>
+    <p class="text-gray-600 mb-12">Giá rõ ràng – Giao đúng hẹn</p>
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="price-card bg-gray-50 rounded-lg shadow-md p-6 text-left" data-aos="fade-up">
+        <h3 class="text-xl font-semibold mb-4">Dịch vụ tiêu chuẩn</h3>
+        <ul class="list-disc list-inside mb-4 text-gray-700">
+          <li>File dễ đọc: <strong>3.000đ/trang</strong></li>
+          <li>PDF rõ nét: <strong>4.000đ/trang</strong></li>
+          <li>Viết tay rõ: <strong>5.000đ/trang</strong></li>
+        </ul>
+        <p class="text-gray-600">Giảm giá khi làm số lượng lớn!</p>
+      </div>
+      <div class="price-card bg-gray-50 rounded-lg shadow-md p-6 text-left" data-aos="fade-up" data-aos-delay="100">
+        <h3 class="text-xl font-semibold mb-4">Dịch vụ gấp</h3>
+        <ul class="list-disc list-inside mb-4 text-gray-700">
+          <li>Trong 2-4 giờ: +50%</li>
+          <li>Trong ngày: +30%</li>
+          <li>Ngoài giờ: +20%</li>
+        </ul>
+        <p class="text-gray-600">Liên hệ để có giá tốt nhất!</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- CONTACT -->
+<section id="contact" class="py-20 bg-gray-50">
+  <div class="container mx-auto px-6 text-center">
+    <h2 class="text-3xl font-bold mb-4">Liên Hệ Đặt Dịch Vụ</h2>
+    <p class="text-gray-600 mb-6">Chúng tôi luôn hỗ trợ 24/7!</p>
+    <div class="bg-white rounded-lg shadow-md p-6 max-w-lg mx-auto text-left">
+      <p>Zalo: <strong><a href="tel:0937648921">0937 648 921</a></strong></p>
+ <p>Email: <strong><a href="mailto:vyk103736@gmail.com">vyk103736@gmail.com</a></strong></p>
+      <p class="text-gray-600"><strong>Facebook:</strong> <a href="https://facebook.com/khanhpc548" class="text-blue-600">facebook.com/khanhpc548</a></p>
+    </div>
+  </div>
+</section>
+<!-- FOOTER -->
+<footer class="bg-gray-800 text-white py-6 text-center">
+  <p>&copy; <span id="year"></span> Dịch Vụ Nhập Liệu. KHANHPC.</p>
+</footer>
+<!-- MODAL -->
+<div id="modal" class="fixed hidden items-center justify-center">
+  <div class="bg-white p-6 rounded-lg shadow-lg text-center max-w-sm">
+    <h3 class="text-xl font-semibold mb-2">Liên hệ ngay</h3>
+   <p>Zalo: <strong><a href="tel:0937648921">0937 648 921</a></strong></p>
+ <p>Email: <strong><a href="mailto:vyk103736@gmail.com">vyk103736@gmail.com</a></strong></p>
+    <p>Facebook: <a href="https://facebook.com/khanhpc548" class="text-blue-600">khanhpc548</a></p>
+    <button onclick="closeModal()" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Đóng</button>
+  </div>
+</div>
+<!-- SCRIPTS -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<!-- INTRO MODAL -->
+<div id="introModal" class="fixed hidden items-center justify-center inset-0 z-[1001] bg-black bg-opacity-60">
+  <div class="bg-gray-900 text-white max-w-3xl rounded-2xl overflow-y-auto max-h-[90vh] shadow-2xl relative">
+    <!-- Tiêu đề cố định -->
+    <div class="sticky top-0 z-10 bg-gray-800 bg-opacity-90 px-6 py-4 rounded-t-lg border-b border-indigo-500">
+      <h2 class="text-2xl font-bold text-indigo-400 text-center">
+        ✨ Giới thiệu về <span class="text-white">KHANHPC</span>
+      </h2>
+      <button onclick="closeIntroModal()" class="absolute top-3 right-4 text-gray-400 hover:text-white text-4xl cursor-pointer">&times;</button>
+    </div>
+    <!-- Nội dung -->
+    <div class="px-6 py-6 space-y-6">
+      <section id="intro">
+        <p class="text-gray-300 leading-relaxed">
+          <strong class="text-white">KHANHPC</strong> là dịch vụ <strong class="text-white">sửa chữa và cài đặt phần mềm máy tính từ xa</strong>, mang đến 
+          <strong class="text-white">giải pháp nhanh chóng – tiện lợi – tiết kiệm chi phí</strong> cho người dùng cá nhân, học sinh – sinh viên, và văn phòng nhỏ.
+        </p>
+        <hr class="border-gray-700" />
+        <h3 class="text-xl font-semibold text-indigo-300">💻 Dịch vụ nổi bật</h3>
+        <ul class="text-gray-300 space-y-3">
+          <li>🔧 <strong>Cài đặt phần mềm từ xa</strong><br />➡️ Office, phần mềm học tập, làm việc, đồ họa, giả lập, tải video, PDF,...</li>
+          <li>🛠️ <strong>Sửa lỗi hệ thống</strong><br />➡️ Khắc phục lỗi Windows, lỗi ứng dụng, máy chậm, nhiễm virus,...</li>
+          <li>⚡ <strong>Tối ưu hóa hiệu năng</strong><br />➡️ Quét rác, tăng tốc máy, nâng cấp phần mềm, khởi động nhanh hơn.</li>
+          <li>🔁 <strong>Khôi phục hệ thống – Backup dữ liệu</strong><br />➡️ Tạo điểm khôi phục, ghost máy, sao lưu dữ liệu an toàn.</li>
+        </ul>
+        <hr class="border-gray-700" />
+        <h3 class="text-xl font-semibold text-indigo-300">🚀 Vì sao chọn KHANHPC?</h3>
+        <ul class="list-disc list-inside text-gray-300 space-y-2">
+          <li>⏱️ Tiết kiệm thời gian – Không cần mang máy đi đâu, chỉ cần Internet.</li>
+          <li>💸 Chi phí hợp lý – Phù hợp học sinh, sinh viên, dân văn phòng.</li>
+          <li>🌐 Linh hoạt – tiện lợi – Đặt lịch sửa chữa online bất kỳ lúc nào.</li>
+          <li>⚡ Xử lý nhanh chóng – Tư vấn tận tâm, hỗ trợ trong thời gian ngắn.</li>
+        </ul>
+        <hr class="border-gray-700" />
+        <h3 class="text-xl font-semibold text-indigo-300">📋 Bảng giá dịch vụ</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm border border-gray-700 text-gray-300">
+            <thead class="bg-gray-800 text-indigo-400">
+              <tr>
+                <th class="p-2 border border-gray-700">🆔 Mã DV</th>
+                <th class="p-2 border border-gray-700">💼 Dịch vụ</th>
+                <th class="p-2 border border-gray-700">💰 Giá (VND)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="p-2 border border-gray-700">DV01</td><td class="p-2 border border-gray-700">Cài đặt phần mềm đầu tiên online</td><td class="p-2 border border-gray-700">155,000</td></tr>
+              <tr><td class="p-2 border border-gray-700">DV02</td><td class="p-2 border border-gray-700">Cài phần mềm thứ 2 trở đi</td><td class="p-2 border border-gray-700">+75,000</td></tr>
+              <tr><td class="p-2 border border-gray-700">DV03</td><td class="p-2 border border-gray-700">Sửa lỗi không vào được Windows</td><td class="p-2 border border-gray-700">165,000</td></tr>
+              <tr><td class="p-2 border border-gray-700">DV04</td><td class="p-2 border border-gray-700">Cài đặt Office bản quyền</td><td class="p-2 border border-gray-700">170,000</td></tr>
+              <tr><td class="p-2 border border-gray-700">DV07</td><td class="p-2 border border-gray-700">Tối ưu, tăng tốc máy</td><td class="p-2 border border-gray-700">150,000</td></tr>
+              <tr><td class="p-2 border border-gray-700">DV10</td><td class="p-2 border border-gray-700">Phụ thu kỹ thuật nâng cao</td><td class="p-2 border border-gray-700">60,000</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-sm text-gray-400 italic">💡 Giá có thể thay đổi nhẹ tùy theo tình trạng máy và yêu cầu riêng.</p>
+        <p class="text-center text-sm text-gray-500 italic">🛠️ KHANHPC – Giải pháp phần mềm từ xa, <strong>an toàn – nhanh chóng – tiện lợi!</strong></p>
+        <!-- 👇 Giới thiệu ngành nghề -->
+        <hr class="border-gray-700" />
+        <h3 class="text-xl font-semibold text-indigo-300">🧑‍💻 Giới thiệu về ngành nghề hiện tại</h3>
+        <p class="text-gray-300 leading-relaxed">
+          Hiện tại tôi đang làm việc trong lĩnh vực <strong class="text-white">công nghệ phần mềm và dịch vụ kỹ thuật máy tính</strong>.  
+          Tập trung vào các mảng như: <strong class="text-white">phát triển web, xử lý tự động bằng công cụ AI</strong>, và <strong class="text-white">tạo các tiện ích phục vụ học tập – làm việc – kinh doanh online</strong>.
+        </p>
+        <ul class="text-gray-300 space-y-2 list-disc list-inside">
+          <li>🛠️ Viết tool tự động (Facebook, TikTok, form thi, OCR,...)</li>
+          <li>📊 Thiết kế hệ thống quản lý, web bán hàng, và dịch vụ số</li>
+          <li>🤖 Kết hợp AI để hỗ trợ nhập liệu, dịch thuật, tạo tài liệu</li>
+          <li>🧩 Làm tiện ích mở rộng (extension) hoặc user script theo yêu cầu</li>
+        </ul>
+        <!-- 👇 Nhập liệu -->
+        <hr class="border-gray-700" />
+        <h3 class="text-xl font-semibold text-indigo-300">📄 Dịch vụ nhập liệu – Word, PDF, Ảnh Scan</h3>
+        <p class="text-gray-300 leading-relaxed">
+          Nhận nhập liệu chính xác từ hình ảnh, PDF scan, giấy tờ viết tay,... sang file Word hoặc Excel.  
+          Phù hợp làm báo cáo, tài liệu học tập, in ấn và văn bản hành chính.
+        </p>
+        <ul class="text-gray-300 space-y-2 list-disc list-inside">
+          <li>📸 Ảnh chụp / giấy tờ viết tay / scan mờ – vẫn xử lý được</li>
+          <li>📝 Chuyển từ PDF sang Word có định dạng chuẩn</li>
+          <li>📂 Nhập bảng biểu từ ảnh sang Excel</li>
+          <li>🎯 Đảm bảo đúng chính tả, bố cục rõ ràng, dễ đọc</li>
+        </ul>
+        <p class="text-sm text-gray-400 italic">📦 File đầu ra: .docx, .xlsx hoặc PDF theo yêu cầu.</p>
+      </section>
+    </div>
+  </div>
+</div>
+<div id="formPopup" class="fixed hidden inset-0 z-[1001] bg-black bg-opacity-50 flex items-center justify-center">
+  <div class="bg-white p-6 rounded-xl shadow-2xl max-w-xl w-full relative">
+    <button onclick="closeFormPopup()" class="absolute top-3 right-4 text-gray-500 hover:text-red-500 text-2xl">&times;</button>
+    <h2 class="text-2xl font-bold mb-4 text-blue-600 text-center">📥 Đặt Dịch Vụ Nhập Liệu</h2>
+    <form id="dichVuForm" class="space-y-4" onsubmit="submitForm(event)">
+      <div>
+        <label class="block font-semibold">Zalo (số điện thoại) *</label>
+        <input required type="tel" name="zalo" id="zalo" class="w-full border rounded px-3 py-2" placeholder="Ví dụ: 0937648921" />
+      </div>
+      <div>
+        <label class="block font-semibold">Email *</label>
+        <input required type="email" name="email" id="email" class="w-full border rounded px-3 py-2" placeholder="Nhập email của bạn" />
+      </div>
+      <div>
+        <label class="block font-semibold">Họ tên *</label>
+        <input required type="text" name="hoten" id="hoten" class="w-full border rounded px-3 py-2" placeholder="Nguyễn Văn A..." />
+      </div>
+      <div>
+        <label class="block font-semibold">Yêu cầu *</label>
+        <textarea required name="yeucau" id="yeucau" class="w-full border rounded px-3 py-2" rows="4" placeholder="Mô tả bạn cần gì..."></textarea>
+      </div>
+      <div>
+        <label class="block font-semibold">Tải ảnh (nếu có)</label>
+        <input type="file" name="anh" id="images" multiple class="w-full border rounded px-3 py-2" />
+      </div>
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 font-semibold">Gửi yêu cầu</button>
+    </form>
+  </div>
+</div>
+<!-- POPUP xem đơn -->
+<div id="popupXemDon" class="fixed top-20 right-4 bg-white border shadow-lg rounded-xl p-4 w-[90vw] max-w-xl z-[1000] hidden">
+  <h3 class="text-lg font-bold mb-2 text-blue-600">📦 Đơn đã đặt</h3>
+  <div id="donContent"></div>
+  <button onclick="document.getElementById('popupXemDon').classList.add('hidden')" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Đóng</button>
+</div>
+<script>
+  AOS.init();
+  document.getElementById('menu-toggle').onclick = () => {
+    document.getElementById('mobile-menu').classList.toggle('hidden');
+  };
+  function openModal() {
+    document.getElementById('modal').style.display = 'flex';
+  }
+  function closeModal() {
+    document.getElementById('modal').style.display = 'none';
+  }
+  // Counter tăng giảm tự nhiên
+  document.addEventListener('DOMContentLoaded', () => {
+    const counters = document.querySelectorAll('.counter');
+    counters.forEach(counter => {
+      let target = +counter.dataset.target;
+      let current = target;
+      const min = target * 0.95;
+      const max = target * 1.05;
+      setInterval(() => {
+        const delta = Math.floor(Math.random() * 7) - 3;
+        current += delta;
+        if (current < min) current = min;
+        if (current > max) current = max;
+        counter.innerText = Math.round(current);
+      }, 3000);
+    });
+    document.getElementById('year').innerText = new Date().getFullYear();
+  });
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+  function openIntroModal() {
+  document.getElementById('introModal').style.display = 'flex';
+}
+function closeIntroModal() {
+  document.getElementById('introModal').style.display = 'none';
+}
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const dropArea = document.getElementById("drop-area");
+  const fileInput = document.getElementById("images");
+  const preview = document.getElementById("preview");
+  dropArea.addEventListener("click", () => fileInput.click());
+  dropArea.addEventListener("dragover", e => {
+    e.preventDefault();
+    dropArea.classList.add("bg-blue-50");
+  });
+  dropArea.addEventListener("dragleave", () => {
+    dropArea.classList.remove("bg-blue-50");
+  });
+  dropArea.addEventListener("drop", e => {
+    e.preventDefault();
+    dropArea.classList.remove("bg-blue-50");
+    fileInput.files = e.dataTransfer.files;
+    showPreview(fileInput.files);
+  });
+  fileInput.addEventListener("change", () => {
+    showPreview(fileInput.files);
+  });
+  function showPreview(files) {
+    preview.innerHTML = "";
+    [...files].forEach(file => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = document.createElement("img");
+        img.src = reader.result;
+        img.className = "w-20 h-20 object-cover rounded border";
+        preview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+  // Hiển thị đơn đã lưu
+  if (localStorage.getItem("dichvu")) {
+    const data = JSON.parse(localStorage.getItem("dichvu"));
+    document.body.insertAdjacentHTML("beforeend", `
+      <div id="popupXemDon" class="fixed top-20 right-4 bg-white border shadow-lg rounded-xl p-4 w-[90vw] max-w-xl z-[1000] hidden">
+        <h3 class="text-lg font-bold mb-2 text-blue-600">📦 Đơn đã đặt</h3>
+        <p><strong>📱 Zalo:</strong> ${data.zalo}</p>
+        <p><strong>📧 Email:</strong> ${data.email}</p>
+        <p><strong>👤 Họ tên:</strong> ${data.hoten}</p>
+        <p><strong>📄 Yêu cầu:</strong><br>${data.yeucau.replace(/\n/g, "<br>")}</p>
+        ${data.images.length > 0 ? `<div class="mt-2 flex flex-wrap gap-2">${data.images.map(url => `<img src="${url}" class="w-20 h-20 object-cover border rounded">`).join("")}</div>` : ''}
+        <button onclick="document.getElementById('popupXemDon').classList.add('hidden')" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Đóng</button>
+      </div>
+    `);
+  }
+});
+function submitForm(e) {
+  e.preventDefault();
+  const zalo = document.getElementById("zalo").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const hoten = document.getElementById("hoten").value.trim();
+  const yeucau = document.getElementById("yeucau").value.trim();
+  const files = document.getElementById("images").files;
+  const images = [];
+  if (files.length > 0) {
+    for (let file of files) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        images.push(reader.result);
+        if (images.length === files.length) {
+          saveData();
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  } else {
+    saveData();
+  }
+function saveData() {
+  const data = { zalo, email, hoten, yeucau, images, time: new Date().toLocaleString() };
+  const old = JSON.parse(localStorage.getItem("donHang") || "[]");
+  old.push(data);
+  localStorage.setItem("donHang", JSON.stringify(old));
+  Swal.fire({
+    icon: "success",
+    title: "✅ Đơn hàng đã được lưu!",
+    html: `Vui lòng tải <strong>PDF</strong> và gửi cho Admin <a href="https://www.facebook.com/khanhpc548" target="_blank" style="color:#2563eb; text-decoration:underline; font-weight:500;">tại đây</a>.`,
+    confirmButtonText: "OK",
+  }).then(() => location.reload());
+}
+}
+</script>
+<script>
+// Hiển thị form đặt dịch vụ
+function openFormPopup() {
+  const form = document.getElementById("formPopup");
+  if (form) form.classList.remove("hidden");
+}
+// Ẩn form đặt dịch vụ
+function closeFormPopup() {
+  const form = document.getElementById("formPopup");
+  if (form) form.classList.add("hidden");
+}
+</script>
+<script>
+function showDonDaDat() {
+  const danhSach = JSON.parse(localStorage.getItem("donHang") || "[]");
+  const donContent = document.getElementById("donContent");
+  if (danhSach.length === 0) {
+    donContent.innerHTML = "<p class='text-gray-500 italic'>Chưa có đơn nào.</p>";
+    document.getElementById("popupXemDon").classList.remove("hidden");
+    return;
+  }
+  // Tạo danh sách đơn
+  let html = "<ul class='space-y-2'>";
+  danhSach.forEach((don, index) => {
+    html += `
+      <li class="border rounded p-3 hover:bg-gray-100 cursor-pointer" onclick="xemChiTietDon(${index})">
+        <div class="font-semibold text-blue-600">Đơn #${index + 1}</div>
+        <div><strong>📧 Email:</strong> ${don.email}</div>
+        <div class="text-sm text-gray-500 italic">${don.time || ''}</div>
+      </li>
+    `;
+  });
+  html += "</ul>";
+  donContent.innerHTML = html;
+  document.getElementById("popupXemDon").classList.remove("hidden");
+}
+function xemChiTietDon(index) {
+  const danhSach = JSON.parse(localStorage.getItem("donHang") || "[]");
+  if (!Array.isArray(danhSach) || index < 0 || index >= danhSach.length) {
+    alert("Đơn hàng không tồn tại!");
+    return;
+  }
+  const don = danhSach[index];
+  const donContent = document.getElementById("donContent");
+  if (!donContent) return;
+  const htmlHinhAnh = don.images && don.images.length
+    ? `<div class="mt-2 flex flex-wrap gap-2">
+         ${don.images.map(url => `<img src="${url}" class="w-20 h-20 object-cover border rounded" alt="Ảnh đính kèm">`).join("")}
+       </div>`
+    : "";
+  donContent.innerHTML = `
+    <h4 class="text-lg font-bold text-blue-700">📄 Chi tiết đơn #${index + 1}</h4>
+    <p><strong>📱 Zalo:</strong> ${don.zalo || 'Không có'}</p>
+    <p><strong>📧 Email:</strong> ${don.email || 'Không có'}</p>
+    <p><strong>👤 Họ tên:</strong> ${don.hoten || 'Không có'}</p>
+    <p><strong>📄 Yêu cầu:</strong><br>${(don.yeucau || '').replace(/\n/g, "<br>")}</p>
+    <p class="text-sm text-gray-500 italic">🕒 Gửi lúc: ${don.time || 'Không rõ'}</p>
+    ${htmlHinhAnh}
+    <div class="flex gap-2 mt-4">
+      <button onclick="showDonDaDat()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">🔙 Quay lại</button>
+      <button onclick="huyDon(${index})" class="px-4 py-2 bg-red-200 text-red-700 rounded hover:bg-red-300">❌ Hủy đơn</button>
+     <button onclick="taiPDF(${index})"
+  class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md shadow transition duration-200">
+  ⬇️ Tải PDF
+</button>
+    </div>
+  `;
+}
+</script>
+<script>
+function huyDon(index) {
+  Swal.fire({
+    title: "Bạn có chắc muốn hủy đơn này?",
+    text: "Thao tác này không thể hoàn tác!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Đồng ý",
+    cancelButtonText: "Không",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const danhSach = JSON.parse(localStorage.getItem("donHang") || "[]");
+      danhSach.splice(index, 1);
+      localStorage.setItem("donHang", JSON.stringify(danhSach));
+      Swal.fire({
+        icon: "success",
+        title: "🗑️ Đơn đã được hủy!",
+        html: `Vui lòng thông báo cho Admin rằng bạn đã hủy đơn <a href="https://www.facebook.com/khanhpc548" target="_blank" style="color:#2563eb;text-decoration:underline;font-weight:500;">thông báo cho Admin rằng bạn đã hủy đơn tại đây</a>.`,
+        confirmButtonText: "Đã hiểu",
+      }).then(() => location.reload());
+    }
+  });
+}
+</script>
+<!-- jsPDF + Roboto -->
+<!-- Thư viện jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- Font Roboto hỗ trợ Unicode tiếng Việt -->
+<script src="https://unpkg.com/jspdf@2.5.1/dist/fonts/Roboto-Regular-normal.js"></script>
+<script>
+  // Hàm loại bỏ dấu tiếng Việt
+  function boDau(str) {
+    return str.normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "") // bỏ dấu
+      .replace(/đ/g, "d").replace(/Đ/g, "D");
+  }
+  async function taiPDF(index) {
+    const danhSach = JSON.parse(localStorage.getItem("donHang") || "[]");
+    const don = danhSach[index];
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF("p", "mm", "a4");
+    pdf.setFont("Times", "normal"); // Dùng font mặc định có hỗ trợ UTF-8
+    let y = 20;
+    const lineHeight = 8;
+    const margin = 20;
+    // ✅ Tự động bỏ dấu ở đây
+    function themDong(text, bold = false) {
+      text = boDau(text); // <<< Tự động bỏ dấu
+      pdf.setFont("Times", bold ? "bold" : "normal");
+      const splitText = pdf.splitTextToSize(text, 170);
+      pdf.text(splitText, margin, y);
+      y += splitText.length * lineHeight;
+    }
+    // Nội dung chữ (không cần chỉnh gì thêm)
+themDong(`Chi tiet don #${index + 1}`, true);
+themDong(`Zalo: ${don.zalo || "Khong co"}`);
+themDong(`Email: ${don.email || "Khong co"}`);
+themDong(`Ho ten: ${don.hoten || "Khong co"}`);
+themDong(`Yeu cau:\n${don.yeucau || "Khong co"}`);
+themDong(`Gui luc: ${don.time || "Khong ro"}`);
+    // Ảnh đính kèm
+    if (don.images && don.images.length) {
+      themDong(`Ảnh đính kèm:`, true);
+      for (let url of don.images) {
+        try {
+          const img = await taiAnhBase64(url);
+          const imgWidth = 160;
+          const imgHeight = (img.height / img.width) * imgWidth;
+          if (y + imgHeight > 290) {
+            pdf.addPage();
+            y = 20;
+          }
+          pdf.addImage(img.data, "JPEG", margin, y, imgWidth, imgHeight);
+          y += imgHeight + 10;
+        } catch (err) {
+          themDong("[Không thể tải ảnh]");
+        }
+      }
+    }
+    pdf.save(`don-${index + 1}.pdf`);
+  }
+  // Tải ảnh từ URL thành base64
+  async function taiAnhBase64(url) {
+    const res = await fetch(url, { mode: "cors" });
+    const blob = await res.blob();
+    const data = await new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.readAsDataURL(blob);
+    });
+    const img = new Image();
+    img.src = data;
+    await new Promise((resolve) => {
+      img.onload = () => resolve();
+    });
+    return { data, width: img.width, height: img.height };
+  }
 </script>
 </body>
 </html>
