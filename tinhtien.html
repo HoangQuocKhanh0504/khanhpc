@@ -269,7 +269,6 @@ function showBills() {
   const bills = JSON.parse(localStorage.getItem("bills") || "[]");
   const container = document.getElementById("billItems");
   container.innerHTML = "";
-
   if (bills.length === 0) {
     container.innerHTML = "<p>Chưa có bill nào.</p>";
   } else {
@@ -289,7 +288,6 @@ function showBills() {
       container.appendChild(div);
     });
   }
-
   document.getElementById("billPopup").style.display = "flex";
 }
 function deleteBill(index) {
@@ -308,7 +306,9 @@ function renameBill(index) {
     showBills();
   }
 }
-
+function closeBills() {
+  document.getElementById("billPopup").style.display = "none";
+}
 // Bỏ dấu tiếng Việt
 function removeDiacritics(str) {
   return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\x00-\x7F]/g, "");
