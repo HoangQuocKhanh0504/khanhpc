@@ -269,28 +269,46 @@ function showBills() {
   const bills = JSON.parse(localStorage.getItem("bills") || "[]");
   const container = document.getElementById("billItems");
   container.innerHTML = "";
+
   if (bills.length === 0) {
-    container.innerHTML = "<p>Chua co bill nao.</p>";
+    container.innerHTML = "<p>Chưa có bill nào.</p>";
   } else {
     bills.forEach((b, i) => {
       const div = document.createElement("div");
       div.className = "bill-item";
       div.innerHTML = `
-        <strong>#${i + 1}</strong> - ${b.file} <br/>
+        <strong>#${i + 1}</strong> - <span id="bill-name-${i}">${b.file}</span> <br/>
         🕒 ${b.time}<br/>
         📄 ${b.pages} trang – ${b.label}<br/>
         💰 ${b.total.toLocaleString()}đ
         <br/>
-        <button onclick="exportBill(${i})">📤 Xuat PDF</button>
+        <button onclick="exportBill(${i})">📤 Xuất PDF</button>
+        <button onclick="renameBill(${i})">✏️ Đổi tên</button>
+        <button onclick="deleteBill(${i})">🗑️ Xóa</button>
       `;
       container.appendChild(div);
     });
   }
+
   document.getElementById("billPopup").style.display = "flex";
 }
-function closeBills() {
-  document.getElementById("billPopup").style.display = "none";
+function deleteBill(index) {
+  if (!confirm("Bạn có chắc chắn muốn xóa bill này không?")) return;
+  const bills = JSON.parse(localStorage.getItem("bills") || "[]");
+  bills.splice(index, 1);
+  localStorage.setItem("bills", JSON.stringify(bills));
+  showBills();
 }
+function renameBill(index) {
+  const bills = JSON.parse(localStorage.getItem("bills") || "[]");
+  const newName = prompt("Nhập tên mới cho bill:", bills[index].file);
+  if (newName && newName.trim() !== "") {
+    bills[index].file = newName.trim();
+    localStorage.setItem("bills", JSON.stringify(bills));
+    showBills();
+  }
+}
+
 // Bỏ dấu tiếng Việt
 function removeDiacritics(str) {
   return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\x00-\x7F]/g, "");
