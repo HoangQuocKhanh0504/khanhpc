@@ -112,6 +112,22 @@
     scrollbar-width: none;     /* Firefox */
   }
 </style>
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  @keyframes fadeOut {
+    from { opacity: 1; transform: scale(1); }
+    to   { opacity: 0; transform: scale(0.9); }
+  }
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-out forwards;
+  }
+  .animate-fadeOut {
+    animation: fadeOut 0.25s ease-in forwards;
+  }
+</style>
 </head>
 <body>
 <!-- HEADER -->
@@ -166,22 +182,22 @@
       animation: scroll-infinite 30s linear infinite;
   ">
     <span style="padding-right: 50px;">
-      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Chi tiết xin liên hệ qua facebook hoặc: 
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Chi tiết xin liên hệ qua <a href="https://www.facebook.com/khanhpc548" target="_blank" style="color: #000; text-decoration: underline;">Facebook</a> hoặc: 
       <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com </a>
        Xin chân thành cảm ơn |© KHANHPC 2025| mọi quyền được bảo lưu
     </span>
     <span style="padding-right: 50px;">
-      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Chi tiết xin liên hệ qua facebook hoặc: 
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Chi tiết xin liên hệ qua <a href="https://www.facebook.com/khanhpc548" target="_blank" style="color: #000; text-decoration: underline;">Facebook </a> hoặc: 
       <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com </a>
        Xin chân thành cảm ơn |© KHANHPC 2025| mọi quyền được bảo lưu
     </span>
     <span style="padding-right: 50px;">
-      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Chi tiết xin liên hệ qua facebook hoặc: 
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Chi tiết xin liên hệ qua <a href="https://www.facebook.com/khanhpc548" target="_blank" style="color: #000; text-decoration: underline;">Facebook </a> hoặc: 
       <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com </a>
        Xin chân thành cảm ơn |© KHANHPC 2025| mọi quyền được bảo lưu
     </span>
     <span style="padding-right: 50px;">
-      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Chi tiết xin liên hệ qua facebook hoặc: 
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Chi tiết xin liên hệ qua <a href="https://www.facebook.com/khanhpc548" target="_blank" style="color: #000; text-decoration: underline;">Facebook </a> hoặc: 
       <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com </a>
        Xin chân thành cảm ơn |© KHANHPC 2025| mọi quyền được bảo lưu
     </span>
@@ -231,23 +247,28 @@
     </div>
   </div>
 </section>
-<!-- SERVICES -->
 <section id="services" class="py-20 bg-gray-50">
   <div class="container mx-auto px-6 text-center">
     <h2 class="text-3xl font-bold mb-4">Chúng Tôi Nhận Nhập Liệu Từ</h2>
     <p class="text-gray-600 mb-12">Ảnh chụp, viết tay, văn bản tiếng Việt,... đảm bảo chính xác</p>
     <div class="grid md:grid-cols-3 gap-8">
-      <div class="card-hover bg-white rounded-lg shadow-md p-6" data-aos="fade-up">
-        <h3 class="text-xl font-semibold mb-4">Ảnh & PDF</h3>
-        <p class="text-gray-600">Chuyển ảnh, file PDF sang Word chính xác, đẹp mắt.</p>
+      <!-- Box 1 -->
+      <div class="card-hover bg-white rounded-lg shadow-md p-6 flex flex-col items-center" data-aos="fade-up">
+        <h3 class="text-xl font-semibold mb-2">Ảnh & PDF</h3>
+        <p class="text-gray-600 mb-4">Chuyển ảnh, file PDF sang Word chính xác, đẹp mắt.</p>
+        <img src="1.png" alt="Demo ảnh & PDF" class="max-w-full max-h-60 object-contain rounded-md">
       </div>
-      <div class="card-hover bg-white rounded-lg shadow-md p-6" data-aos="fade-up" data-aos-delay="100">
-        <h3 class="text-xl font-semibold mb-4">Viết tay</h3>
-        <p class="text-gray-600">Gõ lại từ chữ viết tay rõ ràng, đầy đủ ngữ pháp.</p>
+      <!-- Box 2 -->
+      <div class="card-hover bg-white rounded-lg shadow-md p-6 flex flex-col items-center" data-aos="fade-up" data-aos-delay="100">
+        <h3 class="text-xl font-semibold mb-2">Viết tay</h3>
+        <p class="text-gray-600 mb-4">Gõ lại từ chữ viết tay rõ ràng, đầy đủ ngữ pháp.</p>
+        <img src="2.png" alt="Demo viết tay" class="max-w-full max-h-60 object-contain rounded-md">
       </div>
-      <div class="card-hover bg-white rounded-lg shadow-md p-6" data-aos="fade-up" data-aos-delay="200">
-        <h3 class="text-xl font-semibold mb-4">Văn bản khác</h3>
-        <p class="text-gray-600">Đề thi, báo cáo, giáo án, nội quy,... đều nhận làm.</p>
+      <!-- Box 3 -->
+      <div class="card-hover bg-white rounded-lg shadow-md p-6 flex flex-col items-center" data-aos="fade-up" data-aos-delay="200">
+        <h3 class="text-xl font-semibold mb-2">Văn bản khác</h3>
+        <p class="text-gray-600 mb-4">Đề thi, báo cáo, giáo án, nội quy,... đều nhận làm.</p>
+        <img src="3.png" alt="Demo văn bản khác" class="max-w-full max-h-60 object-contain rounded-md">
       </div>
     </div>
   </div>
@@ -285,9 +306,23 @@
     <h2 class="text-3xl font-bold mb-4">Liên Hệ Đặt Dịch Vụ</h2>
     <p class="text-gray-600 mb-6">Chúng tôi luôn hỗ trợ 24/7!</p>
     <div class="bg-white rounded-lg shadow-md p-6 max-w-lg mx-auto text-left">
-      <p class="text-gray-600">Zalo: <a href="https://zalo.me/0937648921" target="_blank">0937 648 921</a></p>
-      <p class="text-gray-600">Email: <a href="https://mail.google.com/mail/?view=cm&to=vyk103736@gmail.com" target="_blank">Vyk103736@gmail.com</a></p>
-      <p class="text-gray-600"><strong>Facebook:</strong> <a href="https://facebook.com/khanhpc548" class="text-blue-600" target="_blank">khanhpc548</a></p>
+            <a href="https://zalo.me/0937648921" target="_blank"
+         class="flex items-center gap-3 p-3 bg-blue-50 rounded-xl hover:bg-blue-100 transition">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo" class="w-6 h-6">
+        <span class="text-gray-700 font-medium">Zalo: 0937 648 921</span>
+      </a>
+      <br>
+            <a href="mailto:vyk103736@gmail.com" target="_blank"
+         class="flex items-center gap-3 p-3 bg-red-50 rounded-xl hover:bg-red-100 transition">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Gmail_Icon.png" alt="Gmail" class="w-6 h-6">
+        <span class="text-gray-700 font-medium">Email: vyk103736@gmail.com</span>
+      </a>
+      <br>
+            <a href="https://facebook.com/khanhpc548" target="_blank"
+         class="flex items-center gap-3 p-3 bg-blue-100 rounded-xl hover:bg-blue-200 transition">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Facebook_icon.svg" alt="Facebook" class="w-6 h-6">
+        <span class="text-gray-700 font-medium">Facebook: khanhpc548</span>
+      </a>
     </div>
   </div>
 </section>
@@ -296,13 +331,42 @@
   <p>&copy; <span id="year"></span> Dịch Vụ Nhập Liệu. KHANHPC.</p>
 </footer>
 <!-- MODAL -->
-<div id="modal" class="fixed hidden items-center justify-center">
-  <div class="bg-white p-6 rounded-lg shadow-lg text-center max-w-sm">
-    <h3 class="text-xl font-semibold mb-2">Liên hệ ngay</h3>
-      <p class="text-gray-600">Zalo: <a href="https://zalo.me/0937648921" target="_blank">0937 648 921</a></p>
-      <p class="text-gray-600">Email: <a href="https://mail.google.com/mail/?view=cm&to=vyk103736@gmail.com" target="_blank">Vyk103736@gmail.com</a></p>
-      <p class="text-gray-600"><strong>Facebook:</strong> <a href="https://facebook.com/khanhpc548" class="text-blue-600" target="_blank">khanhpc548</a></p>
-    <button onclick="closeModal()" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Đóng</button>
+<!-- Modal nâng cấp với icon -->
+<div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 items-center justify-center">
+  <div id="modalContent" class="bg-white p-6 rounded-2xl shadow-2xl max-w-md w-full text-center animate-fadeIn relative">
+    <!-- Nút đóng -->
+    <button onclick="closeModal()" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-xl font-bold">&times;</button>
+    <!-- Tiêu đề -->
+    <div class="mb-4">
+      <h3 class="text-2xl font-bold text-gray-800">Liên hệ với <span class="text-blue-600">KHANHPC</span></h3>
+      <p class="text-sm text-gray-500 mt-1">Chọn nền tảng để kết nối nhanh</p>
+    </div>
+    <!-- Danh sách liên hệ -->
+    <div class="space-y-4">
+      <!-- Zalo -->
+      <a href="https://zalo.me/0937648921" target="_blank"
+         class="flex items-center gap-3 p-3 bg-blue-50 rounded-xl hover:bg-blue-100 transition">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo" class="w-6 h-6">
+        <span class="text-gray-700 font-medium">Zalo: 0937 648 921</span>
+      </a>
+      <!-- Gmail -->
+      <a href="mailto:vyk103736@gmail.com" target="_blank"
+         class="flex items-center gap-3 p-3 bg-red-50 rounded-xl hover:bg-red-100 transition">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Gmail_Icon.png" alt="Gmail" class="w-6 h-6">
+        <span class="text-gray-700 font-medium">Email: vyk103736@gmail.com</span>
+      </a>
+      <!-- Facebook -->
+      <a href="https://facebook.com/khanhpc548" target="_blank"
+         class="flex items-center gap-3 p-3 bg-blue-100 rounded-xl hover:bg-blue-200 transition">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Facebook_icon.svg" alt="Facebook" class="w-6 h-6">
+        <span class="text-gray-700 font-medium">Facebook: khanhpc548</span>
+      </a>
+    </div>
+    <!-- Nút đóng -->
+    <button onclick="closeModal()"
+            class="mt-6 px-5 py-2 bg-blue-600 text-white font-medium rounded-full hover:bg-blue-700 transition">
+      Đóng
+    </button>
   </div>
 </div>
 <!-- SCRIPTS -->
@@ -399,24 +463,33 @@
     <form id="dichVuForm" class="space-y-4" onsubmit="submitForm(event)">
       <div>
         <label class="block font-semibold">Zalo (số điện thoại) *</label>
-        <input required type="tel" name="zalo" id="zalo" class="w-full border rounded px-3 py-2" placeholder="Ví dụ: 0937648921" />
+        <input required type="tel" name="zalo" id="zalo" class="w-full border rounded px-3 py-2" placeholder="Ví dụ: 0937648921" autocomplete="off"/>
       </div>
       <div>
         <label class="block font-semibold">Email *</label>
-        <input required type="email" name="email" id="email" class="w-full border rounded px-3 py-2" placeholder="Nhập email của bạn" />
+        <input required type="email" name="email" id="email" class="w-full border rounded px-3 py-2" placeholder="Nhập email của bạn" autocomplete="off"/>
       </div>
       <div>
         <label class="block font-semibold">Họ tên *</label>
-        <input required type="text" name="hoten" id="hoten" class="w-full border rounded px-3 py-2" placeholder="Nguyễn Văn A..." />
+        <input required type="text" name="hoten" id="hoten" class="w-full border rounded px-3 py-2" placeholder="Nguyễn Văn A..." autocomplete="off"/>
       </div>
       <div>
         <label class="block font-semibold">Yêu cầu *</label>
         <textarea required name="yeucau" id="yeucau" class="w-full border rounded px-3 py-2" rows="4" placeholder="Mô tả bạn cần gì..."></textarea>
       </div>
-      <div>
-        <label class="block font-semibold">Tải ảnh (nếu có)</label>
-        <input type="file" name="anh" id="images" multiple class="w-full border rounded px-3 py-2" />
-      </div>
+<div class="my-4">
+  <label class="block font-semibold mb-2">Tải ảnh (nếu có)</label>
+  <!-- Khu vực drag & drop -->
+  <div id="dropZone" 
+       class="flex flex-col items-center justify-center border-2 border-dashed border-blue-500 p-6 rounded-lg text-center bg-white hover:bg-blue-50 cursor-pointer transition"
+       onclick="document.getElementById('images').click();">
+    <p class="text-gray-600">Kéo & thả ảnh vào đây hoặc bấm để chọn</p>
+  </div>
+  <!-- Input file ẩn -->
+  <input type="file" name="anh" id="images" multiple class="hidden" />
+  <!-- Hiển thị preview ảnh -->
+  <div id="preview" class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+</div>
       <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 font-semibold">Gửi yêu cầu</button>
     </form>
   </div>
@@ -554,7 +627,7 @@ function saveData() {
   Swal.fire({
     icon: "success",
     title: "✅ Đơn hàng đã được lưu!",
-    html: `Vui lòng tải <strong>PDF</strong> và gửi cho Admin <a href="https://www.facebook.com/khanhpc548" target="_blank" style="color:#2563eb; text-decoration:underline; font-weight:500;">tại đây</a>.`,
+    html: `Vui lòng tải <strong>PDF</strong> tại mục xem đơn và gửi cho Admin <a href="https://www.facebook.com/khanhpc548" target="_blank" style="color:#2563eb; text-decoration:underline; font-weight:500;">tại đây</a>.`,
     confirmButtonText: "OK",
   }).then(() => location.reload());
 }
@@ -725,6 +798,53 @@ themDong(`Gui luc: ${don.time || "Khong ro"}`);
       img.onload = () => resolve();
     });
     return { data, width: img.width, height: img.height };
+  }
+</script>
+<script>
+  const dropZone = document.getElementById("dropZone");
+  const inputFile = document.getElementById("images");
+  const preview = document.getElementById("preview");
+  // Highlight khi kéo ảnh vào
+  ["dragenter", "dragover"].forEach(evt =>
+    dropZone.addEventListener(evt, e => {
+      e.preventDefault();
+      dropZone.classList.add("bg-blue-100");
+    })
+  );
+  // Bỏ highlight khi rời ra
+  ["dragleave", "drop"].forEach(evt =>
+    dropZone.addEventListener(evt, e => {
+      e.preventDefault();
+      dropZone.classList.remove("bg-blue-100");
+    })
+  );
+  // Xử lý khi thả ảnh vào
+  dropZone.addEventListener("drop", e => {
+    const files = e.dataTransfer.files;
+    handleFiles(files);
+  });
+  // Khi chọn ảnh qua nút
+  inputFile.addEventListener("change", () => {
+    handleFiles(inputFile.files);
+  });
+  // Xử lý file + hiển thị preview
+  function handleFiles(files) {
+    preview.innerHTML = ""; // Xóa ảnh cũ
+    [...files].forEach(file => {
+      if (!file.type.startsWith("image/")) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = document.createElement("img");
+        img.src = e.target.result;
+        img.className = "w-full h-32 object-cover rounded shadow";
+        preview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    });
+    // Gán lại file vào input (để submit form vẫn lấy được)
+    const dataTransfer = new DataTransfer();
+    [...files].forEach(file => dataTransfer.items.add(file));
+    inputFile.files = dataTransfer.files;
   }
 </script>
 </body>
