@@ -185,16 +185,163 @@
     <div class="log-box" id="logBox"></div>
     <div class="price-box" id="totalPrice"></div>
   </div>
-  <!-- Popup -->
-  <div class="bill-popup" id="billPopup">
-    <div class="bill-content" id="billList">
-      <h3>🧾 Danh sách bill đã tạo</h3>
-      <div id="billItems"></div>
-      <div class="bill-actions">
-        <button class="custom-btn" onclick="closeBills()">Đóng</button>
+<!-- Popup -->
+<div class="bill-popup" id="billPopup" style="
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  font-family: 'Segoe UI', sans-serif;
+">
+  <div class="bill-content" id="billList" style="
+    background: #fff;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  ">
+    <!-- Header -->
+    <div style="
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 10;
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #e0e0e0;
+    ">
+      <h3 style="margin: 0; font-size: 20px; font-weight: bold; color: #222;">🧾 Danh sách bill đã tạo</h3>
+      <div style="margin-top: 10px; position: relative;">
+        <input
+          type="text"
+          id="searchBill"
+          oninput="showBills()"
+          placeholder="Tìm theo tên bill..."
+          style="
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+            padding-left: 36px;
+            box-sizing: border-box;
+          "
+        />
+        <span style="
+          position: absolute;
+          left: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: #999;
+          font-size: 16px;
+        ">🔍</span>
       </div>
     </div>
+    <!-- Danh sách bill -->
+    <div id="billItems" style="
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-right: 4px;
+      overflow-x: hidden;
+      word-break: break-word;
+    "></div>
+    <!-- Footer -->
+    <div class="bill-actions" style="text-align: right; margin-top: 20px;">
+      <button onclick="closeBills()" style="
+        background: linear-gradient(135deg, #2563eb, #1e3a8a);
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      "
+      onmouseover="this.style.background='linear-gradient(135deg, #1e40af, #1e3a8a)'"
+      onmouseout="this.style.background='linear-gradient(135deg, #2563eb, #1e3a8a)'"
+      >❌ Đóng</button>
+    </div>
   </div>
+</div>
+<!-- Scroll đẹp cho popup -->
+<style>
+  .bill-content::-webkit-scrollbar {
+    width: 6px;
+  }
+  .bill-content::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+  }
+  .bill-content::-webkit-scrollbar-track {
+    background: transparent;
+  }
+</style>
+<!-- Popup Đổi Tên -->
+<div id="renamePopup" style="
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.4); z-index: 99999;
+  justify-content: center; align-items: center;
+">
+  <div style="
+    background: white; padding: 20px; border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2); width: 90%; max-width: 400px;
+  ">
+    <h3 style="margin-top: 0;">✏️ Đổi tên bill</h3>
+    <input id="newBillName" placeholder="Nhập tên mới..." style="
+      width: 100%; padding: 10px; border: 1px solid #ccc;
+      border-radius: 6px; margin-top: 10px; font-size: 15px;
+    " />
+    <div style="margin-top: 16px; text-align: right;">
+      <button onclick="closeRenamePopup()" style="
+        margin-right: 10px; padding: 8px 14px; border: none;
+        background: #ccc; border-radius: 6px; cursor: pointer;
+      ">Huỷ</button>
+      <button onclick="confirmRename()" style="
+        padding: 8px 14px; background: #2563eb; color: white;
+        border: none; border-radius: 6px; cursor: pointer;
+      ">Lưu</button>
+    </div>
+  </div>
+</div>
+<!-- Popup Xác nhận Xoá -->
+<div id="deletePopup" style="
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.4); z-index: 99999;
+  justify-content: center; align-items: center;
+">
+  <div style="
+    background: white; padding: 20px; border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2); width: 90%; max-width: 360px;
+  ">
+    <h3 style="margin-top: 0; color: #ef4444;">🗑️ Xóa bill?</h3>
+    <p>Bạn có chắc chắn muốn xóa bill <strong id="billToDeleteName">này</strong> không?</p>
+    <div style="margin-top: 16px; text-align: right;">
+      <button onclick="closeDeletePopup()" style="
+        margin-right: 10px; padding: 8px 14px; border: none;
+        background: #ccc; border-radius: 6px; cursor: pointer;
+      ">Không</button>
+      <button onclick="confirmDelete()" style="
+        padding: 8px 14px; background: #ef4444; color: white;
+        border: none; border-radius: 6px; cursor: pointer;
+      ">Xóa</button>
+    </div>
+  </div>
+</div>
   <script>
     const fileInput = document.getElementById("fileInput");
     const logBox = document.getElementById("logBox");
@@ -268,22 +415,61 @@
 function showBills() {
   const bills = JSON.parse(localStorage.getItem("bills") || "[]");
   const container = document.getElementById("billItems");
+  const searchKeyword = document.getElementById("searchBill")?.value?.toLowerCase() || "";
   container.innerHTML = "";
-  if (bills.length === 0) {
-    container.innerHTML = "<p>Chưa có bill nào.</p>";
+  const filteredBills = bills.filter(bill =>
+    bill.file.toLowerCase().includes(searchKeyword)
+  );
+  if (filteredBills.length === 0) {
+    container.innerHTML = "<p style='color: gray;'>Không tìm thấy bill nào.</p>";
   } else {
-    bills.forEach((b, i) => {
+    filteredBills.forEach((b, i) => {
       const div = document.createElement("div");
       div.className = "bill-item";
+      div.style = "border: 1px solid #ccc; padding: 10px; border-radius: 8px; margin-bottom: 10px; background: #f9f9f9;";
       div.innerHTML = `
         <strong>#${i + 1}</strong> - <span id="bill-name-${i}">${b.file}</span> <br/>
         🕒 ${b.time}<br/>
         📄 ${b.pages} trang – ${b.label}<br/>
-        💰 ${b.total.toLocaleString()}đ
-        <br/>
-        <button onclick="exportBill(${i})">📤 Xuất PDF</button>
-        <button onclick="renameBill(${i})">✏️ Đổi tên</button>
-        <button onclick="deleteBill(${i})">🗑️ Xóa</button>
+        💰 ${b.total.toLocaleString()}đ<br/>
+        <div style="margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap;">
+  <button onclick="exportBill(${i})" style="
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  " onmouseover="this.style.background='#1e40af'" onmouseout="this.style.background='#2563eb'">
+    📤 Xuất PDF
+  </button>
+  <button onclick="renameBill(${i})" style="
+    background: #f59e0b;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  " onmouseover="this.style.background='#d97706'" onmouseout="this.style.background='#f59e0b'">
+    ✏️ Đổi tên
+  </button>
+  <button onclick="deleteBill(${i})" style="
+    background: #ef4444;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  " onmouseover="this.style.background='#b91c1c'" onmouseout="this.style.background='#ef4444'">
+    🗑️ Xóa
+  </button>
+</div>
       `;
       container.appendChild(div);
     });
