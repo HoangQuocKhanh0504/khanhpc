@@ -378,6 +378,7 @@ body {
         <div class="btn-container">
             <button class="btn" onclick="showPopup('PC')"><i class="fas fa-desktop"></i> Tải bản mới nhất cho PC</button>
             <button class="btn" onclick="showPopup('Android')"><i class="fas fa-mobile-alt"></i> Tải Android</button>
+            <button class="btn" onclick="showPopup('Androidno')"><i class="fas fa-mobile-alt"></i> Tải Android (không mod skin)</button>
         </div>
     </div>
     <div id="popup" class="popup">
@@ -427,6 +428,11 @@ function showPopup(platform) {
         popupTitle.innerHTML = "Đang tải Geometry Dash cho Android...";
         fileName = "Geometry_Dash_KHANHGD.apk";
         filePath = "https://drive.usercontent.google.com/download?id=1gfXohA4Rqz0JGMMlgeFgat7hT9A_GZoz&export=download&authuser=0";
+    
+    } else if (platform === "Androidno") {
+        popupTitle.innerHTML = "Đang tải Geometry Dash không mod cho Android...";
+        fileName = "Geometry_Dash_KHANHGDnomod.apk";
+        filePath = "https://drive.usercontent.google.com/download?id=1Dd4tvVMEx_dakYGoknrifkKBTUh1mSE3&export=download&authuser=0";
     }
     // Tải sau 1.5 giây (để người dùng thấy popup)
     setTimeout(() => {
