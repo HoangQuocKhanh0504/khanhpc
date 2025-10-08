@@ -165,25 +165,79 @@
             }
         }
     </style>
+    
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="#"><i class="fas fa-laptop-code me-2"></i>Cài Win Tại Nhà</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#home">Trang Chủ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#services">Dịch Vụ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#pricing">Giá Cả</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contact">Liên Hệ</a></li>
-                </ul>
-            </div>
+<nav class="navbar navbar-expand-lg navbar-light fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="#"><i class="fas fa-laptop-code me-2"></i>Cài Win Tại Nhà</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#home">Trang Chủ</a></li>
+                <li class="nav-item"><a class="nav-link" href="#services">Dịch Vụ</a></li>
+                <li class="nav-item"><a class="nav-link" href="#pricing">Giá Cả</a></li>
+                <li class="nav-item"><a class="nav-link" href="#contact">Liên Hệ</a></li>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
+
+<!-- Thanh thông báo dưới navbar -->
+<div id="notification-bar" style="
+    width: 100%;
+    background-color: #ffcc00;
+    color: #000;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 2px solid #cc9900;
+    box-sizing: border-box;
+    position: fixed;     /* Dính cố định */
+    top: 56px;           /* Đẩy xuống ngay dưới navbar (navbar bootstrap mặc định cao ~56px) */
+    left: 0;
+    z-index: 9998;       /* thấp hơn navbar nếu cần */
+">
+  <div id="scrolling-wrapper" style="
+      display: inline-block;
+      white-space: nowrap;
+      will-change: transform;
+      animation: scroll-infinite 30s linear infinite;
+  ">
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn. Đôi khi css của web sẽ bị mất. Nếu các bạn muốn làm web thì có thể liên hệ mình qua website: 
+      <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com</a>
+      © KHANHPC 2025 | mọi quyền được bảo lưu
+    </span>
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn. Đôi khi css của web sẽ bị mất. Nếu các bạn muốn làm web thì có thể liên hệ mình qua website: 
+      <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com</a>
+      © KHANHPC 2025 | mọi quyền được bảo lưu
+    </span>
+  </div>
+</div>
+
+<style>
+@keyframes scroll-infinite {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-25%);
+  }
+}
+
+/* Đẩy nội dung web xuống để navbar + notification bar không che */
+body {
+  margin-top: 96px; /* 56px navbar + 40px notification bar */
+}
+</style>
+
 
     <!-- Hero Section -->
     <section id="home" class="hero">
@@ -235,7 +289,7 @@
     <section id="pricing" class="section">
         <div class="container">
             <h2>Bảng Giá Dịch Vụ</h2>
-            <p class="text-center text-muted mb-5">Giá bao gồm di chuyển nội thành. Phí ngoại thành: +50.000 VND. Sử dụng key bản quyền hợp pháp.</p>
+            <p class="text-center text-muted mb-5">Giá chưa bao gồm di chuyển nội thành. Phí ngoại thành: +50.000 VND. Sử dụng key bản quyền hợp pháp.</p>
             <div class="row g-4 justify-content-center">
                 <div class="col-lg-4 col-md-6">
                     <div class="pricing-card">
@@ -252,7 +306,7 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="pricing-card">
                         <h4 class="text-center mb-4"><i class="fab fa-windows me-2"></i>Windows 10</h4>
-                        <div class="price-tag">300.000<sup>đ</sup></div>
+                        <div class="price-tag">200.000<sup>đ</sup></div>
                         <ul class="list-unstyled mb-4">
                             <li><i class="fas fa-check text-success me-2"></i>Bản win phổ biến</li>
                             <li><i class="fas fa-check text-success me-2"></i>Tối ưu hiệu suất</li>
@@ -264,7 +318,7 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="pricing-card">
                         <h4 class="text-center mb-4"><i class="fab fa-windows me-2"></i>Windows 11</h4>
-                        <div class="price-tag">350.000<sup>đ</sup></div>
+                        <div class="price-tag">250.000<sup>đ</sup></div>
                         <ul class="list-unstyled mb-4">
                             <li><i class="fas fa-check text-success me-2"></i>Bản win hiện đại</li>
                             <li><i class="fas fa-check text-success me-2"></i>Tương thích TPM 2.0</li>
@@ -327,7 +381,7 @@
     <!-- Footer -->
     <footer>
         <div class="container">
-            <p class="mb-3">&copy; 2023 Dịch Vụ Cài Windows Tại Nhà. Tất cả quyền được bảo lưu.</p>
+            <p class="mb-3">&copy; 2025 Dịch Vụ Cài Windows Tại Nhà.|khanhPC. Tất cả quyền được bảo lưu.</p>
             <div class="social-icons">
                 <a href="https://zalo.me/0937648921" target="_blank" rel="noopener noreferrer"><i class="fab fa-zalo"></i></a>
                 <a href="https://wa.me/0937648921" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i></a>
@@ -342,7 +396,7 @@
         document.addEventListener("DOMContentLoaded", function () {
             const year = new Date().getFullYear();
             document.querySelector("footer p").innerHTML =
-                `&copy; ${year} Dịch Vụ Cài Windows Tại Nhà. Tất cả quyền được bảo lưu.`;
+                `&copy; ${year} Dịch Vụ Cài Windows Tại Nhà.|khanhPC. Tất cả quyền được bảo lưu.`;
         });
 
         // Tự động chọn dịch vụ khi đến từ link có ?win= (ví dụ: index.html?win=10)
