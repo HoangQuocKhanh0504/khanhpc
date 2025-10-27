@@ -1,4 +1,4 @@
-nhìn xấu quá có cách nào tạo giao diện cho nó không hihi
+
 # ✨ Giới thiệu về **KHANHPC**
 
 **KHANHPC** là dịch vụ **sửa chữa và cài đặt phần mềm máy tính từ xa**, mang đến **giải pháp nhanh chóng – tiện lợi – tiết kiệm chi phí** cho người dùng cá nhân, học sinh – sinh viên, và văn phòng nhỏ.
