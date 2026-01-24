@@ -733,7 +733,7 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
-            display: none;
+            display: none; /* THAY ĐỔI TỪ 'none' THÀNH 'flex' NẾU MUỐN HIỂN THỊ MẶC ĐỊNH */
             justify-content: center;
             align-items: center;
             z-index: 2000;
@@ -1361,6 +1361,9 @@
                 <a href="mailto:vyk103736@gmail.com" class="social-icon">
                     <i class="fas fa-envelope"></i>
                 </a>
+                <a href="https://discord.com/invite/uM5HyRKC" class="social-icon" target="_blank">
+                    <i class="fab fa-discord"></i>
+                </a>
             </div>
         </nav>
 
@@ -1648,7 +1651,7 @@
         const downloadConfig = {
             pc: {
                 '2.208': {
-                    url: 'https://www.mediafire.com/file/4vtv1c3b9m6fqha/KPC.rar/file',
+                    url: 'https://www.mediafire.com/file/4t5og9dt59rynvj/KGD5408.rar/file',
                     fileName: 'KGD5408.rar',
                     fileSize: '278.61MB',
                     displayName: 'Phiên bản PC 2.208'
@@ -1936,7 +1939,8 @@
                 document.getElementById('popupSubtitle').textContent = 
                     `Đang tải ${info.displayName}...`;
                 
-                document.getElementById('popupOverlay').classList.add('active');
+                // SỬA DÒNG NÀY
+                document.getElementById('popupOverlay').style.display = 'flex';
                 document.body.style.overflow = 'hidden';
                 
                 startDownloadProgress(info);
@@ -1957,6 +1961,11 @@
             percent.textContent = '0%';
             speed.textContent = '-- MB/s';
             time.textContent = '--';
+            
+            // HIỂN THỊ POPUP - THÊM DÒNG NÀY
+            const popupOverlay = document.getElementById('popupOverlay');
+            popupOverlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
             
             downloadTimer = setInterval(() => {
                 let increment;
@@ -2019,7 +2028,8 @@
         }
 
         function closePopup() {
-            document.getElementById('popupOverlay').classList.remove('active');
+            const popupOverlay = document.getElementById('popupOverlay');
+            popupOverlay.style.display = 'none'; // THAY ĐỔI TỪ remove('active') THÀNH display = 'none'
             document.body.style.overflow = 'auto';
             
             if (downloadTimer) {
