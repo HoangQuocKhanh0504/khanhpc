@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Khung YouTube ASCII Pro Max</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+  <link rel="icon" href="GD.png">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(to right, #0f172a, #1e293b);
+      color: #eee;
+      font-family: 'Fira Code', monospace;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 800px;
+      background-color: #1e293b;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 0 25px #00000066;
+      border: 1px solid #334155;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #93c5fd;
+      font-weight: 500;
+      font-size: 24px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 140px;
+      background-color: #0f172a;
+      color: #e5e7eb;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 14px;
+      transition: 0.2s;
+      resize: vertical;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px #3b82f655;
+    }
+
+    button {
+      display: block;
+      margin: 20px auto;
+      background: linear-gradient(to right, #3b82f6, #2563eb);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+    }
+
+    pre {
+      background-color: #0f172a;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 14px;
+      color: #93c5fd;
+      border: 1px solid #334155;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>📦 Khung Link YouTube - Đẹp & Cân Đối</h2>
+    <textarea id="input" placeholder="Dán link YouTube vào đây..."></textarea>
+    <button onclick="formatLinks()">✨ Tạo khung cân đối</button>
+    <pre id="output">/* Kết quả sẽ hiện ở đây */</pre>
+  </div>
+
+  <script>
+    function padCenter(text, width) {
+      const totalPadding = width - text.length;
+      const left = Math.floor(totalPadding / 2);
+      const right = totalPadding - left;
+      return ' '.repeat(left) + text + ' '.repeat(right);
+    }
+
+    function formatLinks() {
+      const raw = document.getElementById("input").value;
+      const links = Array.from(
+        new Set(
+          raw.split(/\s+/)
+            .map(link => link.trim())
+            .filter(link => link.startsWith("http") && link.includes("youtube.com"))
+        )
+      );
+
+      if (links.length === 0) {
+        document.getElementById("output").textContent = "⚠️ Không có link hợp lệ!";
+        return;
+      }
+
+      const maxLength = Math.max(...links.map(l => l.length));
+      const frameWidth = maxLength + 4;
+      const border = "-".repeat(frameWidth);
+
+      const boxes = links.map(link => {
+        const padded = padCenter(link, maxLength);
+        return `${border}\n| ${padded} |\n${border}`;
+      });
+
+      document.getElementById("output").textContent = boxes.join('\n');
+    }
+  </script>
+  <div id="donate-host"></div>
+<script>
+  const host = document.getElementById("donate-host");
+  const shadow = host.attachShadow({ mode: "open" });
+  const tpl = `
+    <!-- Nút Donate lắc lư cute -->
+<a href="https://khanhpc-five.vercel.app/ungho.html" id="donate-button" target="_blank">💖 Donate cho KHANHPC</a>
+<style>
+  #donate-button {
+    position: fixed;
+    top:70px;
+    right: 20px;
+    background: linear-gradient(135deg, #ff0080, #7928ca);
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    animation: shake 2s infinite;
+    transition: transform 0.2s;
+  }
+  #donate-button:hover {
+    transform: scale(1.05);
+  }
+  @keyframes shake {
+    0% { transform: rotate(0deg); }
+    20% { transform: rotate(3deg); }
+    40% { transform: rotate(-3deg); }
+    60% { transform: rotate(2deg); }
+    80% { transform: rotate(-2deg); }
+    100% { transform: rotate(0deg); }
+  }
+  @media (max-width: 500px) {
+    #donate-button {
+      font-size: 14px;
+      padding: 10px 16px;
+    }
+  }
+</style>
+  `;
+  shadow.innerHTML = tpl;
+  new MutationObserver((muts, obs) => {
+    if (!shadow.querySelector("#donate-button")) {
+      obs.disconnect();
+      location.reload();
+    }
+  }).observe(shadow, { childList: true });
+</script>
+</body>
+</html>

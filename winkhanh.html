@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dịch vụ cài đặt Windows tại nhà chuyên nghiệp, giá rẻ cho Windows 7, 10, 11 tại TP. Hồ Chí Minh. Bảo hành 3 tháng, hỗ trợ nhanh chóng.">
+    <meta name="keywords" content="cài win tại nhà, cài windows, dịch vụ IT, Windows 10, Windows 11">
+    <title>Dịch Vụ Cài Đặt Windows Tại Nhà - Chuyên Nghiệp & Giá Rẻ</title>
+    <link rel="icon" href="GD.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .navbar-brand {
+            font-weight: 600;
+            color: #0d6efd !important;
+        }
+        .hero {
+            background: linear-gradient(rgba(13, 110, 253, 0.8), rgba(13, 110, 253, 0.8)), url('https://images.unsplash.com/photo-1517336714731-489689fd1ca8?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 30px;
+        }
+        .btn-primary {
+            background: #0d6efd;
+            border: none;
+            padding: 12px 30px;
+            font-weight: 500;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: #0b5ed7;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(13, 110, 253, 0.4);
+        }
+        .btn-success {
+            background: #198754;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+        }
+        .section {
+            padding: 80px 0;
+        }
+        .section h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #0d6efd;
+        }
+        .feature-card {
+            background: white;
+            border: none;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        .feature-card i {
+            font-size: 3rem;
+            color: #0d6efd;
+            margin-bottom: 20px;
+        }
+        .pricing-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+        .price-tag {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #198754;
+            margin: 20px 0;
+        }
+        .testimonial {
+            background: #f8f9fa;
+            border-left: 4px solid #0d6efd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .contact-form {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        .form-control {
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+            padding: 12px 15px;
+            font-size: 1rem;
+        }
+        .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+        }
+        #map {
+            height: 300px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        footer {
+            background: #0d6efd;
+            color: white;
+            padding: 40px 0 20px;
+            text-align: center;
+        }
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+        .social-icons a:hover {
+            color: #ffc107;
+        }
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .section h2 {
+                font-size: 2rem;
+            }
+            .section {
+                padding: 50px 0;
+            }
+        }
+    </style>
+    
+</head>
+<body>
+    <!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="#"><i class="fas fa-laptop-code me-2"></i>Cài Win Tại Nhà</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#home">Trang Chủ</a></li>
+                <li class="nav-item"><a class="nav-link" href="#services">Dịch Vụ</a></li>
+                <li class="nav-item"><a class="nav-link" href="#pricing">Giá Cả</a></li>
+                <li class="nav-item"><a class="nav-link" href="#contact">Liên Hệ</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Thanh thông báo dưới navbar -->
+<div id="notification-bar" style="
+    width: 100%;
+    background-color: #ffcc00;
+    color: #000;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 2px solid #cc9900;
+    box-sizing: border-box;
+    position: fixed;     /* Dính cố định */
+    top: 56px;           /* Đẩy xuống ngay dưới navbar (navbar bootstrap mặc định cao ~56px) */
+    left: 0;
+    z-index: 9998;       /* thấp hơn navbar nếu cần */
+">
+  <div id="scrolling-wrapper" style="
+      display: inline-block;
+      white-space: nowrap;
+      will-change: transform;
+      animation: scroll-infinite 30s linear infinite;
+  ">
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn. Đôi khi css của web sẽ bị mất. Nếu các bạn muốn làm web thì có thể liên hệ mình qua website: 
+      <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com</a>
+      © KHANHPC 2025 | mọi quyền được bảo lưu
+    </span>
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn. Đôi khi css của web sẽ bị mất. Nếu các bạn muốn làm web thì có thể liên hệ mình qua website: 
+      <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com</a>
+      © KHANHPC 2025 | mọi quyền được bảo lưu
+    </span>
+  </div>
+</div>
+
+<style>
+@keyframes scroll-infinite {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-25%);
+  }
+}
+
+/* Đẩy nội dung web xuống để navbar + notification bar không che */
+body {
+  margin-top: 96px; /* 56px navbar + 40px notification bar */
+}
+</style>
+
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>Dịch Vụ Cài Đặt Windows Tại Nhà</h1>
+            <p>Chuyên nghiệp, nhanh chóng, giá rẻ cho Windows 7/10/11 tại TP. HCM. Bảo hành 3 tháng.</p>
+            <a href="#contact" class="btn btn-primary btn-lg me-3">Liên Hệ Ngay</a>
+            <a href="tel:0937648921" class="btn btn-success"><i class="fas fa-phone me-2"></i>Gọi: 0937 648 921</a>
+        </div>
+    </section>
+
+    <!-- Giới Thiệu & Features -->
+    <section id="services" class="section bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Tại Sao Chọn Chúng Tôi?</h2>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <i class="fas fa-tools"></i>
+                        <h4 class="mt-3 mb-3">Cài Đặt Chuyên Nghiệp</h4>
+                        <p>Windows chính hãng, sạch sẽ, không phần mềm rác. Hỗ trợ kích hoạt và cập nhật đầy đủ.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <i class="fas fa-home"></i>
+                        <h4 class="mt-3 mb-3">Dịch Vụ Tại Nhà</h4>
+                        <p>Không cần mang máy đến cửa hàng. Kỹ thuật viên đến tận nơi trong 1-2 giờ.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h4 class="mt-3 mb-3">Bảo Hành & Hỗ Trợ</h4>
+                        <p>Bảo hành 3 tháng. Hỗ trợ miễn phí qua hotline và email.</p>
+                    </div>
+                </div>
+            </div>
+<div class="row mt-5">
+    <div class="col-12" id="testimonial-container">
+        <!-- JS sẽ tự động thêm bình luận ngẫu nhiên vào đây -->
+    </div>
+</div>
+
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="section">
+        <div class="container">
+            <h2>Bảng Giá Dịch Vụ</h2>
+            <p class="text-center text-muted mb-5">Giá chưa bao gồm di chuyển nội thành. Phí ngoại thành: +50.000 VND. Sử dụng key bản quyền hợp pháp.</p>
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-4 col-md-6">
+                    <div class="pricing-card">
+                        <h4 class="text-center mb-4"><i class="fab fa-windows me-2"></i>Windows 7</h4>
+                        <div class="price-tag">200.000<sup>đ</sup></div>
+                        <ul class="list-unstyled mb-4">
+                            <li><i class="fas fa-check text-success me-2"></i>bản win được ưa chuộn</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Driver đầy đủ</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Phù hợp máy cũ</li>
+                        </ul>
+                        <a href="#contact" class="btn btn-primary">Đặt Lịch</a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="pricing-card">
+                        <h4 class="text-center mb-4"><i class="fab fa-windows me-2"></i>Windows 10</h4>
+                        <div class="price-tag">200.000<sup>đ</sup></div>
+                        <ul class="list-unstyled mb-4">
+                            <li><i class="fas fa-check text-success me-2"></i>Bản win phổ biến</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Tối ưu hiệu suất</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Cập nhật bảo mật</li>
+                        </ul>
+                        <a href="#contact" class="btn btn-primary">Đặt Lịch</a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="pricing-card">
+                        <h4 class="text-center mb-4"><i class="fab fa-windows me-2"></i>Windows 11</h4>
+                        <div class="price-tag">250.000<sup>đ</sup></div>
+                        <ul class="list-unstyled mb-4">
+                            <li><i class="fas fa-check text-success me-2"></i>Bản win hiện đại</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Tương thích TPM 2.0</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Giao diện hiện đại, AI</li>
+                        </ul>
+                        <a href="#contact" class="btn btn-primary">Đặt Lịch</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="section bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h2 class="mb-4">Liên Hệ Với Chúng Tôi</h2>
+                    <p class="text-muted mb-4">Hotline: <a href="tel:0937648921" class="text-decoration-none"><i class="fas fa-phone me-2"></i>0937 648 921</a></p>
+                    <p class="text-muted mb-4">Email: <a href="mailto:vyk103736@gmail.com" class="text-decoration-none"><i class="fas fa-envelope me-2"></i>vyk103736@gmail.com</a></p>
+                    <p class="text-muted mb-4"><i class="fas fa-map-marker-alt me-2"></i>10,8665681, 106,6450432</p>
+                    <p class="text-muted mb-0"><i class="fas fa-clock me-2"></i>8h - 22h hàng ngày</p>
+                    <div id="map">
+                        <!-- Embed Google Maps -->
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3918.2763499338816!2d106.64246807577666!3d10.86657325752297!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTDCsDUxJzU5LjYiTiAxMDbCsDM4JzQyLjIiRQ!5e0!3m2!1svi!2s!4v1761561551836!5m2!1svi!2s" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="contact-form">
+                        <h4 class="mb-4">Gửi Yêu Cầu Tư Vấn</h4>
+                        <form action="https://formspree.io/f/your-form-id" method="POST"> <!-- Thay 'your-form-id' bằng ID từ Formspree.io (đăng ký miễn phí tại formspree.io để nhận email tự động) -->
+                            <div class="mb-3">
+                                <input type="text" class="form-control" name="name" placeholder="Họ và tên" required>
+                            </div>
+                            <div class="mb-3">
+                                <input type="tel" class="form-control" name="phone" placeholder="Số điện thoại" required>
+                            </div>
+                            <div class="mb-3">
+                                <input type="email" class="form-control" name="email" placeholder="Email (tùy chọn)">
+                            </div>
+                            <div class="mb-3">
+                                <select class="form-select" name="service" required>
+                                    <option value="">Chọn dịch vụ</option>
+                                    <option value="win7">Cài Windows 7</option>
+                                    <option value="win10">Cài Windows 10</option>
+                                    <option value="win11">Cài Windows 11</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <textarea class="form-control" name="message" rows="4" placeholder="Yêu cầu thêm (ví dụ: địa chỉ, thời gian)"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Gửi Yêu Cầu</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p class="mb-3">&copy; 2025 Dịch Vụ Cài Windows Tại Nhà.|khanhPC. Tất cả quyền được bảo lưu.</p>
+            <div class="social-icons">
+                <a href="https://zalo.me/0937648921" target="_blank" rel="noopener noreferrer"><i class="fab fa-zalo"></i></a>
+                <a href="https://wa.me/0937648921" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.facebook.com/khanhpc548" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
+            </div>
+        </div>
+    </footer>
+
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Auto cập nhật năm hiện tại trong footer
+        document.addEventListener("DOMContentLoaded", function () {
+            const year = new Date().getFullYear();
+            document.querySelector("footer p").innerHTML =
+                `&copy; ${year} Dịch Vụ Cài Windows Tại Nhà.|khanhPC. Tất cả quyền được bảo lưu.`;
+        });
+
+        // Tự động chọn dịch vụ khi đến từ link có ?win= (ví dụ: index.html?win=10)
+        const params = new URLSearchParams(window.location.search);
+        const win = params.get("win");
+        if (win) {
+            const select = document.querySelector("select[name='service']");
+            if (select) {
+                select.value = "win" + win;
+            }
+        }
+    </script>
+    <script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Lấy tất cả nút "Đặt Lịch"
+    const buttons = document.querySelectorAll('.pricing-card .btn-primary');
+    const serviceSelect = document.querySelector('select[name="service"]');
+
+    buttons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Xác định loại Windows từ tiêu đề gần nhất
+            const card = this.closest('.pricing-card');
+            const title = card.querySelector('h4').innerText.toLowerCase();
+
+            if (title.includes('windows 7')) {
+                serviceSelect.value = 'win7';
+            } else if (title.includes('windows 10')) {
+                serviceSelect.value = 'win10';
+            } else if (title.includes('windows 11')) {
+                serviceSelect.value = 'win11';
+            }
+
+            // Cuộn mượt xuống form liên hệ
+            document.querySelector('#contact').scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    /*** AUTO CHỌN DỊCH VỤ TỪ NÚT "Đặt Lịch" HOẶC URL ***/
+    const buttons = document.querySelectorAll('.pricing-card .btn-primary');
+    const serviceSelect = document.querySelector('select[name="service"]');
+
+    buttons.forEach(button => {
+        button.addEventListener('click', function() {
+            const card = this.closest('.pricing-card');
+            const title = card.querySelector('h4').innerText.toLowerCase();
+            if (title.includes('windows 7')) serviceSelect.value = 'win7';
+            else if (title.includes('windows 10')) serviceSelect.value = 'win10';
+            else if (title.includes('windows 11')) serviceSelect.value = 'win11';
+
+            document.querySelector('#contact').scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+
+    // Auto chọn dịch vụ nếu đến từ link ?win=10
+    const params = new URLSearchParams(window.location.search);
+    const win = params.get("win");
+    if (win) {
+        serviceSelect.value = "win" + win;
+    }
+
+    /*** TỰ ĐỘNG THÊM BÌNH LUẬN NGẪU NHIÊN ***/
+const container = document.querySelector('#testimonial-container');
+
+const lastNames = [
+  // Họ phổ biến
+  'Nguyễn','Trần','Lê','Phạm','Hoàng','Huỳnh','Phan','Vũ','Võ','Đỗ',
+  'Bùi','Đặng','Đinh','Ngô','Dương','Lý','Hồ','Trương','Đoàn','Cao',
+  'Tạ','Mai','Lâm','Phùng','Vương','Hà','Lưu','Trịnh','Hưng','Bạch',
+  'Tôn','Chu','Mạc','Quách','Tiêu','Kiều','La','Đào','Tống','Thái',
+  'Triệu','Trịnh Văn','Phạm Thái','Nguyễn Phúc','Đỗ Đức','Nguyễn Hữu',
+  'Nguyễn Thị','Phạm Ngọc','Đinh Công','Lưu Trọng','Tạ Văn','Võ Minh',
+  'Hoàng Anh','Đoàn Quốc','Nguyễn Bá','Phan Hoài','Trương Gia','Trần Quang'
+];
+
+const middleNames = [
+  'Văn','Thị','Minh','Quốc','Anh','Hữu','Ngọc','Thanh','Trường','Thi',
+  'Tuấn','Thảo','Kim','Đức','Phương','Hoài','Bảo','Hồng','Trung','Gia',
+  'Nhật','Khánh','Diệu','Tiến','Khải','Tường','Nguyên','Quang','Đình',
+  'Mai','Lan','Bích','Thu','Như','Hải','Phú','Trọng','Chí','Khương',
+  'Thùy','Tú','Thiên','Nhật','Công','Anh','Uyên','Phúc','Minh','Đăng',
+  'Thành','Mỹ','Anh','Hà','Duy','Linh','Thiện','Thái','Hạo','Uy',
+  'Hoàng','Trâm','Như','Cẩm','Tấn','Khánh','Hiếu','Thanh','Đại','Thảo',
+  'Đoan','Diệu','Đình','Vĩnh','Việt','Bá','Đông','Tấn','Đình','Gia'
+];
+
+const firstNames = [
+  'An','Bảo','Cường','Dũng','Hà','Hải','Hạnh','Huy','Hùng','Khoa',
+  'Lan','Linh','Long','Mai','My','Nam','Nga','Ngọc','Phúc','Quỳnh',
+  'Tâm','Thảo','Thiện','Trang','Tú','Tuấn','Vân','Việt','Hà','Khánh',
+  'Phong','Hòa','Như','Diễm','Thịnh','Bình','Thu','Yến','Trúc','Thủy',
+  'Hương','Thiên','Đức','Mạnh','Khôi','Hoàng','Đăng','Tùng','Minh','Tiến',
+  'Kiệt','Bảo','Vỹ','Nhật','Quý','Trí','Phương','Hiền','Uyên','Ly',
+  'Tường','Thư','Ngân','Thảo','Duy','Lợi','Tuệ','Hạnh','An','Tài',
+  'Lộc','Phát','Thịnh','Toàn','Sơn','Hải','Giang','Tú','Uy','Lâm',
+  'Kim','Tú Anh','Bảo Anh','Hồng Nhung','Minh Anh','Ngọc Bích','Trâm Anh','Thiên Kim','Khả Vy','Ngọc Trinh',
+  'Hữu Tài','Bảo Quốc','Minh Phương','Trọng Nghĩa','Hồng Sơn','Đức Hiếu','Hoàng Vỹ','Minh Tùng','Tuấn Kiệt','Bảo Ngọc'
+];
+
+
+const reviewTemplates = [
+  // --- Review gốc (giữ nguyên + mở rộng) ---
+  "Dịch vụ nhanh, giá hợp lý. Máy mình chạy mượt hẳn, cám ơn kỹ thuật nhé!",
+  "Quá tuyệt! Kỹ thuật viên nhiệt tình, xử lý gọn trong 1 tiếng. Recommend.",
+  "Mình tưởng máy cùi sẽ không lên được Windows 11, ai ngờ chạy ngon. Hài lòng.",
+  "Giá tốt, phục vụ chuyên nghiệp. Sẽ giới thiệu cho bạn bè.",
+  "Tư vấn rõ ràng, hỗ trợ remote rất tận tâm. Dịch vụ đáng tiền.",
+  "Cài nhanh, sạch, không phần mềm rác. Máy chạy mát hơn trước.",
+  "Kỹ thuật đến đúng giờ, làm xong test kỹ. Mình rất yên tâm.",
+  "Up driver và tối ưu xong, hiệu năng khá ổn. 5/5.",
+  "Thái độ làm việc chuyên nghiệp, có bảo hành 3 tháng yên tâm.",
+  "Giải quyết lỗi win update rối rắm của mình luôn, cứu chị rồi!",
+  "Nhân viên dễ thương, giá ok. Cài xong máy chạy mượt, cảm ơn nhé.",
+  "Nhanh, rẻ, uy tín. Mình sẽ quay lại nếu cần nâng cấp.",
+  "Cài từ xa tiện lắm, mình tiết kiệm được thời gian di chuyển.",
+  "Hỗ trợ sau cài đặt rất tốt, kịp thời trả lời thắc mắc.",
+  "Cài xong mọi thứ ổn định, không bị mất driver hay dữ liệu.",
+  "Máy cũ nhưng giờ chạy như mới, dịch vụ tuyệt vời.",
+  "Rất chuyên nghiệp, kỹ thuật hướng dẫn tận tình.",
+  "Giá cả hợp lý, không phát sinh thêm chi phí.",
+  "Mọi thứ ổn, máy chạy nhanh hơn cả mong đợi.",
+  "Hỗ trợ nâng cấp driver và phần mềm miễn phí.",
+  "Dịch vụ nhanh, nhân viên vui vẻ, dễ thương.",
+  "Tư vấn nhiệt tình, giải đáp thắc mắc chi tiết.",
+  "Cài đặt xong test kỹ, mọi thứ chạy mượt mà.",
+  "Máy lỗi lâu năm được xử lý triệt để, quá tuyệt!",
+  "Cài Windows mới mà không mất dữ liệu cũ, rất hài lòng.",
+  "Nhân viên đến đúng giờ, thái độ cực kì thân thiện.",
+  "Giá rẻ, nhưng chất lượng lại vượt mong đợi.",
+  "Máy chạy mượt, update đầy đủ, rất đáng tiền.",
+  "Hỗ trợ cài đặt từ xa tiện lợi, tiết kiệm thời gian.",
+  "Dịch vụ chuyên nghiệp, mình sẽ giới thiệu cho bạn bè.",
+  "Nhanh chóng, sạch sẽ, không cài phần mềm rác.",
+  "Cài Windows xong cảm giác máy nhẹ và mát hơn hẳn.",
+  "Kỹ thuật viên hướng dẫn tận tình, hỗ trợ sau cài đặt rất tốt.",
+  "Máy cũ vẫn chạy mượt, quá ưng ý với dịch vụ này!",
+  "Tư vấn nhiệt tình, cài xong test kỹ, mọi thứ ổn.",
+  "Dịch vụ uy tín, giá cả hợp lý, sẽ quay lại khi cần.",
+  "Cài xong máy chạy nhanh hơn nhiều, rất hài lòng.",
+  "Nhân viên dễ thương, hỗ trợ tận tình, không phát sinh thêm chi phí.",
+  "Cài đặt nhanh, sạch, máy chạy mượt hẳn, rất recommend.",
+  "Dịch vụ tuyệt vời, cài xong kiểm tra kỹ, rất yên tâm.",
+  "Kỹ thuật làm việc nhanh, hướng dẫn mình cách sử dụng chi tiết.",
+  "Máy mình cũ mà giờ chạy mượt, cảm ơn đội ngũ kỹ thuật.",
+  "Rất hài lòng với cách phục vụ và sự nhiệt tình của nhân viên.",
+  "Cài đặt xong máy không bị lỗi, chạy mượt hơn cả mong đợi.",
+  "Nhân viên vui vẻ, cài đặt xong còn dặn dò cẩn thận.",
+  "Đặt lịch nhanh, nhân viên đến đúng giờ, máy chạy ngon.",
+  "Cài Windows mới mà mọi dữ liệu vẫn nguyên vẹn, quá tuyệt!",
+  "Hỗ trợ từ xa dễ dàng, mình không cần di chuyển mà vẫn xong.",
+  "Máy chạy nhanh hơn trước, cài driver chuẩn, rất ok.",
+  "Dịch vụ tốt, giá rẻ, kỹ thuật thân thiện, chắc chắn sẽ quay lại.",
+  "Cài xong mình test vài ngày, máy vẫn chạy ổn định, rất đáng tiền.",
+  "Nhanh chóng, sạch sẽ, kỹ thuật viên chuyên nghiệp, hài lòng.",
+  "Đội ngũ kỹ thuật rất có tâm, hướng dẫn tận tình, máy chạy mượt.",
+  "Cài đặt xong cảm giác máy như mới, quá tuyệt vời.",
+  "Nhân viên hỗ trợ cài đặt và giải đáp thắc mắc rất nhanh.",
+  "Cài đặt nhanh, không phát sinh lỗi, mình rất yên tâm.",
+  "Máy cũ được tối ưu, chạy mượt hơn nhiều, quá hài lòng!",
+
+  // --- Bổ sung cực nhiều (dân văn phòng, học sinh, game thủ, IT, khách hàng vui tính) ---
+  "Lần đầu thuê cài win online mà ưng quá, anh kỹ thuật nói chuyện dễ thương ghê.",
+  "Cài xong FPS tăng thấy rõ, giờ chơi Valorant mượt như nước chảy!",
+  "Trước máy mình lag, giờ mở Chrome 10 tab vẫn ổn, đỉnh luôn.",
+  "Team làm việc có tâm, hỗ trợ nhanh gọn, không câu giờ.",
+  "Giá rẻ hơn tiệm gần nhà mà chất lượng vượt xa luôn.",
+  "Anh kỹ thuật cài xong còn tặng mình theme đẹp, cảm ơn nha.",
+  "Mẹ mình lớn tuổi mà vẫn được hướng dẫn tận tình, rất dễ hiểu.",
+  "Làm việc đúng hẹn, nhanh, gọn, không lề mề như chỗ khác.",
+  "Cài win xong không còn bị lỗi ổ cứng đầy, tuyệt vời!",
+  "Giao tiếp chuyên nghiệp, dễ thương, giải thích cặn kẽ từng bước.",
+  "Dịch vụ tuyệt vời, mình để 5 sao luôn cho xứng đáng.",
+  "Máy học online của con mình chạy mượt, rất cảm ơn bên bạn.",
+  "Cài win xong mà icon desktop gọn gàng, sạch sẽ hẳn.",
+  "Rất đáng tiền, cài từ xa mà cảm giác như có người bên cạnh.",
+  "Kỹ thuật viên còn hỗ trợ mình dọn rác, xóa virus miễn phí.",
+  "Chỉ cần gửi ID TeamViewer là bên kỹ thuật vào xử lý liền.",
+  "Thái độ làm việc vui vẻ, chuyên nghiệp, rất có thiện cảm.",
+  "Đã dùng lần 2 rồi, vẫn chất lượng như ngày đầu.",
+  "Tốc độ xử lý nhanh, đúng kiểu dân kỹ thuật chuyên nghiệp.",
+  "Cài xong máy boot nhanh hơn gấp đôi, không tin được luôn!",
+  "Làm việc online mà vẫn đầy đủ giấy bảo hành, rất uy tín.",
+  "Cài xong game Liên Minh mượt, không drop FPS như trước.",
+  "Mình dùng laptop văn phòng, giờ mở Excel cực nhanh, thích lắm!",
+  "Làm việc đêm vẫn hỗ trợ, quá tận tâm luôn.",
+  "Bữa trước máy bị màn hình xanh, nay chạy ổn định hẳn.",
+  "Cài lại win mà không mất dữ liệu, cứu cả bài đồ án của mình.",
+  "Hỗ trợ remote qua Ultraview siêu nhanh, đỡ phải mang máy ra tiệm.",
+  "Rất chuyên nghiệp, thái độ cực kỳ lịch sự và thân thiện.",
+  "Mình nhắn tin trưa, chiều có người cài liền, tốc độ thần sầu.",
+  "Không nghĩ là dịch vụ online lại tiện đến vậy, quá ok.",
+  "Cài lại win, dọn rác, tối ưu full combo giá quá rẻ.",
+  "Anh kỹ thuật hướng dẫn mình backup dữ liệu, rất có tâm.",
+  "Sau khi cài xong, khởi động chỉ mất 10 giây. Quá nhanh!",
+  "Dịch vụ uy tín, hỗ trợ rất chi tiết, không làm qua loa.",
+  "Làm việc siêu chuyên nghiệp, nói chuyện lịch sự, đáng tin tưởng.",
+  "Máy mình dùng văn phòng, sau cài thấy nhẹ hẳn, cảm ơn bạn.",
+  "Hỗ trợ sửa lỗi Office bị crash luôn, đúng nghĩa full service.",
+  "Cài win mà còn dọn virus, xóa phần mềm rác miễn phí, quá lời!",
+  "Dịch vụ này nên 5 sao trên Google luôn, quá tuyệt vời.",
+  "Rất vui khi gặp đội kỹ thuật làm việc có tâm như vậy.",
+  "Hỗ trợ nhanh, chỉ 15 phút là xong, đúng kiểu chuyên nghiệp.",
+  "Mình dân lập trình mà còn phải khen, cách làm việc rất chuẩn.",
+  "Rất đáng đồng tiền bát gạo, sẽ giới thiệu cho đồng nghiệp.",
+  "Máy yếu mà giờ chơi game nhẹ vô tư, cảm ơn nhiều nha!",
+  "Làm xong còn hỏi lại xem mình có hài lòng không, có tâm lắm.",
+  "Cài Win, Office, dọn rác xong như được hồi sinh máy tính vậy.",
+  "Tư vấn kỹ càng, không chém gió, đúng người, đúng việc.",
+  "Bà mình dùng máy, bên bạn hỗ trợ tận nơi, rất dễ thương.",
+  "Dịch vụ tốt, giao tiếp thân thiện, cài đặt cực nhanh.",
+  "Cài xong khởi động chỉ 5 giây, không tin nổi luôn!",
+  "Tối ưu xong RAM giảm còn nửa, máy mát và mượt hẳn.",
+  "Cực kỳ hài lòng, cài win từ xa mà y như tại nhà.",
+  "Kỹ thuật viên có tâm, không cài phần mềm linh tinh.",
+  "Được hướng dẫn sử dụng sau khi cài, rất chuyên nghiệp.",
+  "Cảm ơn anh kỹ thuật, làm việc cả tối vẫn rất nhiệt tình.",
+  "Mình dùng lần thứ 3 rồi, chưa bao giờ thất vọng.",
+  "Cài xong máy không còn tiếng quạt hú, mượt mà cực.",
+  "Hỗ trợ thêm phần mềm văn phòng miễn phí, quá lời!",
+  "Lần đầu trải nghiệm mà ưng luôn, sẽ giới thiệu bạn bè.",
+  "Cài đặt từ xa rất tiện, không cần mang máy ra tiệm nữa.",
+  "Cài xong có cả tối ưu ổ cứng SSD, quá chuyên nghiệp.",
+  "Nhân viên nói chuyện vui, dễ chịu, hỗ trợ nhanh gọn.",
+  "Máy bị lỗi win lâu năm, giờ hoạt động ngon lành luôn.",
+  "Tư vấn rất kỹ, không chèo kéo, cực kỳ đáng tin.",
+  "Hỗ trợ xong còn nhắn tin hỏi lại xem máy ổn không, chu đáo.",
+  "Làm việc nhanh, chuyên nghiệp, rất đúng hẹn.",
+  "Cài win xong sạch sẽ, không thấy quảng cáo nào hết.",
+  "Cảm ơn team, giờ máy chạy nhanh như mới mua!",
+  "Hài lòng từ khâu tư vấn đến khi hoàn thành, 5 sao!"
+];
+
+    let usedReviews = [];
+
+    function getRandomName() {
+        const last = lastNames[Math.floor(Math.random() * lastNames.length)];
+        const middle = middleNames[Math.floor(Math.random() * middleNames.length)];
+        const first = firstNames[Math.floor(Math.random() * firstNames.length)];
+        return `${last} ${middle} ${first}`;
+    }
+
+    function getRandomReview() {
+        if (usedReviews.length === reviewTemplates.length) usedReviews = [];
+        let review;
+        do {
+            review = reviewTemplates[Math.floor(Math.random() * reviewTemplates.length)];
+        } while (usedReviews.includes(review));
+        usedReviews.push(review);
+        return review;
+    }
+
+    function addReview() {
+        const name = getRandomName();
+        const text = getRandomReview();
+
+        const div = document.createElement("div");
+        div.className = "testimonial animate__animated animate__fadeInUp";
+        div.innerHTML = `<p class="mb-0">"${text}"</p><small class="text-muted">- Khách hàng ${name}</small>`;
+        container.appendChild(div);
+
+        const all = container.querySelectorAll(".testimonial");
+        if (all.length > 3) all[0].remove();
+    }
+
+   setInterval(addReview, 1000); 
+
+
+    /*** MỞ GMAIL COMPOSE KHI GỬI FORM ***/
+    const form = document.querySelector(".contact-form form");
+    form.addEventListener("submit", function(e) {
+        e.preventDefault(); // không gửi form thông thường
+
+        const name = form.querySelector("input[name='name']").value;
+        const phone = form.querySelector("input[name='phone']").value;
+        const email = form.querySelector("input[name='email']").value;
+        const service = form.querySelector("select[name='service']").value;
+        const message = form.querySelector("textarea[name='message']").value;
+
+        const serviceText = service === "win7" ? "Cài Windows 7" :
+                            service === "win10" ? "Cài Windows 10" :
+                            service === "win11" ? "Cài Windows 11" : "";
+
+        const subject = encodeURIComponent(`Yêu cầu tư vấn ${serviceText}`);
+        const body = encodeURIComponent(
+            `Họ và tên: ${name}\nSĐT: ${phone}\nEmail: ${email}\nDịch vụ: ${serviceText}\nYêu cầu thêm: ${message}`
+        );
+
+        const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=vyk103736@gmail.com&su=${subject}&body=${body}`;
+        window.open(gmailUrl, "_blank");
+    });
+
+});
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+</body>
+</html>

@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phân Tích Tài Liệu & Tạo Bill</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+  <link rel="icon" href="GD.png">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f1f5f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      max-width: 600px;
+      width: 100%;
+      padding: 30px;
+    }
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #2563eb;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .options label {
+      display: block;
+      margin-bottom: 10px;
+      background: #f3f4f6;
+      padding: 10px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+    .options label:hover,
+    .options label.selected {
+      border-color: #2563eb;
+      background: #e0f2fe;
+    }
+    .file-upload {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+    }
+    .custom-btn {
+      background: #2563eb;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 15px;
+      cursor: pointer;
+      border: none;
+      transition: 0.2s ease;
+    }
+    .custom-btn:hover {
+      background: #1e40af;
+    }
+    input[type="file"] {
+      display: none;
+    }
+    .log-box {
+      background: #eff6ff;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 10px;
+      font-family: monospace;
+      white-space: pre-line;
+      display: none;
+    }
+    .price-box {
+      margin-top: 15px;
+      font-weight: bold;
+      color: #d97706;
+      font-size: 18px;
+      display: none;
+    }
+    .bill-popup {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+    .bill-content {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      max-height: 80vh;
+      overflow-y: auto;
+      width: 90%;
+      max-width: 500px;
+    }
+    .bill-item {
+      border-bottom: 1px dashed #ccc;
+      padding: 10px 0;
+    }
+    .bill-actions {
+      margin-top: 20px;
+      text-align: right;
+    }
+  </style>
+<div id="notification-bar" style="
+  width: 100%;
+  background-color: #ffcc00;
+  color: #000;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  height: 40px;
+  line-height: 40px;
+  border-bottom: 2px solid #cc9900;
+  box-sizing: border-box;
+  position: fixed; /* Ghim cố định */
+  top: 0;
+  left: 0;
+  z-index: 9999;
+">
+  <div id="scrolling-wrapper" style="
+    display: inline-block;
+    white-space: nowrap;
+    will-change: transform;
+    animation: scroll-infinite 30s linear infinite;
+  ">
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Chi tiết xin liên hệ qua <a href="https://www.facebook.com/khanhpc548" target="_blank" style="color: #000; text-decoration: underline;">Facebook</a> hoặc: 
+      <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com </a>
+       Xin chân thành cảm ơn |© KHANHPC 2025| mọi quyền được bảo lưu
+    </span>
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Chi tiết xin liên hệ qua <a href="https://www.facebook.com/khanhpc548" target="_blank" style="color: #000; text-decoration: underline;">Facebook </a> hoặc: 
+      <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com </a>
+       Xin chân thành cảm ơn |© KHANHPC 2025| mọi quyền được bảo lưu
+    </span>
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Chi tiết xin liên hệ qua <a href="https://www.facebook.com/khanhpc548" target="_blank" style="color: #000; text-decoration: underline;">Facebook </a> hoặc: 
+      <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com </a>
+       Xin chân thành cảm ơn |© KHANHPC 2025| mọi quyền được bảo lưu
+    </span>
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Chi tiết xin liên hệ qua <a href="https://www.facebook.com/khanhpc548" target="_blank" style="color: #000; text-decoration: underline;">Facebook </a> hoặc: 
+      <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com </a>
+       Xin chân thành cảm ơn |© KHANHPC 2025| mọi quyền được bảo lưu
+    </span>
+  </div>
+</div>
+<style>
+@keyframes scroll-infinite {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-25%);
+  }
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="title">📄 Phân Tích Tài Liệu & Tạo Bill</div>
+    <div class="options" id="optionsGroup">
+      <label class="selected"><input type="radio" name="type" value="3000" checked> 📄 File dễ đọc – 3.000đ/trang</label>
+      <label><input type="radio" name="type" value="4000"> 🧾 PDF rõ nét – 4.000đ/trang</label>
+      <label><input type="radio" name="type" value="5000"> ✍️ Viết tay rõ – 5.000đ/trang</label>
+    </div>
+    <div class="file-upload">
+      <label for="fileInput" class="custom-btn"><i class="fa-solid fa-upload"></i> Chọn file</label>
+      <button class="custom-btn" onclick="showBills()">🧾 Xem bill</button>
+    </div>
+    <input type="file" id="fileInput" accept=".docx" />
+    <div class="log-box" id="logBox"></div>
+    <div class="price-box" id="totalPrice"></div>
+  </div>
+<!-- Popup -->
+<div class="bill-popup" id="billPopup" style="
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  font-family: 'Segoe UI', sans-serif;
+">
+  <div class="bill-content" id="billList" style="
+    background: #fff;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  ">
+    <!-- Header -->
+    <div style="
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 10;
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #e0e0e0;
+    ">
+      <h3 style="margin: 0; font-size: 20px; font-weight: bold; color: #222;">🧾 Danh sách bill đã tạo</h3>
+      <div style="margin-top: 10px; position: relative;">
+        <input
+          type="text"
+          id="searchBill"
+          oninput="showBills()"
+          placeholder="Tìm theo tên bill..."
+          style="
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+            padding-left: 36px;
+            box-sizing: border-box;
+          "
+        />
+        <span style="
+          position: absolute;
+          left: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: #999;
+          font-size: 16px;
+        ">🔍</span>
+      </div>
+    </div>
+    <!-- Danh sách bill -->
+    <div id="billItems" style="
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-right: 4px;
+      overflow-x: hidden;
+      word-break: break-word;
+    "></div>
+    <!-- Footer -->
+    <div class="bill-actions" style="text-align: right; margin-top: 20px;">
+      <button onclick="closeBills()" style="
+        background: linear-gradient(135deg, #2563eb, #1e3a8a);
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      "
+      onmouseover="this.style.background='linear-gradient(135deg, #1e40af, #1e3a8a)'"
+      onmouseout="this.style.background='linear-gradient(135deg, #2563eb, #1e3a8a)'"
+      >❌ Đóng</button>
+    </div>
+  </div>
+</div>
+<!-- Scroll đẹp cho popup -->
+<style>
+  .bill-content::-webkit-scrollbar {
+    width: 6px;
+  }
+  .bill-content::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+  }
+  .bill-content::-webkit-scrollbar-track {
+    background: transparent;
+  }
+</style>
+<!-- Popup Đổi Tên -->
+<div id="renamePopup" style="
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.4); z-index: 99999;
+  justify-content: center; align-items: center;
+">
+  <div style="
+    background: white; padding: 20px; border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2); width: 90%; max-width: 400px;
+  ">
+    <h3 style="margin-top: 0;">✏️ Đổi tên bill</h3>
+    <input id="newBillName" placeholder="Nhập tên mới..." style="
+      width: 100%; padding: 10px; border: 1px solid #ccc;
+      border-radius: 6px; margin-top: 10px; font-size: 15px;
+    " />
+    <div style="margin-top: 16px; text-align: right;">
+      <button onclick="closeRenamePopup()" style="
+        margin-right: 10px; padding: 8px 14px; border: none;
+        background: #ccc; border-radius: 6px; cursor: pointer;
+      ">Huỷ</button>
+      <button onclick="confirmRename()" style="
+        padding: 8px 14px; background: #2563eb; color: white;
+        border: none; border-radius: 6px; cursor: pointer;
+      ">Lưu</button>
+    </div>
+  </div>
+</div>
+<!-- Popup Xác nhận Xoá -->
+<div id="deletePopup" style="
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.4); z-index: 99999;
+  justify-content: center; align-items: center;
+">
+  <div style="
+    background: white; padding: 20px; border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2); width: 90%; max-width: 360px;
+  ">
+    <h3 style="margin-top: 0; color: #ef4444;">🗑️ Xóa bill?</h3>
+    <p>Bạn có chắc chắn muốn xóa bill <strong id="billToDeleteName">này</strong> không?</p>
+    <div style="margin-top: 16px; text-align: right;">
+      <button onclick="closeDeletePopup()" style="
+        margin-right: 10px; padding: 8px 14px; border: none;
+        background: #ccc; border-radius: 6px; cursor: pointer;
+      ">Không</button>
+      <button onclick="confirmDelete()" style="
+        padding: 8px 14px; background: #ef4444; color: white;
+        border: none; border-radius: 6px; cursor: pointer;
+      ">Xóa</button>
+    </div>
+  </div>
+</div>
+  <script>
+    const fileInput = document.getElementById("fileInput");
+    const logBox = document.getElementById("logBox");
+    const totalPrice = document.getElementById("totalPrice");
+    const optionsGroup = document.getElementById("optionsGroup");
+    // hiệu ứng chọn option
+    optionsGroup.addEventListener("click", (e) => {
+      if (e.target.closest("label")) {
+        optionsGroup.querySelectorAll("label").forEach(lab => lab.classList.remove("selected"));
+        e.target.closest("label").classList.add("selected");
+      }
+    });
+    function getSelectedPrice() {
+      return parseInt(document.querySelector('input[name="type"]:checked').value);
+    }
+    function getSelectedLabel() {
+      const label = document.querySelector('input[name="type"]:checked').parentElement.innerText.trim();
+      return label;
+    }
+    fileInput.addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (!file || !file.name.endsWith(".docx")) {
+        alert("Vui lòng chọn file .docx");
+        return;
+      }
+      logBox.style.display = "block";
+      logBox.innerText = "📥 Đang phân tích file...\n";
+      totalPrice.style.display = "none";
+      const steps = [
+        "📂 Giải nén file .docx...",
+        "🔍 Đọc metadata...",
+        "📄 Trích xuất số trang..."
+      ];
+      for (const step of steps) {
+        await new Promise(r => setTimeout(r, 500));
+        logBox.innerText += step + "\n";
+      }
+      try {
+        const zip = new JSZip();
+        const buffer = await file.arrayBuffer();
+        const zipData = await zip.loadAsync(buffer);
+        const appXml = await zipData.file("docProps/app.xml").async("string");
+        const match = appXml.match(/<Pages>(\d+)<\/Pages>/);
+        if (match && match[1]) {
+          const pages = parseInt(match[1]);
+          const price = getSelectedPrice();
+          const total = pages * price;
+          const label = getSelectedLabel();
+          logBox.innerText += `✅ Số trang: ${pages}`;
+          totalPrice.innerText = `💰 Tổng tiền: ${total.toLocaleString()}đ`;
+          totalPrice.style.display = "block";
+          // lưu bill
+          const bills = JSON.parse(localStorage.getItem("bills") || "[]");
+          bills.push({
+            file: file.name,
+            pages,
+            label,
+            price,
+            total,
+            time: new Date().toLocaleString()
+          });
+          localStorage.setItem("bills", JSON.stringify(bills));
+        } else {
+          logBox.innerText += "⚠️ Không tìm thấy số trang.";
+        }
+      } catch (e) {
+        logBox.innerText += "❌ Lỗi khi đọc file.";
+      }
+    });
+    // popup bill
+function showBills() {
+  const bills = JSON.parse(localStorage.getItem("bills") || "[]");
+  const container = document.getElementById("billItems");
+  const searchKeyword = document.getElementById("searchBill")?.value?.toLowerCase() || "";
+  container.innerHTML = "";
+  const filteredBills = bills.filter(bill =>
+    bill.file.toLowerCase().includes(searchKeyword)
+  );
+  if (filteredBills.length === 0) {
+    container.innerHTML = "<p style='color: gray;'>Không tìm thấy bill nào.</p>";
+  } else {
+    filteredBills.forEach((b, i) => {
+      const div = document.createElement("div");
+      div.className = "bill-item";
+      div.style = "border: 1px solid #ccc; padding: 10px; border-radius: 8px; margin-bottom: 10px; background: #f9f9f9;";
+      div.innerHTML = `
+        <strong>#${i + 1}</strong> - <span id="bill-name-${i}">${b.file}</span> <br/>
+        🕒 ${b.time}<br/>
+        📄 ${b.pages} trang – ${b.label}<br/>
+        💰 ${b.total.toLocaleString()}đ<br/>
+        <div style="margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap;">
+  <button onclick="exportBill(${i})" style="
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  " onmouseover="this.style.background='#1e40af'" onmouseout="this.style.background='#2563eb'">
+    📤 Xuất PDF
+  </button>
+  <button onclick="renameBill(${i})" style="
+    background: #f59e0b;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  " onmouseover="this.style.background='#d97706'" onmouseout="this.style.background='#f59e0b'">
+    ✏️ Đổi tên
+  </button>
+  <button onclick="deleteBill(${i})" style="
+    background: #ef4444;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  " onmouseover="this.style.background='#b91c1c'" onmouseout="this.style.background='#ef4444'">
+    🗑️ Xóa
+  </button>
+</div>
+      `;
+      container.appendChild(div);
+    });
+  }
+  document.getElementById("billPopup").style.display = "flex";
+}
+function deleteBill(index) {
+  if (!confirm("Bạn có chắc chắn muốn xóa bill này không?")) return;
+  const bills = JSON.parse(localStorage.getItem("bills") || "[]");
+  bills.splice(index, 1);
+  localStorage.setItem("bills", JSON.stringify(bills));
+  showBills();
+}
+function renameBill(index) {
+  const bills = JSON.parse(localStorage.getItem("bills") || "[]");
+  const newName = prompt("Nhập tên mới cho bill:", bills[index].file);
+  if (newName && newName.trim() !== "") {
+    bills[index].file = newName.trim();
+    localStorage.setItem("bills", JSON.stringify(bills));
+    showBills();
+  }
+}
+function closeBills() {
+  document.getElementById("billPopup").style.display = "none";
+}
+// Bỏ dấu tiếng Việt
+function removeDiacritics(str) {
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\x00-\x7F]/g, "");
+}
+function removeDiacritics(str) {
+  if (!str) return "";
+  return str
+    .normalize("NFD")                      // Tách dấu ra khỏi chữ
+    .replace(/[\u0300-\u036f]/g, "")      // Xóa dấu
+    .replace(/đ/g, "d").replace(/Đ/g, "D")
+    .replace(/[\u{1F600}-\u{1F64F}]/gu, "") // Xóa emoji mặt cười
+    .replace(/[\u{1F300}-\u{1F5FF}]/gu, "") // Xóa emoji biểu tượng khác
+    .replace(/[\u{1F680}-\u{1F6FF}]/gu, "") // Xóa emoji giao thông
+    .replace(/[\u{2600}-\u{26FF}]/gu, "")   // Xóa emoji ký hiệu
+    .replace(/[^\x00-\x7F]/g, "")          // Loại bỏ ký tự Unicode không nằm trong ASCII
+    .trim();
+}
+async function loadImageBase64(url) {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.readAsDataURL(blob);
+  });
+}
+async function exportBill(index) {
+  const { jsPDF } = window.jspdf;
+  const bills = JSON.parse(localStorage.getItem("bills") || "[]");
+  const b = bills[index];
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const margin = 20;
+  let y = 30;
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(18);
+  const title = "HOA DON TAI LIEU";
+  const titleWidth = doc.getTextWidth(title);
+  doc.text(title, (pageWidth - titleWidth) / 2, y);
+  y += 10;
+  doc.setLineWidth(0.5);
+  doc.line(margin, y, pageWidth - margin, y);
+  y += 20;
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(13);
+  const addLine = (label, value) => {
+    doc.text(`${removeDiacritics(label)}: ${removeDiacritics(String(value))}`, margin, y);
+    y += 16;
+  };
+  addLine("Tên file", b.file);
+  addLine("Số trang", b.pages);
+  addLine("Loại", b.label);
+  addLine("Giá mỗi trang", `${b.price.toLocaleString()} đ`);
+  addLine("Tổng tiền", `${b.total.toLocaleString()} đ`);
+  addLine("Thời gian", b.time);
+  y += 10;
+  doc.setFontSize(10);
+  doc.setTextColor(100);
+  doc.text(removeDiacritics("Cam on ban da su dung dich vu KHANHPC!"), margin, y);
+  // ⏬ Thêm logo vào 4 góc
+  try {
+    const imgData = await loadImageBase64("GD.png");
+    const logoSize = 20; // mm, đổi tùy thích
+    // 4 vị trí
+    doc.addImage(imgData, "PNG", margin, margin, logoSize, logoSize); // Góc trái trên
+    doc.addImage(imgData, "PNG", pageWidth - margin - logoSize, margin, logoSize, logoSize); // Góc phải trên
+    doc.addImage(imgData, "PNG", margin, pageHeight - margin - logoSize, logoSize, logoSize); // Góc trái dưới
+    doc.addImage(imgData, "PNG", pageWidth - margin - logoSize, pageHeight - margin - logoSize, logoSize, logoSize); // Góc phải dưới
+  } catch (err) {
+    console.warn("Không thể tải ảnh GD.png:", err);
+  }
+  doc.save(`bill_${index + 1}.pdf`);
+}
+  </script>
+</body>
+</html>

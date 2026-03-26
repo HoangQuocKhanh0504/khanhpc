@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<link id="favicon" rel="icon" href="GD.png" type="image/png">
+
+  <meta charset="UTF-8">
+  <title>Kênh Khánh GD</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #f2f6ff, #ffffff);
+      color: #333;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: auto;
+    }
+    .channel-info {
+      display: flex;
+      align-items: center;
+      background: white;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin-bottom: 40px;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .channel-info img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 3px solid #4285f4;
+    }
+    .channel-details {
+      flex-grow: 1;
+    }
+    .channel-details h1 {
+      margin: 0;
+      font-size: 28px;
+      color: #1a73e8;
+    }
+    .channel-details p {
+      margin: 5px 0 10px;
+      font-size: 16px;
+      color: #555;
+    }
+    .subscribe-btn {
+      background: #ff0000;
+      color: white;
+      padding: 10px 18px;
+      font-size: 16px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .subscribe-btn:hover {
+      background: #cc0000;
+    }
+    .video-section {
+      margin-bottom: 50px;
+    }
+    .section-title {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #1a73e8;
+      border-left: 5px solid #1a73e8;
+      padding-left: 10px;
+    }
+    .video-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 25px;
+    }
+    .video {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+    .video:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+    .video img {
+      width: 100%;
+      height: auto;
+      border-bottom: 1px solid #eee;
+    }
+    .video-content {
+      padding: 15px;
+    }
+    .video-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #202124;
+      height: 45px;
+      overflow: hidden;
+    }
+    .video-meta {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.4;
+    }
+
+    .popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+    .popup-content {
+      background: #000;
+      padding: 0;
+      border-radius: 12px;
+      max-width: 90vw;
+      max-height: 90vh;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      position: relative;
+      aspect-ratio: 16 / 9;
+      width: 100%;
+    }
+    .popup iframe {
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+    }
+    .popup-close {
+      position: absolute;
+      top: -15px;
+      right: -15px;
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 22px;
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(0,0,0,0.5);
+    }
+    @media (max-width: 768px) {
+      .popup-content {
+        aspect-ratio: 16 / 9;
+        width: 100%;
+      }
+    }
+    /* Scrollbar đẹp */
+body::-webkit-scrollbar {
+  width: 12px;
+}
+body::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+body::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #4285f4, #1a73e8);
+  border-radius: 8px;
+  border: 2px solid white;
+}
+
+/* Tiêu đề chữ bóng đẹp */
+h1 {
+  font-size: 32px;
+  color: #1a73e8;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+/* Nút đăng ký kênh */
+.subscribe-btn {
+  background: linear-gradient(45deg, #ff0000, #cc0000);
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.3s;
+  box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
+}
+.subscribe-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 14px rgba(255, 0, 0, 0.5);
+}
+/* Thêm vào trong <style> của bạn (chỗ CSS chung) */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+input:checked + .slider {
+  background-color: #2196F3;
+}
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+/* Dark mode styles */
+body.dark-mode {
+  background: #121212;
+  color: #ddd;
+}
+body.dark-mode .channel-info {
+  background: #1e1e1e;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+}
+body.dark-mode .channel-details h1 {
+  color: #90caf9;
+}
+body.dark-mode .channel-details p {
+  color: #bbb;
+}
+body.dark-mode .subscribe-btn {
+  background: linear-gradient(45deg, #bb0000, #880000);
+  box-shadow: 0 4px 10px rgba(187, 0, 0, 0.6);
+}
+body.dark-mode .subscribe-btn:hover {
+  box-shadow: 0 6px 14px rgba(187, 0, 0, 0.9);
+}
+body.dark-mode .video {
+  background: #222;
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.05);
+}
+body.dark-mode .video:hover {
+  box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
+}
+body.dark-mode .video-title {
+  color: #eee;
+}
+body.dark-mode .video-meta {
+  color: #aaa;
+}
+body.dark-mode .popup-content {
+  background: #222;
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+}
+
+  </style>
+</head>
+<body>
+<div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 15px; gap: 10px;">
+  <label for="darkModeToggle" style="color: #666; font-weight: 600; cursor: pointer;">Chế độ tối</label>
+  <label class="switch">
+    <input type="checkbox" id="darkModeToggle">
+    <span class="slider round"></span>
+  </label>
+</div>
+
+
+<div class="container">
+  <div class="channel-info" id="channelInfo"></div>
+
+  <div class="video-section">
+    <div class="section-title">🎬 Video thường</div>
+    <div class="video-list" id="normalVideos"></div>
+  </div>
+
+  <div class="video-section">
+    <div class="section-title">🧷 Video dài</div>
+    <div class="video-list" id="longVideos"></div>
+  </div>
+</div>
+
+<!-- Popup Video -->
+<div class="popup" id="popup">
+  <div class="popup-content">
+    <button class="popup-close" onclick="closePopup()">×</button>
+    <iframe id="popupIframe" src="" frameborder="0" allowfullscreen></iframe>
+  </div>
+</div>
+
+<script>
+  const apiKey = "AIzaSyCtcH0CeJ4fUwPoSfdidQJDUhfU3dVMbGA";
+  const channelId = "UCEShobjY7yHzJ3Wardfdd4A";
+
+  function formatDate(iso) {
+    const date = new Date(iso);
+    return date.toLocaleDateString("vi-VN", {
+      year: "numeric", month: "long", day: "numeric"
+    });
+  }
+
+  function formatViews(num) {
+    if (num >= 1e6) return (num / 1e6).toFixed(1) + " triệu lượt xem";
+    if (num >= 1e3) return (num / 1e3).toFixed(1) + " nghìn lượt xem";
+    return num + " lượt xem";
+  }
+
+  async function getChannelInfo() {
+    const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=snippet&id=${channelId}&key=${apiKey}`);
+    const data = await res.json();
+    const channel = data.items[0].snippet;
+    document.getElementById("channelInfo").innerHTML = `
+      <img src="${channel.thumbnails.high.url}" alt="Avatar">
+      <div class="channel-details">
+        <h1>${channel.title}</h1>
+        <p>${channel.description || "Không có mô tả."}</p>
+        <a href="https://www.youtube.com/channel/${channelId}?sub_confirmation=1" target="_blank" class="subscribe-btn">🔔 Đăng ký kênh</a>
+      </div>
+    `;
+  }
+
+  async function getAllVideos(pageToken = "", videoIds = []) {
+    const res = await fetch(`https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=50&pageToken=${pageToken}`);
+    const data = await res.json();
+    const videoItems = data.items.filter(item => item.id.kind === "youtube#video");
+    const ids = videoItems.map(item => item.id.videoId);
+    videoIds = videoIds.concat(ids);
+    if (data.nextPageToken) {
+      return getAllVideos(data.nextPageToken, videoIds);
+    } else {
+      return videoIds;
+    }
+  }
+
+  async function getVideoDetails(videoIds) {
+    const chunks = [];
+    while (videoIds.length) {
+      chunks.push(videoIds.splice(0, 50));
+    }
+    const allDetails = [];
+    for (const chunk of chunks) {
+      const idsStr = chunk.join(",");
+      const res = await fetch(`https://www.googleapis.com/youtube/v3/videos?key=${apiKey}&id=${idsStr}&part=snippet,contentDetails,statistics`);
+      const data = await res.json();
+      allDetails.push(...data.items);
+    }
+    return allDetails;
+  }
+
+  function isLongVideo(duration) {
+    const match = duration.match(/PT(\d+)M/);
+    const minutes = match ? parseInt(match[1]) : 0;
+    return minutes >= 10;
+  }
+
+  function openPopup(videoId) {
+    const popup = document.getElementById("popup");
+    const iframe = document.getElementById("popupIframe");
+    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+    popup.style.display = "flex";
+  }
+
+  function closePopup() {
+    const popup = document.getElementById("popup");
+    const iframe = document.getElementById("popupIframe");
+    iframe.src = "";
+    popup.style.display = "none";
+  }
+
+  function createVideoElement(video) {
+    const div = document.createElement("div");
+    div.className = "video";
+    div.innerHTML = `
+      <img src="${video.snippet.thumbnails.medium.url}" alt="${video.snippet.title}">
+      <div class="video-content">
+        <div class="video-title" title="${video.snippet.title}">${video.snippet.title}</div>
+        <div class="video-meta">${formatDate(video.snippet.publishedAt)} • ${formatViews(video.statistics.viewCount)}</div>
+      </div>
+    `;
+    div.addEventListener("click", () => openPopup(video.id));
+    return div;
+  }
+
+  async function loadVideos() {
+    await getChannelInfo();
+
+    const videoIds = await getAllVideos();
+    const videoDetails = await getVideoDetails(videoIds);
+
+    const normalVideosContainer = document.getElementById("normalVideos");
+    const longVideosContainer = document.getElementById("longVideos");
+
+    normalVideosContainer.innerHTML = "";
+    longVideosContainer.innerHTML = "";
+
+    videoDetails.forEach(video => {
+      if (isLongVideo(video.contentDetails.duration)) {
+        longVideosContainer.appendChild(createVideoElement(video));
+      } else {
+        normalVideosContainer.appendChild(createVideoElement(video));
+      }
+    });
+  }
+
+// Khởi tạo trạng thái dark mode dựa trên localStorage
+const darkModeToggle = document.getElementById("darkModeToggle");
+
+function applyDarkMode(isDark) {
+  if (isDark) {
+    document.body.classList.add("dark-mode");
+    darkModeToggle.checked = true;
+  } else {
+    document.body.classList.remove("dark-mode");
+    darkModeToggle.checked = false;
+  }
+}
+
+// Load trạng thái khi trang được tải
+const savedMode = localStorage.getItem("darkMode");
+applyDarkMode(savedMode === "true");
+
+// Lắng nghe sự kiện toggle và lưu trạng thái
+darkModeToggle.addEventListener("change", () => {
+  const isDark = darkModeToggle.checked;
+  applyDarkMode(isDark);
+  localStorage.setItem("darkMode", isDark);
+});
+
+
+  loadVideos();
+
+  
+</script>
+<footer style="
+  background: linear-gradient(to right, #1a73e8, #4285f4);
+  color: white;
+  padding: 40px 20px;
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+  margin-top: 60px;
+  border-radius: 50px;
+">
+  <h2 style="margin: 0 0 10px; font-size: 24px;">Cảm ơn bạn đã truy cập web của chúng tôi</h2>
+  <p style="margin: 0 0 20px; font-size: 16px; opacity: 0.9;">© 2025 Kênh Khánh GD| an toàn cho mọi website</p>
+
+  <div style="margin-top: 10px;">
+    <a href="mailto:vyk103736@gmail.com" style="color: white; margin: 0 10px; text-decoration: none;">Liên hệ Email</a> |
+    <a href="https://www.facebook.com/profile.php?id=100079270105917" target="_blank" style="color: white; margin: 0 10px; text-decoration: none;">Facebook</a>
+  </div>
+
+</footer>
+
+
+<script>
+const chaosChars = "!@#$%^&*()_+=-{}[]|:;<>,.?/~`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+// 🔐 Tạo độ dài ngẫu nhiên cố định 1 lần khi tải
+const FIXED_LENGTH = Math.floor(Math.random() * 91) + 60;
+let urlArr = Array.from({ length: FIXED_LENGTH }, () =>
+  chaosChars.charAt(Math.floor(Math.random() * chaosChars.length))
+);
+
+// ➤ Gắn hash ban đầu (phần sau # trên URL)
+const initialHash = "#" + urlArr.join("");
+history.replaceState(null, '', location.pathname + initialHash);
+
+// 🔁 Loạn từng ký tự trong hash, giữ nguyên độ dài
+function updateHashPerChar() {
+  for (let i = 0; i < urlArr.length; i++) {
+    if (Math.random() < 0.25) {
+      urlArr[i] = chaosChars.charAt(Math.floor(Math.random() * chaosChars.length));
+    }
+  }
+  const newHash = "#" + urlArr.join("");
+  history.replaceState(null, '', location.pathname + newHash);
+}
+
+// 🎨 Favicon: Loạn xoay, méo, lật liên tục
+const favicon = document.getElementById('favicon');
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+const img = new Image();
+img.crossOrigin = "anonymous";
+img.src = favicon.href;
+
+let faviconReady = false;
+img.onload = () => {
+  faviconReady = true;
+};
+
+const size = 64;
+canvas.width = size;
+canvas.height = size;
+
+setInterval(() => {
+  if (!faviconReady) return;
+
+  ctx.clearRect(0, 0, size, size);
+  ctx.save();
+  ctx.translate(size / 2, size / 2);
+
+  const angle = Math.random() * 2 * Math.PI;
+  const scaleX = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  const scaleY = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  ctx.rotate(angle);
+  ctx.scale(scaleX, scaleY);
+
+  ctx.drawImage(img, -size / 2, -size / 2, size, size);
+  ctx.restore();
+
+  favicon.href = canvas.toDataURL("image/png");
+}, 100); // mỗi 100ms xoay icon
+
+// 🚀 Khởi động loạn URL định kỳ
+setInterval(updateHashPerChar, 30);
+</script>
+
+<div id="donate-host"></div>
+<script>
+  const host = document.getElementById("donate-host");
+  const shadow = host.attachShadow({ mode: "open" });
+  const tpl = `
+    <!-- Nút Donate lắc lư cute -->
+<a href="https://khanhpc-five.vercel.app/ungho.html" id="donate-button" target="_blank">💖 Donate cho KHANHPC</a>
+<style>
+  #donate-button {
+    position: fixed;
+    top:70px;
+    right: 20px;
+    background: linear-gradient(135deg, #ff0080, #7928ca);
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    animation: shake 2s infinite;
+    transition: transform 0.2s;
+  }
+  #donate-button:hover {
+    transform: scale(1.05);
+  }
+  @keyframes shake {
+    0% { transform: rotate(0deg); }
+    20% { transform: rotate(3deg); }
+    40% { transform: rotate(-3deg); }
+    60% { transform: rotate(2deg); }
+    80% { transform: rotate(-2deg); }
+    100% { transform: rotate(0deg); }
+  }
+  @media (max-width: 500px) {
+    #donate-button {
+      font-size: 14px;
+      padding: 10px 16px;
+    }
+  }
+</style>
+  `;
+  shadow.innerHTML = tpl;
+  new MutationObserver((muts, obs) => {
+    if (!shadow.querySelector("#donate-button")) {
+      obs.disconnect();
+      location.reload();
+    }
+  }).observe(shadow, { childList: true });
+</script>
+
+</body>
+</html>
