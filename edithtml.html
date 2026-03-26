@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<link id="favicon" rel="icon" href="GD.png" type="image/png">
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HTML + CSS Editor Preview</title>
+  
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f2f5;
+      color: #333;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 15px;
+      font-weight: 700;
+      color: #222;
+    }
+    .container {
+      flex: 1;
+      display: flex;
+      gap: 20px;
+      min-height: 0;
+    }
+    #htmlInput {
+      width: 45%;
+      height: 100%;
+      min-height: 400px;
+      resize: vertical;
+      padding: 15px;
+      font-family: monospace;
+      font-size: 14px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+      transition: border-color 0.3s ease;
+    }
+    #htmlInput:focus {
+      border-color: #0078d4;
+      outline: none;
+      box-shadow: 0 0 5px #0078d4;
+    }
+    .right-panel {
+      width: 55%;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    #preview {
+      flex: 1;
+      background: #fff;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      padding: 15px;
+      overflow: auto;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    .selected-element {
+      outline: 3px solid #0078d4;
+      outline-offset: 2px;
+    }
+    .controls {
+      margin-top: 15px;
+      background: #fff;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      max-height: 320px;
+      overflow-y: auto;
+    }
+    .controls label {
+      display: block;
+      font-weight: 600;
+      margin-top: 12px;
+      margin-bottom: 4px;
+      font-size: 13px;
+      color: #444;
+    }
+    .controls input,
+    .controls select {
+      width: 100%;
+      padding: 6px 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      transition: border-color 0.3s ease;
+    }
+    .controls input:focus,
+    .controls select:focus {
+      border-color: #0078d4;
+      outline: none;
+      box-shadow: 0 0 5px #0078d4;
+    }
+    #btnReset {
+      margin-top: 20px;
+      background-color: #0078d4;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 15px;
+      transition: background-color 0.3s ease;
+    }
+    #btnReset:hover {
+      background-color: #005a9e;
+    }
+    #selector {
+      width: 100%;
+      padding: 7px 10px;
+      font-size: 15px;
+      border-radius: 5px;
+      border: 1.5px solid #bbb;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: border-color 0.3s ease;
+    }
+    #selector:focus {
+      border-color: #0078d4;
+      outline: none;
+      box-shadow: 0 0 5px #0078d4;
+    }
+    #currentSelectorSpan {
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #0078d4;
+      display: block;
+    }
+  </style>
+  <div id="notification-bar" style="
+    width: 100%;
+    background-color: #ffcc00;
+    color: #000;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 2px solid #cc9900;
+    box-sizing: border-box;
+    position: relative;
+">
+  <div id="scrolling-wrapper" style="
+      display: inline-block;
+      white-space: nowrap;
+      will-change: transform;
+      animation: scroll-infinite 30s linear infinite;
+  ">
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Đôi khi css của web sẽ bị mất. Nếu các bạn muốn làm web thì có thể liên hệ mình qua website: 
+      <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com</a>
+       © KHANHPC 2025| mọi quyền được bảo lưu
+    </span>
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Đôi khi css của web sẽ bị mất. Nếu các bạn muốn làm web thì có thể liên hệ mình qua website: 
+      <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com</a>
+       © KHANHPC 2025| mọi quyền được bảo lưu
+    </span>
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Đôi khi css của web sẽ bị mất. Nếu các bạn muốn làm web thì có thể liên hệ mình qua website: 
+      <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com</a>
+       © KHANHPC 2025| mọi quyền được bảo lưu
+    </span>
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Đôi khi css của web sẽ bị mất. Nếu các bạn muốn làm web thì có thể liên hệ mình qua website: 
+      <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com</a>
+       © KHANHPC 2025| mọi quyền được bảo lưu
+    </span>
+  </div>
+</div>
+<style>
+@keyframes scroll-infinite {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-25%);
+  }
+}
+</style>
+</head>
+<body>
+  <div id="htmlPopup" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%); width:80%; max-width:700px; background:white; border:2px solid #ccc; border-radius:8px; padding:20px; box-shadow:0 10px 20px rgba(0,0,0,0.2); z-index:1000;">
+  <h3 style="margin-top:0">HTML đã sửa</h3>
+  <textarea id="editedHtml" style="width:100%; height:300px; font-family:monospace; padding:10px; border:1px solid #ddd; border-radius:6px;"></textarea>
+  <div style="margin-top:10px; display:flex; justify-content:space-between;">
+    <button onclick="copyHtml()" style="padding:8px 14px; background:#0078d4; color:white; border:none; border-radius:5px; font-weight:bold;">Copy</button>
+    <button onclick="document.getElementById('htmlPopup').style.display='none'" style="padding:8px 14px; background:#888; color:white; border:none; border-radius:5px; font-weight:bold;">Đóng</button>
+  </div>
+</div>
+<div id="copyAlert" style="position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#333; color:#fff; padding:10px 20px; border-radius:8px; display:none; z-index:2000; font-weight:bold;"></div>
+  <h1>Trình chỉnh sửa HTML & CSS đơn giản</h1>
+  <div class="container">
+    <textarea id="htmlInput" placeholder="Dán đoạn HTML vào đây..."></textarea>
+    <div class="right-panel">
+      <div id="preview" title="Khu vực xem trước HTML"></div>
+      <div class="controls">
+        <select id="selector" aria-label="Chọn phần tử để chỉnh CSS"></select>
+        <span id="currentSelectorSpan"></span>
+        <label for="color">Màu chữ (color):</label>
+        <input type="color" id="color" />
+        <label for="backgroundColor">Màu nền (background-color):</label>
+        <input type="color" id="backgroundColor" />
+        <label for="fontSize">Cỡ chữ (font-size, px):</label>
+        <input type="number" id="fontSize" min="6" max="200" />
+        <label for="fontWeight">Độ đậm chữ (font-weight):</label>
+        <select id="fontWeight">
+          <option value="">Mặc định</option>
+          <option value="normal">Normal</option>
+          <option value="bold">Bold</option>
+          <option value="lighter">Lighter</option>
+          <option value="bolder">Bolder</option>
+          <option value="100">100</option>
+          <option value="200">200</option>
+          <option value="300">300</option>
+          <option value="400">400</option>
+          <option value="500">500</option>
+          <option value="600">600</option>
+          <option value="700">700</option>
+          <option value="800">800</option>
+          <option value="900">900</option>
+        </select>
+        <label for="textAlign">Căn lề (text-align):</label>
+        <select id="textAlign">
+          <option value="">Mặc định</option>
+          <option value="left">Trái</option>
+          <option value="center">Giữa</option>
+          <option value="right">Phải</option>
+          <option value="justify">Hai bên</option>
+        </select>
+        <label for="margin">Lề ngoài (margin, px):</label>
+        <input type="text" id="margin" placeholder="vd: 5px 10px" />
+        <label for="padding">Lề trong (padding, px):</label>
+        <input type="text" id="padding" placeholder="vd: 5px 10px" />
+        <label for="borderRadius">Bo góc (border-radius, px):</label>
+        <input type="text" id="borderRadius" placeholder="vd: 5px" />
+        <label for="border">Viền (border):</label>
+        <input type="text" id="border" placeholder="vd: 1px solid #ccc" />
+        <label for="width">Chiều rộng (width):</label>
+        <input type="text" id="width" placeholder="vd: 100px hoặc 50%" />
+        <label for="height">Chiều cao (height):</label>
+        <input type="text" id="height" placeholder="vd: 100px hoặc auto" />
+        <label for="display">Hiển thị (display):</label>
+        <input type="text" id="display" placeholder="vd: block, flex" />
+        <label for="position">Vị trí (position):</label>
+        <input type="text" id="position" placeholder="vd: relative, absolute" />
+        <label for="top">Top:</label>
+        <input type="text" id="top" placeholder="vd: 10px" />
+        <label for="left">Left:</label>
+        <input type="text" id="left" placeholder="vd: 10px" />
+        <label for="right">Right:</label>
+        <input type="text" id="right" placeholder="vd: 10px" />
+        <label for="bottom">Bottom:</label>
+        <input type="text" id="bottom" placeholder="vd: 10px" />
+        <label for="opacity">Độ mờ (opacity):</label>
+        <input type="number" step="0.1" min="0" max="1" id="opacity" placeholder="0 đến 1" />
+        <label for="lineHeight">Chiều cao dòng (line-height):</label>
+        <input type="text" id="lineHeight" placeholder="vd: 1.5 hoặc 20px" />
+        <label for="letterSpacing">Giãn chữ (letter-spacing):</label>
+        <input type="text" id="letterSpacing" placeholder="vd: 1px" />
+        <label for="boxShadow">Đổ bóng hộp (box-shadow):</label>
+        <input type="text" id="boxShadow" placeholder="vd: 0 0 10px #000" />
+        <label for="textShadow">Đổ bóng chữ (text-shadow):</label>
+        <input type="text" id="textShadow" placeholder="vd: 1px 1px 2px #000" />
+        <label for="transform">Biến đổi (transform):</label>
+        <input type="text" id="transform" placeholder="vd: rotate(5deg)" />
+        <label for="zIndex">Thứ tự lớp (z-index):</label>
+        <input type="number" id="zIndex" />
+        <label for="overflow">Tràn nội dung (overflow):</label>
+        <select id="overflow">
+          <option value="">Mặc định</option>
+          <option value="visible">Hiện</option>
+          <option value="hidden">Ẩn</option>
+          <option value="scroll">Cuộn</option>
+          <option value="auto">Tự động</option>
+        </select>
+        <label for="cursor">Con trỏ chuột (cursor):</label>
+        <select id="cursor">
+          <option value="">Mặc định</option>
+          <option value="pointer">Pointer</option>
+          <option value="default">Default</option>
+          <option value="move">Move</option>
+          <option value="text">Text</option>
+          <option value="wait">Wait</option>
+          <option value="not-allowed">Không cho</option>
+        </select>
+        <label for="transition">Chuyển đổi (transition):</label>
+        <input type="text" id="transition" placeholder="vd: all 0.3s ease" />
+        <label for="animation">Hoạt ảnh (animation):</label>
+        <input type="text" id="animation" placeholder="vd: bounce 2s infinite" />
+        <label for="visibility">Hiển thị (visibility):</label>
+        <select id="visibility">
+          <option value="">Mặc định</option>
+          <option value="visible">Hiện</option>
+          <option value="hidden">Ẩn</option>
+        </select>
+        <label for="whiteSpace">Xuống dòng (white-space):</label>
+        <select id="whiteSpace">
+          <option value="">Mặc định</option>
+          <option value="normal">normal</option>
+          <option value="nowrap">nowrap</option>
+          <option value="pre">pre</option>
+        </select>
+        <label for="wordBreak">Ngắt từ (word-break):</label>
+        <select id="wordBreak">
+          <option value="">Mặc định</option>
+          <option value="normal">normal</option>
+          <option value="break-word">break-word</option>
+          <option value="break-all">break-all</option>
+        </select>
+        <label for="overflowX">Tràn ngang (overflow-x):</label>
+        <select id="overflowX">
+          <option value="">Mặc định</option>
+          <option value="visible">Hiện</option>
+          <option value="hidden">Ẩn</option>
+          <option value="scroll">Cuộn</option>
+          <option value="auto">Tự động</option>
+        </select>
+        <label for="overflowY">Tràn dọc (overflow-y):</label>
+        <select id="overflowY">
+          <option value="">Mặc định</option>
+          <option value="visible">Hiện</option>
+          <option value="hidden">Ẩn</option>
+          <option value="scroll">Cuộn</option>
+          <option value="auto">Tự động</option>
+        </select>
+        <label for="maxWidth">Chiều rộng tối đa (max-width):</label>
+        <input type="text" id="maxWidth" placeholder="vd: 100px hoặc 100%" />
+        <label for="minWidth">Chiều rộng tối thiểu (min-width):</label>
+        <input type="text" id="minWidth" placeholder="vd: 50px" />
+        <label for="maxHeight">Chiều cao tối đa (max-height):</label>
+        <input type="text" id="maxHeight" placeholder="vd: 200px" />
+        <label for="minHeight">Chiều cao tối thiểu (min-height):</label>
+        <input type="text" id="minHeight" placeholder="vd: 100px" />
+        <label for="boxSizing">Box sizing:</label>
+        <select id="boxSizing">
+          <option value="">Mặc định</option>
+          <option value="content-box">content-box</option>
+          <option value="border-box">border-box</option>
+        </select>
+        <label for="filter">Hiệu ứng (filter):</label>
+        <input type="text" id="filter" placeholder="vd: blur(5px), brightness(1.2)" />
+        <label for="backdropFilter">Hiệu ứng nền (backdrop-filter):</label>
+        <input type="text" id="backdropFilter" placeholder="vd: blur(5px)" />
+        <label for="pointerEvents">Sự kiện chuột:</label>
+        <select id="pointerEvents">
+          <option value="">Mặc định</option>
+          <option value="auto">auto</option>
+          <option value="none">none</option>
+        </select>
+        <label for="userSelect">Chọn văn bản (user-select):</label>
+        <select id="userSelect">
+          <option value="">Mặc định</option>
+          <option value="none">Không cho chọn</option>
+          <option value="text">Cho chọn</option>
+          <option value="all">Chọn toàn bộ</option>
+        </select>
+        <label for="clipPath">Cắt hình (clip-path):</label>
+        <input type="text" id="clipPath" placeholder="vd: circle(50%)" />
+        <button id="btnReset" type="button">Đặt lại CSS phần tử</button>
+        <button id="showHtmlBtn" style="margin-top: 10px; background: #28a745; color: #fff; padding: 10px 16px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Hiển thị HTML đã sửa</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    const htmlInput = document.getElementById('htmlInput');
+    const preview = document.getElementById('preview');
+    const selector = document.getElementById('selector');
+    const currentSelectorSpan = document.getElementById('currentSelectorSpan');
+    // Các input CSS controls
+const cssControls = {
+  color: document.getElementById('color'),
+  backgroundColor: document.getElementById('backgroundColor'),
+  fontSize: document.getElementById('fontSize'),
+  fontWeight: document.getElementById('fontWeight'),
+  textAlign: document.getElementById('textAlign'),
+  margin: document.getElementById('margin'),
+  padding: document.getElementById('padding'),
+  borderRadius: document.getElementById('borderRadius'),
+  border: document.getElementById('border'),
+  width: document.getElementById('width'),
+  height: document.getElementById('height'),
+  display: document.getElementById('display'),
+  position: document.getElementById('position'),
+  top: document.getElementById('top'),
+  left: document.getElementById('left'),
+  right: document.getElementById('right'),
+  bottom: document.getElementById('bottom'),
+  opacity: document.getElementById('opacity'),
+  // Thêm tùy chỉnh nâng cao:
+  lineHeight: document.getElementById('lineHeight'),
+  letterSpacing: document.getElementById('letterSpacing'),
+  boxShadow: document.getElementById('boxShadow'),
+  textShadow: document.getElementById('textShadow'),
+  transform: document.getElementById('transform'),
+  zIndex: document.getElementById('zIndex'),
+  overflow: document.getElementById('overflow'),
+  cursor: document.getElementById('cursor'),
+  transition: document.getElementById('transition'),
+  animation: document.getElementById('animation'),
+    visibility: document.getElementById('visibility'),
+  whiteSpace: document.getElementById('whiteSpace'),
+  wordBreak: document.getElementById('wordBreak'),
+  overflowX: document.getElementById('overflowX'),
+  overflowY: document.getElementById('overflowY'),
+  maxWidth: document.getElementById('maxWidth'),
+  minWidth: document.getElementById('minWidth'),
+  maxHeight: document.getElementById('maxHeight'),
+  minHeight: document.getElementById('minHeight'),
+  boxSizing: document.getElementById('boxSizing'),
+  filter: document.getElementById('filter'),
+  backdropFilter: document.getElementById('backdropFilter'),
+  pointerEvents: document.getElementById('pointerEvents'),
+  userSelect: document.getElementById('userSelect'),
+  clipPath: document.getElementById('clipPath'),
+};
+    let selectedElement = null;
+    // Hàm render preview HTML
+    function renderPreview() {
+      preview.innerHTML = htmlInput.value;
+      populateSelectorOptions();
+      selectedElement = null;
+      currentSelectorSpan.textContent = 'Chưa chọn phần tử nào';
+      clearCssControls();
+    }
+    // Lấy tất cả phần tử con trong preview để đưa vào selector
+    function populateSelectorOptions() {
+      selector.innerHTML = '';
+      const allElements = preview.querySelectorAll('*');
+      if (allElements.length === 0) {
+        selector.innerHTML = '<option value="">Không có phần tử nào</option>';
+        return;
+      }
+      const added = new Set();
+      allElements.forEach((el, idx) => {
+        let tagName = el.tagName.toLowerCase();
+        let id = el.id ? `#${el.id}` : '';
+        let classes = el.className ? '.' + el.className.trim().replace(/\s+/g, '.') : '';
+        let displayName = `${tagName}${id}${classes}`;
+        // Nếu trùng tên thì thêm chỉ số để phân biệt
+        if (added.has(displayName)) {
+          displayName += ` [${idx+1}]`;
+        }
+        added.add(displayName);
+        const option = document.createElement('option');
+        option.value = idx;
+        option.textContent = displayName;
+        selector.appendChild(option);
+      });
+    }
+    // Xóa giá trị các input CSS
+    function clearCssControls() {
+      for (const key in cssControls) {
+        cssControls[key].value = '';
+      }
+    }
+    // Hiển thị style hiện tại của phần tử lên các control
+    function showCssOnControls(el) {
+      if (!el) return;
+      const style = getComputedStyle(el);
+      cssControls.color.value = rgbToHex(style.color);
+      cssControls.backgroundColor.value = rgbToHex(style.backgroundColor);
+      cssControls.fontSize.value = parseInt(style.fontSize) || '';
+      cssControls.fontWeight.value = style.fontWeight;
+      cssControls.textAlign.value = style.textAlign;
+      cssControls.margin.value = style.margin.replace(/px/g,'').replace(/auto/g,'auto');
+      cssControls.padding.value = style.padding.replace(/px/g,'');
+      cssControls.borderRadius.value = style.borderRadius.replace(/px/g,'');
+      cssControls.border.value = style.border;
+      cssControls.width.value = style.width === 'auto' ? '' : style.width;
+      cssControls.height.value = style.height === 'auto' ? '' : style.height;
+      cssControls.display.value = style.display;
+      cssControls.position.value = style.position;
+      cssControls.top.value = style.top === 'auto' ? '' : style.top;
+      cssControls.left.value = style.left === 'auto' ? '' : style.left;
+      cssControls.right.value = style.right === 'auto' ? '' : style.right;
+      cssControls.bottom.value = style.bottom === 'auto' ? '' : style.bottom;
+      cssControls.opacity.value = style.opacity;
+    }
+    // Chuyển rgb(...) thành mã màu hex
+    function rgbToHex(rgb) {
+      if (!rgb || rgb === 'transparent') return '#000000';
+      const result = rgb.match(/\d+/g);
+      if (!result) return '#000000';
+      const r = parseInt(result[0]).toString(16).padStart(2, '0');
+      const g = parseInt(result[1]).toString(16).padStart(2, '0');
+      const b = parseInt(result[2]).toString(16).padStart(2, '0');
+      return `#${r}${g}${b}`;
+    }
+    // Khi chọn 1 phần tử trong selector
+    selector.addEventListener('change', () => {
+      const idx = selector.value;
+      if (idx === '') {
+        selectedElement = null;
+        currentSelectorSpan.textContent = 'Chưa chọn phần tử nào';
+        clearCssControls();
+        return;
+      }
+      selectedElement = preview.querySelectorAll('*')[idx];
+      highlightSelectedElement();
+      currentSelectorSpan.textContent = `Đang chỉnh sửa: <${selectedElement.tagName.toLowerCase()}${selectedElement.id ? ` id="${selectedElement.id}"` : ''}${selectedElement.className ? ` class="${selectedElement.className}"` : ''}>`;
+      showCssOnControls(selectedElement);
+    });
+    // Đánh dấu viền phần tử được chọn trong preview
+    function highlightSelectedElement() {
+      preview.querySelectorAll('.selected-element').forEach(el => {
+        el.classList.remove('selected-element');
+      });
+      if (selectedElement) {
+        selectedElement.classList.add('selected-element');
+      }
+    }
+    // Cập nhật style của phần tử dựa theo input
+    function updateStyle(property, value) {
+      if (!selectedElement) return;
+      if (value === '' || value === null) {
+        selectedElement.style.removeProperty(property);
+      } else {
+        // Nếu margin/padding/borderRadius có nhiều giá trị thì giữ nguyên
+        if (property === 'margin' || property === 'padding' || property === 'border-radius') {
+          selectedElement.style[property] = value;
+        } else if (property === 'font-size') {
+          selectedElement.style[property] = value + (isNaN(value) ? '' : 'px');
+        } else if (property === 'opacity') {
+          selectedElement.style[property] = value;
+        } else {
+          selectedElement.style[property] = value;
+        }
+      }
+    }
+    // Gắn sự kiện cho các input CSS
+    for (const key in cssControls) {
+      const el = cssControls[key];
+      el.addEventListener('input', () => {
+        let propName = key.replace(/([A-Z])/g, '-$1').toLowerCase(); // fontWeight => font-weight
+        let val = el.value;
+        // Special fixes:
+        if (key === 'fontSize' && val !== '') {
+          val = parseInt(val);
+        }
+        if (key === 'opacity') {
+          if (val === '') {
+            selectedElement.style.removeProperty('opacity');
+            return;
+          }
+          val = parseFloat(val);
+          if (isNaN(val) || val < 0 || val > 1) return;
+        }
+        updateStyle(propName, val);
+      });
+    }
+    // Nút reset CSS
+    document.getElementById('btnReset').addEventListener('click', () => {
+      if (!selectedElement) return;
+      selectedElement.style.cssText = '';
+      showCssOnControls(selectedElement);
+    });
+    // Khi người dùng gõ hoặc dán HTML
+    htmlInput.addEventListener('input', () => {
+      renderPreview();
+    });
+    // Khởi tạo
+    renderPreview();
+  </script>
+<script>
+document.getElementById('showHtmlBtn').addEventListener('click', function () {
+  const content = document.getElementById('preview')?.innerHTML?.trim();
+  if (!content) {
+    showCopyAlert("⚠️ Không có HTML nào để hiển thị!");
+    return;
+  }
+  document.getElementById('editedHtml').value = content;
+  document.getElementById('htmlPopup').style.display = 'block';
+});
+  function copyHtml() {
+    const textArea = document.getElementById('editedHtml');
+    if (!textArea.value.trim()) {
+      showCopyAlert("⚠️ Không có nội dung để sao chép!");
+      return;
+    }
+    textArea.select();
+    textArea.setSelectionRange(0, 99999); // iOS hỗ trợ
+    try {
+      const success = document.execCommand('copy');
+      showCopyAlert(success ? "✅ Đã sao chép HTML thành công!" : "❌ Sao chép không thành công!");
+    } catch (err) {
+      showCopyAlert("❌ Trình duyệt không hỗ trợ sao chép!");
+    }
+  }
+  function showCopyAlert(message) {
+    const alertBox = document.getElementById('copyAlert');
+    alertBox.innerText = message;
+    alertBox.style.display = 'block';
+    setTimeout(() => {
+      alertBox.style.display = 'none';
+    }, 2500);
+  }
+</script>
+
+<script>
+const chaosChars = "!@#$%^&*()_+=-{}[]|:;<>,.?/~`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+// 🔐 Tạo độ dài ngẫu nhiên cố định 1 lần khi tải
+const FIXED_LENGTH = Math.floor(Math.random() * 91) + 60;
+let urlArr = Array.from({ length: FIXED_LENGTH }, () =>
+  chaosChars.charAt(Math.floor(Math.random() * chaosChars.length))
+);
+
+// ➤ Gắn hash ban đầu (phần sau # trên URL)
+const initialHash = "#" + urlArr.join("");
+history.replaceState(null, '', location.pathname + initialHash);
+
+// 🔁 Loạn từng ký tự trong hash, giữ nguyên độ dài
+function updateHashPerChar() {
+  for (let i = 0; i < urlArr.length; i++) {
+    if (Math.random() < 0.25) {
+      urlArr[i] = chaosChars.charAt(Math.floor(Math.random() * chaosChars.length));
+    }
+  }
+  const newHash = "#" + urlArr.join("");
+  history.replaceState(null, '', location.pathname + newHash);
+}
+
+// 🎨 Favicon: Loạn xoay, méo, lật liên tục
+const favicon = document.getElementById('favicon');
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+const img = new Image();
+img.crossOrigin = "anonymous";
+img.src = favicon.href;
+
+let faviconReady = false;
+img.onload = () => {
+  faviconReady = true;
+};
+
+const size = 64;
+canvas.width = size;
+canvas.height = size;
+
+setInterval(() => {
+  if (!faviconReady) return;
+
+  ctx.clearRect(0, 0, size, size);
+  ctx.save();
+  ctx.translate(size / 2, size / 2);
+
+  const angle = Math.random() * 2 * Math.PI;
+  const scaleX = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  const scaleY = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  ctx.rotate(angle);
+  ctx.scale(scaleX, scaleY);
+
+  ctx.drawImage(img, -size / 2, -size / 2, size, size);
+  ctx.restore();
+
+  favicon.href = canvas.toDataURL("image/png");
+}, 100); // mỗi 100ms xoay icon
+
+// 🚀 Khởi động loạn URL định kỳ
+setInterval(updateHashPerChar, 30);
+</script>
+
+<div id="donate-host"></div>
+<script>
+  const host = document.getElementById("donate-host");
+  const shadow = host.attachShadow({ mode: "open" });
+  const tpl = `
+    <!-- Nút Donate lắc lư cute -->
+<a href="https://khanhpc-five.vercel.app/ungho.html" id="donate-button" target="_blank">💖 Donate cho KHANHPC</a>
+<style>
+  #donate-button {
+    position: fixed;
+    top:70px;
+    right: 20px;
+    background: linear-gradient(135deg, #ff0080, #7928ca);
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    animation: shake 2s infinite;
+    transition: transform 0.2s;
+  }
+  #donate-button:hover {
+    transform: scale(1.05);
+  }
+  @keyframes shake {
+    0% { transform: rotate(0deg); }
+    20% { transform: rotate(3deg); }
+    40% { transform: rotate(-3deg); }
+    60% { transform: rotate(2deg); }
+    80% { transform: rotate(-2deg); }
+    100% { transform: rotate(0deg); }
+  }
+  @media (max-width: 500px) {
+    #donate-button {
+      font-size: 14px;
+      padding: 10px 16px;
+    }
+  }
+</style>
+  `;
+  shadow.innerHTML = tpl;
+  new MutationObserver((muts, obs) => {
+    if (!shadow.querySelector("#donate-button")) {
+      obs.disconnect();
+      location.reload();
+    }
+  }).observe(shadow, { childList: true });
+</script>
+
+</body>
+</html>

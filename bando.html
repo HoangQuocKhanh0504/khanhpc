@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<link id="favicon" rel="icon" href="GD.png" type="image/png">
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bản đồ của KhanhPC</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<!-- Các nâng cấp hiệu ứng mượt hơn -->
+<style>
+  @keyframes glow {
+    0% { box-shadow: 0 0 10px #3b82f6; }
+    50% { box-shadow: 0 0 25px #2563eb; }
+    100% { box-shadow: 0 0 10px #3b82f6; }
+  }
+  .glow-border {
+    animation: glow 2s infinite;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .glow-border:hover {
+    transform: scale(1.01);
+    box-shadow: 0 0 30px #2563eb;
+  }
+
+  .cat-container {
+    display: none;
+    position: absolute;
+    left: 50%;
+    bottom: 60px;
+    transform: translateX(-50%);
+    text-align: center;
+    animation: fade-in 0.5s ease-in-out;
+  }
+
+  .cat-img {
+    width: 100px;
+    animation: bounce 1s infinite alternate ease-in-out;
+  }
+
+  .speech-bubble {
+    background: #fffbe6;
+    color: #222;
+    padding: 8px 12px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.25);
+    margin-top: 10px;
+    font-weight: 500;
+  }
+
+  @keyframes bounce {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-6px); }
+  }
+
+  .qr-container {
+    display: none;
+    animation: fade-in 0.4s ease-out;
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-out;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+    transition: 0.2s;
+  }
+
+  iframe:hover {
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    transition: 0.3s;
+  }
+</style>
+
+</head>
+
+<body class="bg-gradient-to-br from-blue-100 to-indigo-200 min-h-screen overflow-x-hidden">
+
+  <!-- Thanh nút chọn -->
+  <div class="fixed top-0 left-0 w-full bg-white shadow z-50 p-3 flex flex-wrap justify-center gap-3">
+    <button onclick="showMap('map360')" class="bg-blue-600 text-white px-4 py-1.5 rounded-full font-semibold">🌐 Bản đồ 360°</button>
+    <button onclick="showMap('mapDiachi')" class="bg-purple-600 text-white px-4 py-1.5 rounded-full font-semibold">📍 Bản đồ địa chỉ</button>
+    <button onclick="toggleSharePopup()" class="bg-yellow-500 text-black px-4 py-1.5 rounded-full font-semibold">🔗 Chia sẻ</button>
+  </div>
+
+  <!-- Nội dung chính -->
+  <div class="pt-24 px-4 pb-32 max-w-5xl mx-auto space-y-12">
+
+    <!-- Bản đồ 360 -->
+    <div id="map360" class="rounded-3xl glow-border bg-white shadow-md p-5">
+      <h2 class="text-2xl font-bold text-blue-700 text-center mb-2">🌐 Vị trí thực tế 360°</h2>
+      <p class="text-sm text-center text-gray-600 mb-3">Đã xem <span id="view360">0</span> lần</p>
+      <iframe class="w-full h-[400px] rounded-xl" 
+        src="https://www.google.com/maps/embed?pb=!4v1751499679332!6m8!1m7!1sne89p-3COvOlBTqrDQeUCQ!2m2!1d10.87121490386774!2d106.6381402791052!3f152.5!4f-7.450000000000003!5f0.4000000000000002" 
+        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+      <div class="text-center mt-3">
+        <button onclick="toggleQR('qr360')" class="bg-yellow-400 text-black font-semibold px-4 py-2 rounded-full">📱 Mở bằng điện thoại</button>
+        <div id="qr360" class="qr-container mt-3">
+          <img src="QRCode (1).png" class="w-32 mx-auto rounded-xl border shadow" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Bản đồ địa chỉ -->
+    <div id="mapDiachi" class="hidden rounded-3xl glow-border bg-white shadow-md p-5">
+      <h2 class="text-2xl font-bold text-purple-700 text-center mb-2">📍 Địa chỉ cụ thể</h2>
+      <p class="text-sm text-center text-gray-600 mb-3">Đã xem <span id="viewDiachi">0</span> lần</p>
+      <iframe class="w-full h-[400px] rounded-xl" 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.2162499308024!2d106.63554927574489!3d10.871150357437951!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317529faf8e68ef5%3A0x32f6536e833a982!2zMzgzIE5ndXnhu4VuIFRo4buLIEtp4buDdSwgUCwgUXXhuq1uIDEyLCBI4buTIENow60gTWluaCA3MDAwMCwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1751499729407!5m2!1svi!2s" 
+        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+      <div class="text-center mt-3">
+        <button onclick="toggleQR('qrDiachi')" class="bg-yellow-400 text-black font-semibold px-4 py-2 rounded-full">📱 Mở bằng điện thoại</button>
+        <div id="qrDiachi" class="qr-container mt-3">
+          <img src="QRCode.png" class="w-32 mx-auto rounded-xl border shadow" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup Chia sẻ -->
+  <div id="popup-bg" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-[100] transition-all">
+    <div class="bg-white p-6 rounded-2xl w-[300px] relative shadow-xl animate-fade-in">
+      <button class="absolute top-2 right-3 text-gray-500 text-2xl font-bold hover:text-red-500" onclick="toggleSharePopup()">×</button>
+      <h3 class="text-xl font-bold text-center mb-4 text-blue-600">🔗 Chia sẻ bản đồ</h3>
+      <div class="flex justify-around items-center space-x-4 mb-4">
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https://maps.google.com" target="_blank" title="Facebook">
+          <i class="fab fa-facebook fa-2x text-blue-600 hover:scale-110 transition"></i>
+        </a>
+          <a href="https://zalo.me/share?url=https://maps.google.com" target="_blank" title="Zalo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="w-8 h-8 fill-[#0068FF] hover:scale-110 transition">
+              <path d="M4 10C4 6.686 6.686 4 10 4h28c3.314 0 6 2.686 6 6v28c0 3.314-2.686 6-6 6H18.343L8.72 47.28A2 2 0 0 1 5.999 45.585V10z"/>
+              <text x="11" y="30" fill="white" font-size="13" font-family="Arial, sans-serif" font-weight="bold">Zalo</text>
+            </svg>
+          </a>
+
+        <button onclick="copyLink()" title="Sao chép liên kết">
+          <i class="fas fa-copy fa-2x text-gray-700 hover:text-green-600 transition"></i>
+        </button>
+      </div>
+      <p id="copy-msg" class="text-center text-green-600 text-sm hidden">✔️ Đã sao chép liên kết!</p>
+    </div>
+  </div>
+
+  <!-- Footer mèo bản quyền -->
+  <div class="copyright fixed bottom-0 left-0 w-full bg-blue-600 text-white text-center py-3 font-semibold z-50" id="copyright">
+    © KhanhPC 2025 - Mọi quyền được bảo lưu
+    <div class="cat-container" id="cat">
+      <img src="meo.gif" alt="Mèo đáng yêu" class="cat-img">
+      <div class="speech-bubble">Meo meo bản quyền! Đây là web của Hoàng Quốc Khánh đấy!</div>
+    </div>
+  </div>
+
+  <!-- Script -->
+  <script>
+    let view360 = parseInt(localStorage.getItem("view360") || "0");
+    let viewDiachi = parseInt(localStorage.getItem("viewDiachi") || "0");
+
+    document.getElementById("view360").textContent = view360;
+    document.getElementById("viewDiachi").textContent = viewDiachi;
+
+    function showMap(id) {
+      document.getElementById("map360").classList.add("hidden");
+      document.getElementById("mapDiachi").classList.add("hidden");
+      document.getElementById(id).classList.remove("hidden");
+
+      if (id === "map360") {
+        view360++;
+        localStorage.setItem("view360", view360);
+        document.getElementById("view360").textContent = view360;
+      } else {
+        viewDiachi++;
+        localStorage.setItem("viewDiachi", viewDiachi);
+        document.getElementById("viewDiachi").textContent = viewDiachi;
+      }
+    }
+
+    function toggleQR(id) {
+      const el = document.getElementById(id);
+      el.style.display = el.style.display === "block" ? "none" : "block";
+    }
+
+    function toggleSharePopup() {
+      const bg = document.getElementById("popup-bg");
+      bg.classList.toggle("hidden");
+    }
+
+    function copyLink() {
+      navigator.clipboard.writeText(window.location.href);
+      document.getElementById("copy-msg").classList.remove("hidden");
+      setTimeout(() => document.getElementById("copy-msg").classList.add("hidden"), 2000);
+    }
+
+    document.getElementById("copyright").addEventListener("mouseover", () => {
+      document.getElementById("cat").style.display = "block";
+    });
+
+    document.getElementById("copyright").addEventListener("mouseleave", () => {
+      document.getElementById("cat").style.display = "none";
+    });
+  </script>
+
+<script>
+const chaosChars = "!@#$%^&*()_+=-{}[]|:;<>,.?/~`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+// 🔐 Tạo độ dài ngẫu nhiên cố định 1 lần khi tải
+const FIXED_LENGTH = Math.floor(Math.random() * 91) + 60;
+let urlArr = Array.from({ length: FIXED_LENGTH }, () =>
+  chaosChars.charAt(Math.floor(Math.random() * chaosChars.length))
+);
+
+// ➤ Gắn hash ban đầu (phần sau # trên URL)
+const initialHash = "#" + urlArr.join("");
+history.replaceState(null, '', location.pathname + initialHash);
+
+// 🔁 Loạn từng ký tự trong hash, giữ nguyên độ dài
+function updateHashPerChar() {
+  for (let i = 0; i < urlArr.length; i++) {
+    if (Math.random() < 0.25) {
+      urlArr[i] = chaosChars.charAt(Math.floor(Math.random() * chaosChars.length));
+    }
+  }
+  const newHash = "#" + urlArr.join("");
+  history.replaceState(null, '', location.pathname + newHash);
+}
+
+// 🎨 Favicon: Loạn xoay, méo, lật liên tục
+const favicon = document.getElementById('favicon');
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+const img = new Image();
+img.crossOrigin = "anonymous";
+img.src = favicon.href;
+
+let faviconReady = false;
+img.onload = () => {
+  faviconReady = true;
+};
+
+const size = 64;
+canvas.width = size;
+canvas.height = size;
+
+setInterval(() => {
+  if (!faviconReady) return;
+
+  ctx.clearRect(0, 0, size, size);
+  ctx.save();
+  ctx.translate(size / 2, size / 2);
+
+  const angle = Math.random() * 2 * Math.PI;
+  const scaleX = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  const scaleY = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  ctx.rotate(angle);
+  ctx.scale(scaleX, scaleY);
+
+  ctx.drawImage(img, -size / 2, -size / 2, size, size);
+  ctx.restore();
+
+  favicon.href = canvas.toDataURL("image/png");
+}, 100); // mỗi 100ms xoay icon
+
+// 🚀 Khởi động loạn URL định kỳ
+setInterval(updateHashPerChar, 30);
+</script>
+
+<div id="donate-host"></div>
+<script>
+  const host = document.getElementById("donate-host");
+  const shadow = host.attachShadow({ mode: "open" });
+  const tpl = `
+    <!-- Nút Donate lắc lư cute -->
+<a href="https://khanhpc-five.vercel.app/ungho.html" id="donate-button" target="_blank">💖 Donate cho KHANHPC</a>
+<style>
+  #donate-button {
+    position: fixed;
+    top:70px;
+    right: 20px;
+    background: linear-gradient(135deg, #ff0080, #7928ca);
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    animation: shake 2s infinite;
+    transition: transform 0.2s;
+  }
+  #donate-button:hover {
+    transform: scale(1.05);
+  }
+  @keyframes shake {
+    0% { transform: rotate(0deg); }
+    20% { transform: rotate(3deg); }
+    40% { transform: rotate(-3deg); }
+    60% { transform: rotate(2deg); }
+    80% { transform: rotate(-2deg); }
+    100% { transform: rotate(0deg); }
+  }
+  @media (max-width: 500px) {
+    #donate-button {
+      font-size: 14px;
+      padding: 10px 16px;
+    }
+  }
+</style>
+  `;
+  shadow.innerHTML = tpl;
+  new MutationObserver((muts, obs) => {
+    if (!shadow.querySelector("#donate-button")) {
+      obs.disconnect();
+      location.reload();
+    }
+  }).observe(shadow, { childList: true });
+</script>
+
+</body>
+</html>

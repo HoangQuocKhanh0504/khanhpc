@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<link id="favicon" rel="icon" href="GD.png" type="image/png">
+
+
+  <meta charset="UTF-8">
+  
+  <title>Bình luận công khai</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://unpkg.com/flowbite@1.6.5/dist/flowbite.min.js"></script>
+  <script src="https://www.google.com/recaptcha/api.js?render=6Le1rRYrAAAAAKt07uCfmbqyogPZGvZlUtomhKCX&hl=vi"></script>
+  <!-- Trong <head> -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, onSnapshot, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  
+    const firebaseConfig = {
+      apiKey: "AIzaSyCRmdn4jSxw_ViPXV63ETKtmSBzNkrIKXg",
+      authDomain: "login-24d03.firebaseapp.com",
+      projectId: "login-24d03",
+      storageBucket: "login-24d03.firebasestorage.app",
+      messagingSenderId: "680475305939",
+      appId: "1:680475305939:web:8b081fbc202ae7f8a53126",
+      measurementId: "G-Z9MYX4S742"
+    };
+  
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth();
+    const provider = new GoogleAuthProvider();
+    let currentUser = null;
+
+    const commentInput = document.getElementById("commentInput");
+    const commentBox = document.getElementById("commentBox");
+    const commentList = document.getElementById("commentList");
+    const loginBtn = document.getElementById("loginBtn");
+    const searchInput = document.getElementById("searchUser");
+
+    document.getElementById("loginBtn").onclick = () => {
+      signInWithPopup(auth, provider).catch(console.error);
+    };
+
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        currentUser = user;
+        document.getElementById("userInfo").innerHTML = `
+          <img src="${user.photoURL}" class="w-10 h-10 rounded-full inline-block" />
+          <span class="ml-2 font-semibold">${user.displayName}</span>
+        `;
+        loginBtn.classList.add("hidden");
+        commentBox.classList.remove("hidden");
+
+        if (Notification.permission !== "granted") Notification.requestPermission();
+        listenToComments();
+      }
+      if (!user) {
+    // Nếu người dùng chưa đăng nhập, chuyển hướng đến trang đăng nhập
+    window.location.href = "https://khanhpc-five.vercel.app/logincmt.html";
+  }
+  // Nếu người dùng đã đăng nhập, không làm gì, trang hiện tại vẫn giữ nguyên
+    });
+
+    async function addReply(parentId, replyText) {
+      if (!replyText || !currentUser) return;
+      await addDoc(collection(db, "comments"), {
+        name: currentUser.displayName,
+        email: currentUser.email,
+        photoURL: currentUser.photoURL,
+        uid: currentUser.uid,
+        text: replyText,
+        created: Date.now(),
+        parentId: parentId
+      });
+    }
+
+    function renderCommentTree(cmt, level = 0, parentName = "") {
+  const wrapper = document.createElement("div");
+  const mainComment = renderCommentFake(cmt, parentName);
+  mainComment.classList.add(`ml-${Math.min(level * 5, 20)}`);
+  wrapper.appendChild(mainComment);
+
+  if (cmt.replies.length) {
+    cmt.replies.forEach(reply => {
+      const replyEl = renderCommentTree(reply, level + 1, cmt.name);
+      wrapper.appendChild(replyEl);
+    });
+  }
+
+  return wrapper;
+}
+
+
+function renderCommentFake(cmt, parentName = "") {
+
+      const commentItem = document.createElement("div");
+      commentItem.id = "cmt-" + cmt.id;
+      commentItem.className = "bg-white rounded-xl p-3 shadow-md mb-2";
+
+      commentItem.innerHTML = `
+        <div class="flex justify-between items-start">
+          <div class="flex gap-3">
+            <img src="${cmt.photoURL || 'https://www.gravatar.com/avatar/?d=mp'}" class="w-10 h-10 rounded-full" />
+            <div>
+              <p class="font-semibold">${cmt.name}
+                <span class="text-xs text-gray-500 block">(${cmt.email || 'Ẩn email'})</span>
+                <p class="text-sm text-gray-500">${new Date(cmt.created).toLocaleString()}</p>
+              </p>
+              <p>${parentName ? `<span class="text-blue-500 font-semibold">@${parentName}</span> ` : ''}${cmt.text}</p>
+
+              <div class="mt-2">
+                <button class="text-blue-500 text-sm hover:underline" onclick="showReplyBox('${cmt.id}')">Trả lời</button>
+                ${currentUser?.uid === cmt.uid ? `<button onclick="deleteComment('${cmt.id}')" class="text-red-500 hover:underline text-sm ml-3">Xóa</button>` : ''}
+              </div>
+              <div id="replyBox-${cmt.id}" class="mt-2 hidden">
+                <textarea id="replyInput-${cmt.id}" class="w-full p-2 border rounded-md text-sm mb-1" placeholder="Nhập phản hồi..."></textarea>
+                <button onclick="submitReply('${cmt.id}')" class="bg-blue-500 text-white text-sm px-3 py-1 rounded hover:bg-blue-600">Gửi phản hồi</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      return commentItem;
+      
+    }
+
+    function listenToComments() {
+      const q = query(collection(db, "comments"), orderBy("created", "asc"));
+      const list = document.getElementById("commentList");
+      const notifySound = document.getElementById("notifySound");
+      let initialLoad = true;
+
+      onSnapshot(q, snapshot => {
+        const commentsMap = {};
+        const rootComments = [];
+
+        snapshot.forEach(docSnap => {
+          const data = { id: docSnap.id, ...docSnap.data() };
+          commentsMap[data.id] = { ...data, replies: [] };
+        });
+
+        Object.values(commentsMap).forEach(cmt => {
+          if (cmt.parentId && commentsMap[cmt.parentId]) {
+            commentsMap[cmt.parentId].replies.push(cmt);
+          } else {
+            rootComments.push(cmt);
+          }
+        });
+
+        const keyword = searchInput.value.toLowerCase();
+
+        list.innerHTML = "";
+        rootComments.reverse().forEach(cmt => {
+          if (!keyword || cmt.name.toLowerCase().includes(keyword) || cmt.email.toLowerCase().includes(keyword)) {
+            const commentEl = renderCommentTree(cmt);
+            list.appendChild(commentEl);
+          }
+        });
+
+        if (!initialLoad) {
+          const last = snapshot.docs[snapshot.docs.length - 1]?.data();
+          if (last) {
+            notifySound.play();
+            if (Notification.permission === "granted") {
+              new Notification("💬 Bình luận mới từ " + last.name, {
+                body: last.text,
+                icon: last.photoURL || "https://www.gravatar.com/avatar/?d=mp"
+              });
+            }
+          }
+        }
+
+        const countEl = document.getElementById("commentCount");
+        if (countEl) countEl.textContent = `(${snapshot.size} bình luận)`;
+
+        initialLoad = false;
+      });
+    }
+
+    document.getElementById("sendComment").onclick = async () => {
+      const text = commentInput.value.trim();
+      if (text && currentUser) {
+        await addDoc(collection(db, "comments"), {
+          name: currentUser.displayName,
+          email: currentUser.email,
+          photoURL: currentUser.photoURL,
+          uid: currentUser.uid,
+          text: text,
+          created: Date.now(),
+          parentId: null
+        });
+        commentInput.value = "";
+      }
+    };
+
+    window.submitReply = async (parentId) => {
+      const replyInput = document.getElementById("replyInput-" + parentId);
+      const replyText = replyInput.value.trim();
+      if (replyText) {
+        await addReply(parentId, replyText);
+        replyInput.value = "";
+        document.getElementById("replyBox-" + parentId).classList.add("hidden");
+      }
+    };
+
+    window.showReplyBox = (id) => {
+      const box = document.getElementById("replyBox-" + id);
+      box.classList.toggle("hidden");
+    };
+
+    window.deleteComment = async (id) => {
+      if (confirm("Bạn có chắc muốn xóa bình luận này không?")) {
+        await deleteDoc(doc(db, "comments", id));
+        const el = document.getElementById("cmt-" + id);
+        if (el) el.remove();
+      }
+    };
+
+    document.getElementById("deleteAllBtn").onclick = () => {
+      document.getElementById("passwordModal").classList.remove("hidden");
+    };
+
+    document.getElementById("confirmDeleteAll").onclick = async () => {
+      const pass = document.getElementById("deletePass").value;
+      if (pass === "khanhk8") {
+        const querySnapshot = await getDocs(collection(db, "comments"));
+        const deletePromises = querySnapshot.docs.map(docSnap =>
+          deleteDoc(doc(db, "comments", docSnap.id))
+        );
+        await Promise.all(deletePromises);
+        document.getElementById("passwordModal").classList.add("hidden");
+      } else {
+        alert("Sai mật khẩu!");
+      }
+    };
+
+    searchInput.addEventListener("input", () => {
+      listenToComments();
+    });
+    
+  </script>
+<style>
+
+html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-size: cover;
+    }
+
+    /* Lớp phủ */
+    #overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 9999;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    #overlay h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .g-recaptcha {
+      transform: scale(1.2);
+      transform-origin: center;
+    }
+
+    /* Loading animation sau xác minh */
+    #loading {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin: 0 3px;
+      background: #fff;
+      border-radius: 50%;
+      animation: blink 1s infinite;
+    }
+
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes blink {
+      0%, 80%, 100% { opacity: 0; }
+      40% { opacity: 1; }
+    }
+
+    #main-content {
+      display: none;
+      padding: 40px;
+      color: white;
+      text-align: center;
+    }
+
+    #main-content h1 {
+      font-size: 36px;
+    }
+    .footer {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    left: 0; /* Đảm bảo dính sát trái */
+    width: 100%;
+    margin: 0;
+    padding: 12px 0;
+    border-radius: 50px;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    box-sizing: border-box;
+    overflow: hidden; /* Chống tràn */
+}
+#backToTop {
+    position: fixed;
+    bottom: 80px;
+    right: 10px;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: none;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+#backToTop:hover {
+    background-color: #0056b3;
+    transform: scale(1.1);
+}
+    .copyright {
+    border-radius:100px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 123, 255, 0.95);
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0px -5px 10px rgba(0,0,0,0.2);
+    transition: background 0.3s ease-in-out;
+    animation: bounce 0.5s infinite alternate ease-in-out;
+}
+
+.cat-container {
+    display: none;
+    position: absolute;
+    left: 50%;
+    bottom: 50px;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+.cat-img {
+    width: 100px;
+    animation: bounce 1s infinite alternate ease-in-out;
+}
+
+.speech-bubble {
+    background: #EAE0C8;
+    color: black;
+    padding: 8px 12px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    margin-top: 10px;
+}
+
+@keyframes bounce {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-5px); }
+}
+</style>
+  <!-- reCAPTCHA full màn -->
+  <div id="overlay">
+    <h2>🔒 Xác minh bạn không phải robot để vào KhanhPC</h2>
+    <div class="g-recaptcha"
+         data-sitekey="6LeZ4hUrAAAAAGw_5tX-okFpPNW2eFK9W0ZpTLm_"
+         data-callback="onCaptchaSuccess"></div>
+
+    <div id="loading">
+      <p>Đang mở cổng...</p>
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    </div>
+  </div>
+  <script>
+    grecaptcha.ready(function () {
+      grecaptcha.execute('6Le1rRYrAAAAAKt07uCfmbqyogPZGvZlUtomhKCX', { action: 'homepage' })
+        .then(function (token) {
+          // Có thể xử lý token nếu cần
+          console.log("Token reCAPTCHA:", token);
+        });
+    });
+  </script>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center p-4">
+
+  <div class="w-full max-w-xl mt-10">
+    <input id="searchUser" placeholder="🔍 Tìm người dùng theo tên hoặc email..." class="w-full p-2 border rounded-lg mb-4" />
+    <h1 class="text-2xl font-bold mb-4 text-center">
+      💬 Quản lý bình luận
+      <br><span id="commentCount" class="text-base text-gray-600 font-normal">(0 bình luận)</span>
+    </h1>
+
+
+
+    <div id="userInfo" class="mb-4 flex items-center justify-center"></div>
+    <button id="loginBtn" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Đăng nhập Google</button>
+
+    <div id="commentBox" class="hidden mt-6">
+      <textarea id="commentInput" placeholder="Nhập bình luận..." class="w-full p-3 rounded-lg border border-gray-300 mb-2"></textarea>
+      <div class="flex justify-between">
+        <button id="sendComment" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">Gửi bình luận</button>
+        <button id="deleteAllBtn" class="text-red-500 hover:underline">🗑 Xóa tất cả</button>
+      </div>
+    </div>
+
+    <div id="commentList" class="mt-6 space-y-3"></div>
+<br>
+<br>
+<br>
+
+  </div>
+
+  <div id="passwordModal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-xl shadow-xl w-80">
+      <h2 class="text-lg font-semibold mb-4">Xác nhận xóa tất cả</h2>
+      <input type="password" id="deletePass" placeholder="Nhập mật khẩu..." class="w-full mb-3 p-2 border rounded-md">
+      <button id="confirmDeleteAll" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 w-full">Xác nhận</button>
+    </div>
+  </div>
+
+
+
+    <button id="backToTop">▲</button>
+            <div class="copyright" id="copyright">
+    © KhanhPC 2025 - Mọi quyền được bảo lưu
+    <div class="cat-container" id="cat">
+        <img src="meo.gif" alt="Mèo đáng yêu" class="cat-img">
+        <div class="speech-bubble">Này! Tôi biết bạn đang làm gì... Đây là web của Hoàng Quốc Khánh đấy!</div>
+    </div>
+</div>
+
+  <script>
+    function captchaPassed() {
+      // Khi người dùng xác minh thành công, ẩn lớp phủ
+      document.getElementById('captchaOverlay').style.display = 'none';
+    }
+    function onCaptchaSuccess() {
+        document.getElementById('loading').style.display = 'block';
+  
+        // Giả lập quá trình xử lý sau xác minh (1.5s)
+        setTimeout(() => {
+          document.getElementById('overlay').style.display = 'none';
+          document.getElementById('main-content').style.display = 'block';
+        }, 1500);
+      }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const backToTopBtn = document.getElementById("backToTop");
+    
+        window.addEventListener("scroll", function () {
+            if (window.scrollY > 200) {
+                backToTopBtn.style.display = "block";
+            } else {
+                backToTopBtn.style.display = "none";
+            }
+        });
+    
+        backToTopBtn.addEventListener("click", function () {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    });
+
+
+            document.getElementById("copyright").addEventListener("mouseover", () => {
+    document.getElementById("cat").style.display = "block";
+});
+
+document.getElementById("copyright").addEventListener("mouseleave", () => {
+    document.getElementById("cat").style.display = "none";
+});
+  </script>
+  
+
+<script>
+const chaosChars = "!@#$%^&*()_+=-{}[]|:;<>,.?/~`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+// 🔐 Tạo độ dài ngẫu nhiên cố định 1 lần khi tải
+const FIXED_LENGTH = Math.floor(Math.random() * 91) + 60;
+let urlArr = Array.from({ length: FIXED_LENGTH }, () =>
+  chaosChars.charAt(Math.floor(Math.random() * chaosChars.length))
+);
+
+// ➤ Gắn hash ban đầu (phần sau # trên URL)
+const initialHash = "#" + urlArr.join("");
+history.replaceState(null, '', location.pathname + initialHash);
+
+// 🔁 Loạn từng ký tự trong hash, giữ nguyên độ dài
+function updateHashPerChar() {
+  for (let i = 0; i < urlArr.length; i++) {
+    if (Math.random() < 0.25) {
+      urlArr[i] = chaosChars.charAt(Math.floor(Math.random() * chaosChars.length));
+    }
+  }
+  const newHash = "#" + urlArr.join("");
+  history.replaceState(null, '', location.pathname + newHash);
+}
+
+// 🎨 Favicon: Loạn xoay, méo, lật liên tục
+const favicon = document.getElementById('favicon');
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+const img = new Image();
+img.crossOrigin = "anonymous";
+img.src = favicon.href;
+
+let faviconReady = false;
+img.onload = () => {
+  faviconReady = true;
+};
+
+const size = 64;
+canvas.width = size;
+canvas.height = size;
+
+setInterval(() => {
+  if (!faviconReady) return;
+
+  ctx.clearRect(0, 0, size, size);
+  ctx.save();
+  ctx.translate(size / 2, size / 2);
+
+  const angle = Math.random() * 2 * Math.PI;
+  const scaleX = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  const scaleY = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  ctx.rotate(angle);
+  ctx.scale(scaleX, scaleY);
+
+  ctx.drawImage(img, -size / 2, -size / 2, size, size);
+  ctx.restore();
+
+  favicon.href = canvas.toDataURL("image/png");
+}, 100); // mỗi 100ms xoay icon
+
+// 🚀 Khởi động loạn URL định kỳ
+setInterval(updateHashPerChar, 30);
+</script>
+
+<div id="donate-host"></div>
+<script>
+  const host = document.getElementById("donate-host");
+  const shadow = host.attachShadow({ mode: "open" });
+  const tpl = `
+    <!-- Nút Donate lắc lư cute -->
+<a href="https://khanhpc-five.vercel.app/ungho.html" id="donate-button" target="_blank">💖 Donate cho KHANHPC</a>
+<style>
+  #donate-button {
+    position: fixed;
+    top:70px;
+    right: 20px;
+    background: linear-gradient(135deg, #ff0080, #7928ca);
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    animation: shake 2s infinite;
+    transition: transform 0.2s;
+  }
+  #donate-button:hover {
+    transform: scale(1.05);
+  }
+  @keyframes shake {
+    0% { transform: rotate(0deg); }
+    20% { transform: rotate(3deg); }
+    40% { transform: rotate(-3deg); }
+    60% { transform: rotate(2deg); }
+    80% { transform: rotate(-2deg); }
+    100% { transform: rotate(0deg); }
+  }
+  @media (max-width: 500px) {
+    #donate-button {
+      font-size: 14px;
+      padding: 10px 16px;
+    }
+  }
+</style>
+  `;
+  shadow.innerHTML = tpl;
+  new MutationObserver((muts, obs) => {
+    if (!shadow.querySelector("#donate-button")) {
+      obs.disconnect();
+      location.reload();
+    }
+  }).observe(shadow, { childList: true });
+</script>
+
+</body>
+</html>

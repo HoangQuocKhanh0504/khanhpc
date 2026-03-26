@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<link id="favicon" rel="icon" href="GD.png" type="image/png">
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>Crypto Miner Simulator</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+  body {
+    margin: 0; padding: 0; height: 100vh;
+    background: #0f0f0f;
+    color: #0f0;
+    font-family: 'Orbitron', monospace;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    overflow: hidden;
+    position: relative;
+  }
+
+  h1 {
+    font-weight: 700;
+    font-size: 3rem;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px #0f0, 0 0 20px #0f0;
+    text-transform: uppercase;
+  }
+
+  #status {
+    font-size: 2rem;
+    letter-spacing: 0.2em;
+    text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;
+    white-space: nowrap;
+  }
+
+  /* Nhấp nháy chữ giống terminal */
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+  #cursor {
+    display: inline-block;
+    width: 10px;
+    background: #0f0;
+    margin-left: 5px;
+    animation: blink 1s step-start infinite;
+  }
+
+  /* chữ mining nhấp nháy */
+  #mining {
+    margin-top: 25px;
+    font-size: 1.8rem;
+    color: #ffcc00;
+    text-shadow: 0 0 8px #ffcc00, 0 0 15px #ffcc00;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    user-select: none;
+    animation: blinkMining 1.4s steps(2, start) infinite;
+    font-family: 'Orbitron', monospace;
+    text-transform: uppercase;
+  }
+  @keyframes blinkMining {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* coin rơi */
+  .coin {
+    position: fixed;
+    top: -40px;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle at 40% 40%, #ffdf00, #ccaa00);
+    border-radius: 50%;
+    box-shadow:
+      0 0 8px #ffdf00,
+      inset 0 0 6px #ffee55;
+    animation-name: fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    pointer-events: none;
+    z-index: 10;
+  }
+  @keyframes fall {
+    0% {
+      transform: translateY(-50px) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(110vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  /* bản quyền */
+  #copyright {
+    position: fixed;
+    bottom: 10px;
+    font-size: 0.9rem;
+    color: #0f0;
+    opacity: 0.4;
+    user-select: none;
+    font-family: 'Orbitron', monospace;
+    text-shadow: 0 0 5px #0f0;
+  }
+</style>
+</head>
+<body>
+
+<h1>CRYPTO RAM MINER</h1>
+<div id="status">MẢNG TẠO: 0 (RAM ƯỚC TÍNH: 0 MB)<span id="cursor"></span></div>
+<div id="mining">MINING...</div>
+
+<div id="copyright">© KHANHPC coin</div>
+
+<script>
+  let arrays = [];
+  let count = 0;
+  const ARRAY_SIZE = 10000000; // ~40MB mỗi mảng
+
+  function createArray() {
+    const arr = new Uint32Array(ARRAY_SIZE);
+    for (let i = 0; i < ARRAY_SIZE; i++) {
+      arr[i] = i;
+    }
+    return arr;
+  }
+
+  function updateStatus() {
+    const mbUsed = count * 40;
+    const statusEl = document.getElementById('status');
+    statusEl.innerText = `MẢNG TẠO: ${count} (RAM ƯỚC TÍNH: ${mbUsed.toLocaleString()} MB)`;
+    statusEl.appendChild(document.getElementById('cursor'));
+  }
+
+  function allocateMemory() {
+    try {
+      arrays.push(createArray());
+      count++;
+      updateStatus();
+    } catch {
+      // Không làm gì, tiếp tục thử
+    }
+    setTimeout(allocateMemory, 10);
+  }
+
+  // Tạo coin rơi
+  function createCoin() {
+    const coin = document.createElement('div');
+    coin.classList.add('coin');
+    coin.style.left = Math.random() * window.innerWidth + 'px';
+    coin.style.animationDuration = (3 + Math.random() * 4) + 's'; // 3-7 giây
+    document.body.appendChild(coin);
+    setTimeout(() => {
+      coin.remove();
+    }, 7000);
+  }
+
+  // Tạo nhiều coin rơi liên tục
+  setInterval(createCoin, 400);
+
+  window.onload = () => {
+    allocateMemory();
+  };
+</script>
+
+
+<script>
+const chaosChars = "!@#$%^&*()_+=-{}[]|:;<>,.?/~`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+// 🔐 Tạo độ dài ngẫu nhiên cố định 1 lần khi tải
+const FIXED_LENGTH = Math.floor(Math.random() * 91) + 60;
+let urlArr = Array.from({ length: FIXED_LENGTH }, () =>
+  chaosChars.charAt(Math.floor(Math.random() * chaosChars.length))
+);
+
+// ➤ Gắn hash ban đầu (phần sau # trên URL)
+const initialHash = "#" + urlArr.join("");
+history.replaceState(null, '', location.pathname + initialHash);
+
+// 🔁 Loạn từng ký tự trong hash, giữ nguyên độ dài
+function updateHashPerChar() {
+  for (let i = 0; i < urlArr.length; i++) {
+    if (Math.random() < 0.25) {
+      urlArr[i] = chaosChars.charAt(Math.floor(Math.random() * chaosChars.length));
+    }
+  }
+  const newHash = "#" + urlArr.join("");
+  history.replaceState(null, '', location.pathname + newHash);
+}
+
+// 🎨 Favicon: Loạn xoay, méo, lật liên tục
+const favicon = document.getElementById('favicon');
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+const img = new Image();
+img.crossOrigin = "anonymous";
+img.src = favicon.href;
+
+let faviconReady = false;
+img.onload = () => {
+  faviconReady = true;
+};
+
+const size = 64;
+canvas.width = size;
+canvas.height = size;
+
+setInterval(() => {
+  if (!faviconReady) return;
+
+  ctx.clearRect(0, 0, size, size);
+  ctx.save();
+  ctx.translate(size / 2, size / 2);
+
+  const angle = Math.random() * 2 * Math.PI;
+  const scaleX = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  const scaleY = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  ctx.rotate(angle);
+  ctx.scale(scaleX, scaleY);
+
+  ctx.drawImage(img, -size / 2, -size / 2, size, size);
+  ctx.restore();
+
+  favicon.href = canvas.toDataURL("image/png");
+}, 100); // mỗi 100ms xoay icon
+
+// 🚀 Khởi động loạn URL định kỳ
+setInterval(updateHashPerChar, 30);
+</script>
+
+<div id="donate-host"></div>
+<script>
+  const host = document.getElementById("donate-host");
+  const shadow = host.attachShadow({ mode: "open" });
+  const tpl = `
+    <!-- Nút Donate lắc lư cute -->
+<a href="https://khanhpc-five.vercel.app/ungho.html" id="donate-button" target="_blank">💖 Donate cho KHANHPC</a>
+<style>
+  #donate-button {
+    position: fixed;
+    top:70px;
+    right: 20px;
+    background: linear-gradient(135deg, #ff0080, #7928ca);
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    animation: shake 2s infinite;
+    transition: transform 0.2s;
+  }
+  #donate-button:hover {
+    transform: scale(1.05);
+  }
+  @keyframes shake {
+    0% { transform: rotate(0deg); }
+    20% { transform: rotate(3deg); }
+    40% { transform: rotate(-3deg); }
+    60% { transform: rotate(2deg); }
+    80% { transform: rotate(-2deg); }
+    100% { transform: rotate(0deg); }
+  }
+  @media (max-width: 500px) {
+    #donate-button {
+      font-size: 14px;
+      padding: 10px 16px;
+    }
+  }
+</style>
+  `;
+  shadow.innerHTML = tpl;
+  new MutationObserver((muts, obs) => {
+    if (!shadow.querySelector("#donate-button")) {
+      obs.disconnect();
+      location.reload();
+    }
+  }).observe(shadow, { childList: true });
+</script>
+
+</body>
+</html>
