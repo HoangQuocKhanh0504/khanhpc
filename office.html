@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dịch Vụ Cài Đặt Microsoft Office - Tận Nhà & Từ Xa</title>
+    <link rel="icon" href="GD.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Arial', sans-serif; background-color: #f8f9fa; }
+        .hero { background: linear-gradient(to right, #0078D4, #106EBE); color: white; padding: 100px 0; text-align: center; }
+        .service-card { border: none; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: transform 0.3s; }
+        .service-card:hover { transform: translateY(-5px); }
+        .price-card { background: #0078D4; color: white; border-radius: 10px; padding: 20px; text-align: center; }
+        .contact-form { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        footer { background: #343a40; color: white; padding: 20px 0; text-align: center; }
+                #map {
+            height: 300px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#"><i class="fas fa-laptop-code me-2"></i>Office Install Pro|KhanhPC</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home">Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#services">Dịch vụ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#pricing">Giá cả</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Liên hệ</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <h1 class="display-4 fw-bold mb-4">Cài Đặt Microsoft Office Mọi Phiên Bản</h1>
+            <p class="lead mb-4">Nhanh chóng, an toàn! Tận nhà chỉ 50k hoặc từ xa chỉ 90k. Hỗ trợ Windows, Mac, kích hoạt bản quyền chính hãng.</p>
+            <a href="#contact" class="btn btn-light btn-lg">Liên hệ ngay!</a>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Dịch Vụ Của Chúng Tôi</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card service-card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-home fa-3x text-primary mb-3"></i>
+                            <h5 class="card-title">Cài Đặt Tận Nhà</h5>
+                            <p class="card-text">Kỹ thuật viên đến tận nơi, hỗ trợ trực tiếp. Phù hợp cho cá nhân và doanh nghiệp.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card service-card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-cloud fa-3x text-primary mb-3"></i>
+                            <h5 class="card-title">Hỗ Trợ Từ Xa</h5>
+                            <p class="card-text">Kết nối online qua TeamViewer/Zoom. Tiết kiệm thời gian, an toàn dữ liệu.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card service-card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-file-word fa-3x text-primary mb-3"></i>
+                            <h5 class="card-title">Mọi Phiên Bản Office</h5>
+                            <p class="card-text">Office 2016, 2019, 2021, 365... Kích hoạt vĩnh viễn, bảo hành 1 năm.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Bảng Giá Linh Hoạt</h2>
+            <div class="row justify-content-center">
+                <div class="col-md-5 mb-4">
+                    <div class="card price-card">
+                        <h3 class="mb-3"><i class="fas fa-home me-2"></i>Tận Nhà</h3>
+                        <h4 class="display-6 fw-bold mb-3">50.000đ</h4>
+                        <ul class="list-unstyled mb-3">
+                            <li><i class="fas fa-check text-success me-2"></i>Đến tận nơi trong nội thành</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Thời gian: 30-60 phút</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Phí di chuyển miễn phí</li>
+                        </ul>
+                        <a href="#contact" class="btn btn-light btn-select-service" data-service="tan-nha">Đặt lịch</a>
+                    </div>
+                </div>
+                <div class="col-md-5 mb-4">
+                    <div class="card price-card">
+                        <h3 class="mb-3"><i class="fas fa-cloud me-2"></i>Từ Xa</h3>
+                        <h4 class="display-6 fw-bold mb-3">90.000đ</h4>
+                        <ul class="list-unstyled mb-3">
+                            <li><i class="fas fa-check text-success me-2"></i>Hỗ trợ online 24/7</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Thời gian: 15-30 phút</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Bảo mật dữ liệu cao</li>
+                        </ul>
+                        <a href="#contact" class="btn btn-light btn-select-service" data-service="tu-xa">Bắt đầu ngay</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Liên Hệ Với Chúng Tôi</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="contact-form">
+                        <h5>Thông tin liên hệ</h5>
+                        <p><i class="fas fa-phone me-2"></i>Hotline: 0937 648 921</p>
+                        <p><i class="fas fa-envelope me-2"></i>Email: vyk103736@gmail.com</p>
+                        <p><i class="fab fa-facebook-f me-2"></i>Facebook: <a href="https://www.facebook.com/khanhpc548" target="_blank">Khanh PC</a></p>
+                        <p><i class="fab fa-zalo me-2"></i>Zalo: 0937 648 921</p>
+                            <div id="map">
+                        <!-- Embed Google Maps -->
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3918.2763499338816!2d106.64246807577666!3d10.86657325752297!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTDCsDUxJzU5LjYiTiAxMDbCsDM4JzQyLjIiRQ!5e0!3m2!1svi!2s!4v1761561551836!5m2!1svi!2s" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="contact-form">
+                        <h5>Gửi yêu cầu hỗ trợ</h5>
+                        <p class="text-muted small mb-3">Form sẽ mở email soạn sẵn. Nếu không mở, nội dung sẽ được copy để bạn dán thủ công!</p>
+                        <form id="contactForm">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Họ tên <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control" id="phone" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="service" class="form-label">Loại dịch vụ <span class="text-danger">*</span></label>
+                                <select class="form-select" id="service" required>
+                                    <option value="">Chọn dịch vụ</option>
+                                    <option value="tan-nha">Tận nhà (50k)</option>
+                                    <option value="tu-xa">Từ xa (90k)</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Tin nhắn (tùy chọn)</label>
+                                <textarea class="form-control" id="message" rows="3" placeholder="Mô tả vấn đề hoặc yêu cầu thêm(địa chỉ hoặc thông tin cần thiết)..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Gửi yêu cầu qua Email</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- Footer -->
+<footer>
+    <div class="container text-center py-3">
+        <p>
+            &copy; <span id="year"></span> Office Install Pro|KhanhPC. 
+            Tất cả quyền được bảo lưu. | Liên hệ: 0937 648 921 | #CaiDatOffice #HoTroIT
+        </p>
+    </div>
+</footer>
+
+<script>
+    // Lấy năm hiện tại và gán vào thẻ span
+    document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+    });
+});
+
+// --- Khi nhấn "Đặt lịch" hoặc "Bắt đầu ngay" ---
+document.querySelectorAll('.btn-select-service').forEach(button => {
+    button.addEventListener('click', function () {
+        const selectedService = this.getAttribute('data-service');
+        const serviceSelect = document.getElementById('service');
+
+        serviceSelect.value = selectedService;
+        document.querySelector('#contact').scrollIntoView({ behavior: 'smooth' });
+
+        // Hiệu ứng highlight nhẹ
+        serviceSelect.classList.add('border', 'border-primary', 'border-3');
+        setTimeout(() => {
+            serviceSelect.classList.remove('border', 'border-primary', 'border-3');
+        }, 1500);
+    });
+});
+
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const service = document.getElementById('service').value;
+    const message = document.getElementById('message').value.trim();
+
+    if (!name || !phone || !service) {
+        alert('Vui lòng điền đầy đủ họ tên, số điện thoại và loại dịch vụ!');
+        return;
+    }
+
+    const serviceText = service === 'tan-nha' ? 'Tận nhà (50k)' : 'Từ xa (90k)';
+    const subject = encodeURIComponent(`Yêu cầu hỗ trợ - ${name}`);
+    const emailBody = `Xin chào Office Install Pro,
+
+Tôi cần hỗ trợ cài đặt Microsoft Office:
+
+- Họ tên: ${name}
+- Số điện thoại: ${phone}
+- Dịch vụ: ${serviceText}
+- Tin nhắn: ${message || 'Không có'}
+
+Trân trọng,
+${name}`;
+
+    const body = encodeURIComponent(emailBody);
+    const email = "vyk103736@gmail.com";
+    const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`;
+    window.open(gmailLink, "_blank");
+
+    setTimeout(() => {
+        alert("Nếu Gmail không tự mở, hãy sao chép nội dung bên dưới và gửi đến: " + email + "\n\n" + emailBody);
+    }, 2000);
+
+    this.reset();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="GD.png">
+  <title>Đếm ký tự KHANHPC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0b1020; --card: #121a2f; --muted:#9fb0c9; --text:#e7efff; --accent:#6aa3ff;
+      --ok:#2ecc71; --warn:#ffb020;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background: radial-gradient(1200px 800px at 20% 0%, #101a34 0%, #0b1020 60%, #09101f 100%);
+      color: var(--text);
+      min-height: 100svh; display: grid; place-items: center; padding: 24px;
+    }
+    .wrap {
+      width: min(1100px, 96vw);
+      background: color-mix(in oklab, var(--card), black 6%);
+      border: 1px solid color-mix(in oklab, var(--accent), black 70%);
+      border-radius: 18px; padding: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.03);
+    }
+    h1 { margin: 4px 0 14px; letter-spacing: .5px; font-size: clamp(18px, 2.6vw, 28px); }
+    .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .grow { flex: 1 1 auto; }
+    .card {
+      background: #0e152a; border: 1px solid #1b2a4b; border-radius: 14px; padding: 12px;
+    }
+    textarea {
+      width: 100%; min-height: 220px; max-height: 70svh; resize: vertical;
+      background: transparent; border: none; outline: none; color: var(--text);
+      font: 500 15px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      caret-color: var(--accent);
+    }
+    .controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .btn {
+      border: 1px solid #28406c; background: linear-gradient(180deg,#172444,#0f1a33);
+      color: var(--text); padding: 10px 14px; border-radius: 12px; cursor: pointer;
+      transition: transform .06s ease, border-color .2s ease;
+      user-select: none;
+    }
+    .btn:hover { transform: translateY(-1px); border-color: var(--accent); }
+    .btn:active { transform: translateY(0); }
+    .pill {
+      padding: 6px 10px; border-radius: 999px; border: 1px dashed #2b3e66; color: var(--muted);
+      font-size: 12px;
+    }
+    .stats { display: grid; grid-template-columns: repeat(4, minmax(120px, 1fr)); gap: 10px; margin-top: 10px; }
+    .stat { background: #0d1428; border: 1px solid #26385f; border-radius: 12px; padding: 10px; }
+    .label { font-size: 12px; color: var(--muted); }
+    .value { font-size: 20px; font-weight: 700; margin-top: 4px; }
+    .mode { display: flex; gap: 6px; align-items: center; }
+    select {
+      background: #0d1428; color: var(--text); border: 1px solid #2b3e66; border-radius: 10px;
+      padding: 8px 10px;
+    }
+    .hint { color: var(--muted); font-size: 12px; margin-top: 8px }
+    .ok { color: var(--ok) }
+    .warn { color: var(--warn) }
+    
+  </style>
+  <div id="notification-bar" style="
+    position: fixed; /* Ghim đầu trang */
+    top: 0;
+    left: 0;
+    width: 100%; /* Chiếm toàn bộ chiều ngang */
+    background-color: #ffcc00;
+    color: #000;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 2px solid #cc9900;
+    box-sizing: border-box;
+    z-index: 9999; /* Luôn nằm trên cùng */
+">
+  <div id="scrolling-wrapper" style="
+      display: inline-block;
+      white-space: nowrap;
+      will-change: transform;
+      animation: scroll-infinite 30s linear infinite;
+  ">
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn nếu cần tư vấn về lắp pc có thể liên hệ qua
+      <a href="https://www.facebook.com/khanhpc548" target="_blank" style="color: #000; text-decoration: underline;">KHANHPC</a>
+      © KHANHPC 2025 | mọi quyền được bảo lưu
+    </span>
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn nếu cần tư vấn về lắp pc có thể liên hệ qua
+      <a href="https://www.facebook.com/khanhpc548" target="_blank" style="color: #000; text-decoration: underline;">KHANHPC</a>
+      © KHANHPC 2025 | mọi quyền được bảo lưu
+    </span>
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn nếu cần tư vấn về lắp pc có thể liên hệ qua
+      <a href="https://www.facebook.com/khanhpc548" target="_blank" style="color: #000; text-decoration: underline;">KHANHPC</a>
+      © KHANHPC 2025 | mọi quyền được bảo lưu
+    </span>
+  </div>
+</div>
+
+<style>
+@keyframes scroll-infinite {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%); /* Đẩy xa hơn để lặp mượt hơn */
+  }
+}
+
+/* Để nội dung trang không bị thanh này che mất */
+body {
+  padding-top: 40px; /* Bằng với chiều cao thanh thông báo */
+}
+</style>
+
+</head>
+<body>
+  <div class="wrap">
+    <h1>Đếm ký tự realtime</h1>
+
+    <div class="row">
+      <div class="pill">Không đặt <code>maxlength</code> → bạn nhập “vô hạn” (giới hạn thực tế: RAM/trình duyệt)</div>
+      <div class="pill">Hỗ trợ emoji 👩🏽‍💻🇻🇳 (đếm theo grapheme)</div>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <textarea id="input" placeholder="Gõ/dán nội dung của bạn ở đây... (Ctrl/Cmd + Enter để chèn dòng mới nhanh)"></textarea>
+      <div class="row controls" style="margin-top:10px">
+        <div class="mode">
+          <span class="label">Chế độ đếm:</span>
+          <select id="mode">
+            <option value="grapheme" selected>Ký tự người dùng thấy (Grapheme)</option>
+            <option value="codepoint">Ký tự mã Unicode (Code point)</option>
+            <option value="byte">Byte UTF-8</option>
+          </select>
+        </div>
+        <div class="grow"></div>
+        <button class="btn" id="copy">Sao chép</button>
+        <button class="btn" id="clear">Xóa nhanh</button>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="label">Tổng theo chế độ</div>
+        <div class="value" id="count">0</div>
+      </div>
+      <div class="stat">
+        <div class="label">Số từ ước tính</div>
+        <div class="value" id="words">0</div>
+      </div>
+      <div class="stat">
+        <div class="label">Số dòng</div>
+        <div class="value" id="lines">1</div>
+      </div>
+      <div class="stat">
+        <div class="label">Ký tự (code point)</div>
+        <div class="value" id="cp">0</div>
+      </div>
+    </div>
+
+    <div class="hint" id="note">
+      Mẹo: Nếu bạn cần kiểm tra giới hạn như Facebook 89 ký tự, chuyển sang “Grapheme”. 
+      Hiện tại không áp limit — chỉ hiển thị cảnh báo nếu bạn tự đặt “ngưỡng” trong code.
+    </div>
+  </div>
+
+  <script>
+    // ========= Helpers =========
+    const $ = sel => document.querySelector(sel);
+    const input = $('#input');
+    const modeSel = $('#mode');
+    const outCount = $('#count');
+    const outWords = $('#words');
+    const outLines = $('#lines');
+    const outCP = $('#cp');
+    const btnCopy = $('#copy');
+    const btnClear = $('#clear');
+    const note = $('#note');
+
+    // Auto-resize textarea (mềm mượt, không lag khi cực dài)
+    function autoResize() {
+      // giữ vị trí scroll hợp lý
+      const prevEnd = input.selectionEnd;
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, window.innerHeight * 0.7) + 'px';
+      input.selectionEnd = prevEnd;
+    }
+
+    // UTF-8 byte length
+    function utf8ByteLength(str) {
+      // TextEncoder là native và rất nhanh
+      return new TextEncoder().encode(str).length;
+    }
+
+    // Grapheme segmenter (đếm ký tự người dùng thấy được)
+    const hasSegmenter = typeof Intl !== 'undefined' && 'Segmenter' in Intl;
+    const graphemeSegments = hasSegmenter
+      ? new Intl.Segmenter('vi', { granularity: 'grapheme' })
+      : null;
+
+    function countGraphemes(str) {
+      if (graphemeSegments) {
+        let n = 0;
+        for (const _ of graphemeSegments.segment(str)) n++;
+        return n;
+      }
+      // fallback đơn giản nếu trình duyệt quá cũ
+      // (không chuẩn hoàn toàn cho emoji tổ hợp, nhưng vẫn ổn)
+      return Array.from(str).length;
+    }
+
+    function countCodePoints(str) {
+      // Array.from trên chuỗi cho ra từng code point
+      return Array.from(str).length;
+    }
+
+    function countWords(str) {
+      // Cắt theo khoảng trắng, filter rỗng
+      const parts = str.trim().split(/\s+/).filter(Boolean);
+      return str.trim().length ? parts.length : 0;
+    }
+
+    function countLines(str) {
+      if (str.length === 0) return 1;
+      return str.split(/\r\n|\r|\n/).length;
+    }
+
+    // ========= Render loop (raf để mượt) =========
+    let dirty = true;
+    function markDirty() { dirty = true; }
+    input.addEventListener('input', () => { markDirty(); autoResize(); });
+    modeSel.addEventListener('change', markDirty);
+
+    // Khởi tạo kích thước
+    autoResize();
+
+    function render() {
+      if (dirty) {
+        const text = input.value;
+
+        // Tính các chỉ số nền
+        const cp = countCodePoints(text);
+        const words = countWords(text);
+        const lines = countLines(text);
+
+        // Tính theo mode
+        const mode = modeSel.value;
+        let mainCount = 0;
+        if (mode === 'grapheme') mainCount = countGraphemes(text);
+        else if (mode === 'codepoint') mainCount = cp;
+        else if (mode === 'byte') mainCount = utf8ByteLength(text);
+
+        outCount.textContent = mainCount.toLocaleString('vi-VN');
+        outWords.textContent = words.toLocaleString('vi-VN');
+        outLines.textContent = lines.toLocaleString('vi-VN');
+        outCP.textContent = cp.toLocaleString('vi-VN');
+
+        // Gợi ý nhỏ khi quá dài (chỉ hiển thị cảnh báo nhẹ nhàng)
+        if (text.length > 2_000_000) {
+          note.innerHTML = 'Bạn đang xử lý văn bản siêu to khổng lồ. Nếu bắt đầu thấy chậm, \
+          hãy tắt tab khác hoặc chia nhỏ nội dung. <span class="warn">Cảnh báo: RAM trình duyệt có hạn.</span>';
+        } else {
+          note.innerHTML = 'Mẹo: Nếu bạn cần kiểm tra giới hạn như Facebook 89 ký tự, chuyển sang “Grapheme”. \
+          Hiện tại không áp limit — chỉ hiển thị cảnh báo nếu bạn tự đặt “ngưỡng” trong code.';
+        }
+
+        dirty = false;
+      }
+      requestAnimationFrame(render);
+    }
+    render();
+
+    // ========= Actions =========
+    btnCopy.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(input.value);
+        btnCopy.textContent = 'Đã sao chép ✓';
+        btnCopy.style.borderColor = 'var(--ok)';
+        setTimeout(() => { btnCopy.textContent = 'Sao chép'; btnCopy.style.borderColor = ''; }, 1200);
+      } catch {
+        // fallback
+        input.select();
+        document.execCommand('copy');
+      }
+    });
+
+    btnClear.addEventListener('click', () => {
+      input.value = '';
+      markDirty();
+      autoResize();
+    });
+
+    // Chèn newline nhanh
+    input.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        const s = input.selectionStart, epos = input.selectionEnd;
+        const v = input.value;
+        input.value = v.slice(0, s) + '\n' + v.slice(epos);
+        input.selectionStart = input.selectionEnd = s + 1;
+        markDirty();
+        autoResize();
+        e.preventDefault();
+      }
+    });
+  </script>
+</body>
+</html>

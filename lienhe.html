@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<link id="favicon" rel="icon" href="GD.png" type="image/png">
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://www.google.com/recaptcha/api.js?render=6Le1rRYrAAAAAKt07uCfmbqyogPZGvZlUtomhKCX&hl=vi"></script>
+  
+  <title>Liên hệ - Hoàng Quốc Khánh</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+body {
+  background: rgb(255, 0, 150); /* Màu nền ban đầu */
+  background-size: 400% 400%;
+  animation: gradientBackground 45s ease infinite; /* Thời gian chuyển màu dài hơn */
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Arial', sans-serif;
+}
+
+@keyframes gradientBackground {
+  0% {
+    background: rgb(255, 0, 150); /* Màu nền ban đầu */
+  }
+  25% {
+    background: rgb(0, 255, 255); /* Màu nền thay đổi */
+  }
+  50% {
+    background: rgb(255, 255, 0); /* Màu nền thay đổi */
+  }
+  75% {
+    background: rgb(0, 255, 0); /* Màu nền thay đổi */
+  }
+  100% {
+    background: rgb(255, 0, 150); /* Màu nền thay đổi về màu đầu */
+  }
+}
+
+h1 {
+  font-size: 80px;
+  color: rgb(255, 255, 255); /* Màu chữ mặc định trắng */
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-family: 'Arial', sans-serif; /* Sử dụng font hỗ trợ tốt hơn */
+  line-height: 1.2; /* Điều chỉnh độ cao dòng */
+}
+
+h1:hover {
+  transform: scale(1.2) rotate(-10deg);
+  color: rgb(255, 64, 129); /* Màu RGB khi rê chuột vào */
+  text-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+h1:active {
+  transform: scale(1) rotate(0deg);
+  color: rgb(255, 255, 255); /* Màu chữ khi nhấn (active) */
+  text-shadow: none;
+}
+
+button {
+  background-color: rgb(99, 102, 241); /* Màu nền nút mặc định */
+  color: white;
+  padding: 16px 32px;
+  border-radius: 9999px; /* Tạo nút tròn */
+  font-size: 1.125rem;
+  font-weight: 600;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease; /* Tạo hiệu ứng chuyển đổi cho tất cả các thuộc tính */
+}
+
+button:hover {
+  background-color: rgb(255, 64, 129); /* Màu nền khi rê chuột vào (RGB) */
+  transform: rotate(-10deg) scale(1.1); /* Nghiêng và phóng to nút khi rê chuột vào */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Thêm bóng khi rê chuột vào */
+}
+
+button:active {
+  background-color: rgb(255, 255, 255); /* Màu nền khi nhấn (active) */
+  color: rgb(99, 102, 241); /* Màu chữ khi nhấn */
+  transform: rotate(0deg) scale(1); /* Trả lại kích thước và góc nghiêng ban đầu khi nhấn */
+  box-shadow: none; /* Tắt bóng khi nhấn */
+}
+    .copyright {
+    border-radius:100px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 123, 255, 0.95);
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0px -5px 10px rgba(0,0,0,0.2);
+    transition: background 0.3s ease-in-out;
+    animation: bounce 0.5s infinite alternate ease-in-out;
+}
+
+.cat-container {
+    display: none;
+    position: absolute;
+    left: 50%;
+    bottom: 50px;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+.cat-img {
+    width: 100px;
+    animation: bounce 1s infinite alternate ease-in-out;
+}
+
+.speech-bubble {
+    background: #EAE0C8;
+    color: black;
+    padding: 8px 12px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    margin-top: 10px;
+}
+
+@keyframes bounce {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-5px); }
+}
+  </style>
+</head>
+<body class="bg-gradient-to-r from-indigo-200 to-blue-100 min-h-screen flex flex-col items-center justify-center text-gray-800">
+
+  <h1 class="text-5xl font-bold mb-8" data-aos="zoom-in">💬 Liên hệ với mình</h1>
+  <button onclick="openModal()" data-aos="fade-up"
+    class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-full text-xl font-semibold shadow-lg transition-all duration-300">
+    Liên hệ
+  </button>
+
+  <!-- Modal -->
+  <div id="contactModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-2xl shadow-2xl p-8 w-96 max-w-full animate-fade-in-up" data-aos="zoom-in-up">
+      <h2 class="text-2xl font-bold text-center mb-6 text-indigo-700">📱 Thông tin liên hệ</h2>
+      <div class="space-y-4 text-lg">
+        <div class="flex items-center space-x-2">
+          <span class="font-semibold">Số điện thoại:</span>
+          <a href="tel:0937648921" class="text-blue-600 hover:underline">0937648921</a>
+        </div>
+        <div class="flex items-center space-x-2">
+          <span class="font-semibold">Email:</span>
+          <a href="mailto:vyk193736@gmail.com" class="text-blue-600 hover:underline">vyk193736@gmail.com</a>
+        </div>
+        <div class="flex items-center space-x-2">
+          <span class="font-semibold">Facebook:</span>
+          <a href="https://www.facebook.com/profile.php?id=100079270105917" target="_blank" class="text-blue-600 hover:underline">Xem Facebook</a>
+        </div>
+      </div>
+      <div class="mt-6 text-center">
+        <button onclick="closeModal()"
+          class="px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-full font-medium transition-all">Đóng</button>
+      </div>
+    </div>
+  </div>
+        <div class="copyright" id="copyright">
+    © KhanhPC 2025 - Mọi quyền được bảo lưu
+    <div class="cat-container" id="cat">
+        <img src="meo.gif" alt="Mèo đáng yêu" class="cat-img">
+        <div class="speech-bubble">Này! Tôi biết bạn đang làm gì... Đây là web của Hoàng Quốc Khánh đấy!</div>
+    </div>
+</div>
+
+  <!-- AOS & Modal Script -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 1000 });
+
+    function openModal() {
+      document.getElementById('contactModal').classList.remove('hidden');
+      document.getElementById('contactModal').classList.add('flex');
+    }
+
+    function closeModal() {
+      document.getElementById('contactModal').classList.add('hidden');
+      document.getElementById('contactModal').classList.remove('flex');
+    }
+                document.getElementById("copyright").addEventListener("mouseover", () => {
+    document.getElementById("cat").style.display = "block";
+});
+
+document.getElementById("copyright").addEventListener("mouseleave", () => {
+    document.getElementById("cat").style.display = "none";
+});
+  </script>
+
+  <!-- Optional: Fade-in Animation -->
+  <style>
+    @keyframes fade-in-up {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in-up {
+      animation: fade-in-up 0.5s ease-out;
+    }
+    
+  </style>
+
+
+<script>
+const chaosChars = "!@#$%^&*()_+=-{}[]|:;<>,.?/~`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+// 🔐 Tạo độ dài ngẫu nhiên cố định 1 lần khi tải
+const FIXED_LENGTH = Math.floor(Math.random() * 91) + 60;
+let urlArr = Array.from({ length: FIXED_LENGTH }, () =>
+  chaosChars.charAt(Math.floor(Math.random() * chaosChars.length))
+);
+
+// ➤ Gắn hash ban đầu (phần sau # trên URL)
+const initialHash = "#" + urlArr.join("");
+history.replaceState(null, '', location.pathname + initialHash);
+
+// 🔁 Loạn từng ký tự trong hash, giữ nguyên độ dài
+function updateHashPerChar() {
+  for (let i = 0; i < urlArr.length; i++) {
+    if (Math.random() < 0.25) {
+      urlArr[i] = chaosChars.charAt(Math.floor(Math.random() * chaosChars.length));
+    }
+  }
+  const newHash = "#" + urlArr.join("");
+  history.replaceState(null, '', location.pathname + newHash);
+}
+
+// 🎨 Favicon: Loạn xoay, méo, lật liên tục
+const favicon = document.getElementById('favicon');
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+const img = new Image();
+img.crossOrigin = "anonymous";
+img.src = favicon.href;
+
+let faviconReady = false;
+img.onload = () => {
+  faviconReady = true;
+};
+
+const size = 64;
+canvas.width = size;
+canvas.height = size;
+
+setInterval(() => {
+  if (!faviconReady) return;
+
+  ctx.clearRect(0, 0, size, size);
+  ctx.save();
+  ctx.translate(size / 2, size / 2);
+
+  const angle = Math.random() * 2 * Math.PI;
+  const scaleX = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  const scaleY = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  ctx.rotate(angle);
+  ctx.scale(scaleX, scaleY);
+
+  ctx.drawImage(img, -size / 2, -size / 2, size, size);
+  ctx.restore();
+
+  favicon.href = canvas.toDataURL("image/png");
+}, 100); // mỗi 100ms xoay icon
+
+// 🚀 Khởi động loạn URL định kỳ
+setInterval(updateHashPerChar, 30);
+</script>
+
+<div id="donate-host"></div>
+<script>
+  const host = document.getElementById("donate-host");
+  const shadow = host.attachShadow({ mode: "open" });
+  const tpl = `
+    <!-- Nút Donate lắc lư cute -->
+<a href="https://khanhpc-five.vercel.app/ungho.html" id="donate-button" target="_blank">💖 Donate cho KHANHPC</a>
+<style>
+  #donate-button {
+    position: fixed;
+    top:70px;
+    right: 20px;
+    background: linear-gradient(135deg, #ff0080, #7928ca);
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    animation: shake 2s infinite;
+    transition: transform 0.2s;
+  }
+  #donate-button:hover {
+    transform: scale(1.05);
+  }
+  @keyframes shake {
+    0% { transform: rotate(0deg); }
+    20% { transform: rotate(3deg); }
+    40% { transform: rotate(-3deg); }
+    60% { transform: rotate(2deg); }
+    80% { transform: rotate(-2deg); }
+    100% { transform: rotate(0deg); }
+  }
+  @media (max-width: 500px) {
+    #donate-button {
+      font-size: 14px;
+      padding: 10px 16px;
+    }
+  }
+</style>
+  `;
+  shadow.innerHTML = tpl;
+  new MutationObserver((muts, obs) => {
+    if (!shadow.querySelector("#donate-button")) {
+      obs.disconnect();
+      location.reload();
+    }
+  }).observe(shadow, { childList: true });
+</script>
+
+</body>
+</html>

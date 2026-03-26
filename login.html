@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<link id="favicon" rel="icon" href="GD.png" type="image/png">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng nhập với Google KhanhPC</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.google.com/recaptcha/api.js?render=6Le1rRYrAAAAAKt07uCfmbqyogPZGvZlUtomhKCX&hl=vi"></script>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1f4037, #99f2c8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 420px;
+      width: 100%;
+      background-color: white;
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+      text-align: center;
+      transition: all 0.3s ease-in-out;
+    }
+    .container:hover {
+      transform: translateY(-5px);
+    }
+    .title {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #1f4037;
+    }
+    .button {
+      background-color: #1f4037;
+      color: #fff;
+      padding: 12px;
+      border-radius: 999px;
+      width: 100%;
+      font-size: 16px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .button:hover {
+      background-color: #145a32;
+    }
+    .avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 999px;
+      object-fit: cover;
+      margin: 20px auto 10px auto;
+      border: 4px solid #1f4037;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      animation: fadeIn 0.8s ease-in-out;
+    }
+    .user-name {
+      font-size: 20px;
+      font-weight: 600;
+      color: #2c3e50;
+      animation: fadeIn 1s ease-in-out;
+    }
+    .hidden {
+      display: none;
+    }
+    .loading-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 30px;
+      color: #1f4037;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    .loading-spinner {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #1f4037;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 15px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: scale(0.9); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1 class="title">Ồ, có vẻ bạn chưa đăng nhập Google KhanhPC</h1>
+    <button id="loginBtn" class="button">
+      Tiếp tục với Google
+    </button>
+
+    <div id="userInfo" class="hidden">
+      <img id="userAvatar" class="avatar" src="" alt="Avatar">
+      <p id="userName" class="user-name"></p>
+      <button id="logoutBtn" class="button mt-4">Đăng xuất</button>
+    </div>
+
+    <div id="loadingSection" class="loading-wrapper hidden">
+      <div class="loading-spinner"></div>
+      <p class="text-lg font-semibold animate-pulse">Đang chuyển hướng tới <span class="text-green-700 font-bold">KhanhPC...</span></p>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCRmdn4jSxw_ViPXV63ETKtmSBzNkrIKXg",
+      authDomain: "login-24d03.firebaseapp.com",
+      projectId: "login-24d03",
+      storageBucket: "login-24d03.appspot.com",
+      messagingSenderId: "680475305939",
+      appId: "1:680475305939:web:8b081fbc202ae7f8a53126",
+      measurementId: "G-Z9MYX4S742"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+
+    const loginBtn = document.getElementById("loginBtn");
+    const userInfo = document.getElementById("userInfo");
+    const userAvatar = document.getElementById("userAvatar");
+    const userName = document.getElementById("userName");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const loadingSection = document.getElementById("loadingSection");
+
+    loginBtn.onclick = () => {
+      loginBtn.innerHTML = `<svg class="animate-spin inline mr-2 w-5 h-5 text-white" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4z"></path>
+      </svg>Đang đăng nhập...`;
+      loginBtn.disabled = true;
+
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          const user = result.user;
+          userAvatar.src = user.photoURL;
+          userName.textContent = `Xin chào, ${user.displayName}`;
+          userInfo.classList.remove("hidden");
+          loginBtn.classList.add("hidden");
+          loadingSection.classList.remove("hidden");
+
+          setTimeout(() => {
+            window.location.href = "https://khanhpc-five.vercel.app/khanhpc.html";
+          }, 3000);
+        })
+        .catch((error) => {
+          console.error("Lỗi đăng nhập:", error.message);
+          loginBtn.disabled = false;
+          loginBtn.innerHTML = "Tiếp tục với Google";
+        });
+    };
+
+    logoutBtn.onclick = () => {
+      userInfo.classList.add("hidden");
+      loadingSection.querySelector("p").textContent = "Đang đăng xuất...";
+      loadingSection.classList.remove("hidden");
+
+      setTimeout(() => {
+        signOut(auth).then(() => {
+          loadingSection.classList.add("hidden");
+          loginBtn.classList.remove("hidden");
+          loadingSection.querySelector("p").textContent = "Đang chuyển hướng tới KhanhPC...";
+        });
+      }, 100000);
+    };
+
+// TỰ ĐỘNG CHUYỂN HƯỚNG NẾU ĐÃ ĐĂNG NHẬP
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // Đã đăng nhập → đợi 7 giây rồi chuyển hướng
+    setTimeout(() => {
+      window.location.href = "https://khanhpc-five.vercel.app/khanhpc.html";
+    }, 10000); 
+  } 
+});
+
+
+  </script>
+
+
+<script>
+const chaosChars = "!@#$%^&*()_+=-{}[]|:;<>,.?/~`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+// 🔐 Tạo độ dài ngẫu nhiên cố định 1 lần khi tải
+const FIXED_LENGTH = Math.floor(Math.random() * 91) + 60;
+let urlArr = Array.from({ length: FIXED_LENGTH }, () =>
+  chaosChars.charAt(Math.floor(Math.random() * chaosChars.length))
+);
+
+// ➤ Gắn hash ban đầu (phần sau # trên URL)
+const initialHash = "#" + urlArr.join("");
+history.replaceState(null, '', location.pathname + initialHash);
+
+// 🔁 Loạn từng ký tự trong hash, giữ nguyên độ dài
+function updateHashPerChar() {
+  for (let i = 0; i < urlArr.length; i++) {
+    if (Math.random() < 0.25) {
+      urlArr[i] = chaosChars.charAt(Math.floor(Math.random() * chaosChars.length));
+    }
+  }
+  const newHash = "#" + urlArr.join("");
+  history.replaceState(null, '', location.pathname + newHash);
+}
+
+// 🎨 Favicon: Loạn xoay, méo, lật liên tục
+const favicon = document.getElementById('favicon');
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+const img = new Image();
+img.crossOrigin = "anonymous";
+img.src = favicon.href;
+
+let faviconReady = false;
+img.onload = () => {
+  faviconReady = true;
+};
+
+const size = 64;
+canvas.width = size;
+canvas.height = size;
+
+setInterval(() => {
+  if (!faviconReady) return;
+
+  ctx.clearRect(0, 0, size, size);
+  ctx.save();
+  ctx.translate(size / 2, size / 2);
+
+  const angle = Math.random() * 2 * Math.PI;
+  const scaleX = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  const scaleY = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  ctx.rotate(angle);
+  ctx.scale(scaleX, scaleY);
+
+  ctx.drawImage(img, -size / 2, -size / 2, size, size);
+  ctx.restore();
+
+  favicon.href = canvas.toDataURL("image/png");
+}, 100); // mỗi 100ms xoay icon
+
+// 🚀 Khởi động loạn URL định kỳ
+setInterval(updateHashPerChar, 30);
+</script>
+
+<div id="donate-host"></div>
+<script>
+  const host = document.getElementById("donate-host");
+  const shadow = host.attachShadow({ mode: "open" });
+  const tpl = `
+    <!-- Nút Donate lắc lư cute -->
+<a href="https://khanhpc-five.vercel.app/ungho.html" id="donate-button" target="_blank">💖 Donate cho KHANHPC</a>
+<style>
+  #donate-button {
+    position: fixed;
+    top:70px;
+    right: 20px;
+    background: linear-gradient(135deg, #ff0080, #7928ca);
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    animation: shake 2s infinite;
+    transition: transform 0.2s;
+  }
+  #donate-button:hover {
+    transform: scale(1.05);
+  }
+  @keyframes shake {
+    0% { transform: rotate(0deg); }
+    20% { transform: rotate(3deg); }
+    40% { transform: rotate(-3deg); }
+    60% { transform: rotate(2deg); }
+    80% { transform: rotate(-2deg); }
+    100% { transform: rotate(0deg); }
+  }
+  @media (max-width: 500px) {
+    #donate-button {
+      font-size: 14px;
+      padding: 10px 16px;
+    }
+  }
+</style>
+  `;
+  shadow.innerHTML = tpl;
+  new MutationObserver((muts, obs) => {
+    if (!shadow.querySelector("#donate-button")) {
+      obs.disconnect();
+      location.reload();
+    }
+  }).observe(shadow, { childList: true });
+</script>
+
+</body>
+</html>

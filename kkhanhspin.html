@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<link id="favicon" rel="icon" href="GD.png" type="image/png">
+
+  <meta charset="UTF-8" />
+  <title>KHANHSPIN - Vòng quay may mắn</title>
+  
+  <style>
+    :root {
+      --bg: linear-gradient(to right, #1f4037, #99f2c8);
+      --text: #fff;
+      --btn: #00ffcc;
+      --popup-bg: #fff;
+      --popup-text: #111;
+    }
+    [data-theme="dark"] {
+      --bg: #111;
+      --text: #eee;
+      --btn: #ffaa00;
+      --popup-bg: #333;
+      --popup-text: #fff;
+    }
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: var(--bg);
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+      color: var(--text);
+      transition: 0.3s;
+    }
+    h1 { margin-bottom: 10px; }
+    textarea {
+      width: 90%; max-width: 500px;
+      height: 120px;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 16px;
+      resize: none;
+      margin-top: 10px;
+    }
+    button {
+      margin: 10px;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      background: var(--btn);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #000;
+      transition: 0.2s;
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+    canvas#wheel {
+      margin-top: 20px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 15px #00ffccaa;
+    }
+    #popup {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    #popup-content {
+      background: var(--popup-bg);
+      color: var(--popup-text);
+      padding: 40px;
+      font-size: 30px;
+      border-radius: 20px;
+      animation: popup 0.5s ease-out;
+      box-shadow: 0 0 20px #00ffccaa;
+      position: relative;
+    }
+    @keyframes popup {
+      from { transform: scale(0.5); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    #confetti-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+    }
+    #winnersList {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+    #darkToggle {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      padding: 6px 12px;
+      font-size: 14px;
+    }
+  </style>
+  <div id="notification-bar" style="
+    width: 100%;
+    background-color: #ffcc00;
+    color: #000;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 2px solid #cc9900;
+    box-sizing: border-box;
+    position: relative;
+">
+  <div id="scrolling-wrapper" style="
+      display: inline-block;
+      white-space: nowrap;
+      will-change: transform;
+      animation: scroll-infinite 30s linear infinite;
+  ">
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Đôi khi css của web sẽ bị mất. Nếu các bạn muốn làm web thì có thể liên hệ mình qua website: 
+      <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com</a>
+       © KHANHPC 2025| mọi quyền được bảo lưu
+    </span>
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Đôi khi css của web sẽ bị mất. Nếu các bạn muốn làm web thì có thể liên hệ mình qua website: 
+      <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com</a>
+       © KHANHPC 2025| mọi quyền được bảo lưu
+    </span>
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Đôi khi css của web sẽ bị mất. Nếu các bạn muốn làm web thì có thể liên hệ mình qua website: 
+      <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com</a>
+       © KHANHPC 2025| mọi quyền được bảo lưu
+    </span>
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Đôi khi css của web sẽ bị mất. Nếu các bạn muốn làm web thì có thể liên hệ mình qua website: 
+      <a href="https://aikhanh.onrender.com" target="_blank" style="color: #000; text-decoration: underline;">https://aikhanh.onrender.com</a>
+       © KHANHPC 2025| mọi quyền được bảo lưu
+    </span>
+  </div>
+</div>
+<style>
+@keyframes scroll-infinite {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-25%);
+  }
+}
+</style>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+  <button id="darkToggle" onclick="toggleTheme()">🌙</button>
+  <h1>🎡 KHANHSPIN - Vòng quay may mắn 🎡</h1>
+  <textarea id="namesInput" placeholder="Nhập mỗi tên 1 dòng..."></textarea><br>
+  <button onclick="drawWheel()">🎨 Vẽ vòng quay</button>
+  <button onclick="spin()">🎯 Quay số</button>
+  <button onclick="removeWinner()">🧹 Xoá tên đã trúng</button>
+  <button onclick="resetNames()">🔄 Reset tất cả</button>
+  <canvas id="wheel" width="400" height="400"></canvas>
+  <div id="popup">
+    <div id="popup-content">
+      🎉 CHÚC MỪNG: <span id="winnerName"></span> 🎉<br><br>
+      <button onclick="removeWinner()" style="background: #ff5f5f;">🗑 Xoá tên này</button>
+      <button onclick="closePopup()" style="background: #ccc;">❌ Đóng</button>
+    </div>
+  </div>
+  <div id="winnersList">🏆 Người đã trúng: <span id="pastWinners"></span></div>
+  <canvas id="confetti-canvas"></canvas>
+  <script>
+    const canvas = document.getElementById("wheel");
+    const ctx = canvas.getContext("2d");
+    let names = [];
+    let originalNames = [];
+    let anglePerSlice = 0;
+    let rotation = 0;
+    let spinning = false;
+    let winner = "";
+    let pastWinners = [];
+    function drawWheel() {
+      const input = document.getElementById("namesInput").value.trim();
+      names = input.split('\n').map(n => n.trim()).filter(n => n);
+      if (names.length < 2) return;
+      originalNames = [...names];
+      anglePerSlice = 2 * Math.PI / names.length;
+      drawRotatedWheel(rotation);
+    }
+    function drawRotatedWheel(deg) {
+      const angleOffset = (deg * Math.PI) / 180;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
+      ctx.translate(200, 200);
+      ctx.rotate(angleOffset);
+      ctx.translate(-200, -200);
+      for (let i = 0; i < names.length; i++) {
+        const startAngle = i * anglePerSlice;
+        const endAngle = startAngle + anglePerSlice;
+        ctx.beginPath();
+        ctx.moveTo(200, 200);
+        ctx.arc(200, 200, 200, startAngle, endAngle);
+        ctx.fillStyle = i % 2 ? '#00c3ff' : '#ffe100';
+        ctx.fill();
+        ctx.stroke();
+        ctx.save();
+        ctx.translate(200, 200);
+        ctx.rotate(startAngle + anglePerSlice / 2);
+        ctx.textAlign = "right";
+        ctx.fillStyle = (names[i] === winner) ? "#ff0055" : "#000";
+        ctx.font = "16px sans-serif";
+        ctx.fillText(names[i], 180, 10);
+        ctx.restore();
+      }
+      ctx.restore();
+      ctx.fillStyle = "#ff0055";
+      ctx.beginPath();
+      ctx.moveTo(380, 200);
+      ctx.lineTo(400, 190);
+      ctx.lineTo(400, 210);
+      ctx.closePath();
+      ctx.fill();
+    }
+    function spin() {
+      if (spinning || names.length < 2) return;
+      spinning = true;
+      winner = "";
+      let spinAngle = Math.random() * 360 + 1440;
+      const duration = 4000;
+      const start = performance.now();
+      const spinAudio = new Audio("https://www.soundjay.com/button/beep-07.mp3");
+      spinAudio.play();
+      function animate(t) {
+        let time = t - start;
+        if (time > duration) time = duration;
+        const easeOut = 1 - Math.pow(1 - time / duration, 4);
+        const angle = easeOut * spinAngle;
+        rotation = angle;
+        drawRotatedWheel(rotation);
+        if (time < duration) {
+          requestAnimationFrame(animate);
+        } else {
+          setTimeout(() => {
+            showWinner();
+            spinning = false;
+          }, 300);
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+function showWinner() {
+  const totalRotationDeg = rotation % 360;
+  const pointerAngleDeg = 0; // vì mũi tên nằm bên phải (3 giờ), tương ứng góc 0 độ
+  const relativeDeg = (360 - totalRotationDeg + pointerAngleDeg) % 360;
+  const sliceDeg = 360 / names.length;
+  const index = Math.floor(relativeDeg / sliceDeg);
+  winner = names[index];
+  document.getElementById("winnerName").textContent = winner;
+  document.getElementById("popup").style.display = "flex";
+  const bell = new Audio("https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3");
+  bell.play();
+  const myConfetti = confetti.create(document.getElementById('confetti-canvas'), {
+    resize: true,
+    useWorker: true
+  });
+  myConfetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
+  pastWinners.push(winner);
+  updateWinnerList();
+}
+    function removeWinner() {
+      if (!winner) return alert("Chưa có ai trúng để xoá 😅");
+      names = names.filter(name => name !== winner);
+      document.getElementById("namesInput").value = names.join("\n");
+      winner = "";
+      drawWheel();
+      closePopup();
+    }
+    function resetNames() {
+      names = [...originalNames];
+      document.getElementById("namesInput").value = names.join("\n");
+      pastWinners = [];
+      updateWinnerList();
+      drawWheel();
+    }
+    function updateWinnerList() {
+      document.getElementById("pastWinners").textContent = pastWinners.join(", ") || "Chưa có ai cả 😁";
+    }
+    function closePopup() {
+      document.getElementById("popup").style.display = "none";
+    }
+    function toggleTheme() {
+      document.body.dataset.theme = document.body.dataset.theme === "dark" ? "" : "dark";
+    }
+    document.getElementById("namesInput").addEventListener("input", () => {
+      drawWheel();
+    });
+  </script>
+  <script>
+  const favicon = document.getElementById('favicon');
+  let angle = 0;
+  function rotateFavicon() {
+    const canvas = document.createElement('canvas');
+    const img = new Image();
+    img.src = favicon.href;
+    img.onload = function () {
+      const size = 64;
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, size, size);
+      ctx.translate(size / 2, size / 2);
+      ctx.rotate(angle * Math.PI / 180);
+      ctx.translate(-size / 2, -size / 2);
+      ctx.drawImage(img, 0, 0, size, size);
+      const newFavicon = canvas.toDataURL('image/png');
+      favicon.href = newFavicon;
+    };
+    angle = (angle + 5) % 360;
+  }
+  setInterval(rotateFavicon, 100); // mỗi 100ms xoay 5 độ
+</script>
+
+<script>
+const chaosChars = "!@#$%^&*()_+=-{}[]|:;<>,.?/~`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+// 🔐 Tạo độ dài ngẫu nhiên cố định 1 lần khi tải
+const FIXED_LENGTH = Math.floor(Math.random() * 91) + 60;
+let urlArr = Array.from({ length: FIXED_LENGTH }, () =>
+  chaosChars.charAt(Math.floor(Math.random() * chaosChars.length))
+);
+
+// ➤ Gắn hash ban đầu (phần sau # trên URL)
+const initialHash = "#" + urlArr.join("");
+history.replaceState(null, '', location.pathname + initialHash);
+
+// 🔁 Loạn từng ký tự trong hash, giữ nguyên độ dài
+function updateHashPerChar() {
+  for (let i = 0; i < urlArr.length; i++) {
+    if (Math.random() < 0.25) {
+      urlArr[i] = chaosChars.charAt(Math.floor(Math.random() * chaosChars.length));
+    }
+  }
+  const newHash = "#" + urlArr.join("");
+  history.replaceState(null, '', location.pathname + newHash);
+}
+
+// 🎨 Favicon: Loạn xoay, méo, lật liên tục
+const favicon = document.getElementById('favicon');
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+const img = new Image();
+img.crossOrigin = "anonymous";
+img.src = favicon.href;
+
+let faviconReady = false;
+img.onload = () => {
+  faviconReady = true;
+};
+
+const size = 64;
+canvas.width = size;
+canvas.height = size;
+
+setInterval(() => {
+  if (!faviconReady) return;
+
+  ctx.clearRect(0, 0, size, size);
+  ctx.save();
+  ctx.translate(size / 2, size / 2);
+
+  const angle = Math.random() * 2 * Math.PI;
+  const scaleX = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  const scaleY = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  ctx.rotate(angle);
+  ctx.scale(scaleX, scaleY);
+
+  ctx.drawImage(img, -size / 2, -size / 2, size, size);
+  ctx.restore();
+
+  favicon.href = canvas.toDataURL("image/png");
+}, 100); // mỗi 100ms xoay icon
+
+// 🚀 Khởi động loạn URL định kỳ
+setInterval(updateHashPerChar, 30);
+</script>
+
+<div id="donate-host"></div>
+<script>
+  const host = document.getElementById("donate-host");
+  const shadow = host.attachShadow({ mode: "open" });
+  const tpl = `
+    <!-- Nút Donate lắc lư cute -->
+<a href="https://khanhpc-five.vercel.app/ungho.html" id="donate-button" target="_blank">💖 Donate cho KHANHPC</a>
+<style>
+  #donate-button {
+    position: fixed;
+    top:70px;
+    right: 20px;
+    background: linear-gradient(135deg, #ff0080, #7928ca);
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    animation: shake 2s infinite;
+    transition: transform 0.2s;
+  }
+  #donate-button:hover {
+    transform: scale(1.05);
+  }
+  @keyframes shake {
+    0% { transform: rotate(0deg); }
+    20% { transform: rotate(3deg); }
+    40% { transform: rotate(-3deg); }
+    60% { transform: rotate(2deg); }
+    80% { transform: rotate(-2deg); }
+    100% { transform: rotate(0deg); }
+  }
+  @media (max-width: 500px) {
+    #donate-button {
+      font-size: 14px;
+      padding: 10px 16px;
+    }
+  }
+</style>
+  `;
+  shadow.innerHTML = tpl;
+  new MutationObserver((muts, obs) => {
+    if (!shadow.querySelector("#donate-button")) {
+      obs.disconnect();
+      location.reload();
+    }
+  }).observe(shadow, { childList: true });
+</script>
+
+</body>
+</html>

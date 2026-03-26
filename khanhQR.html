@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<link id="favicon" rel="icon" href="GD.png" type="image/png">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nhờ khánh tạo mã QR</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://www.google.com/recaptcha/api.js?render=6Le1rRYrAAAAAKt07uCfmbqyogPZGvZlUtomhKCX&hl=vi"></script>
+  
+  <style>
+    /* Các style của bạn */    body {
+      background: linear-gradient(135deg, #00e5ff, #ff4081, #8e24aa);
+      background-size: 400% 400%;
+      animation: gradientBackground 5s ease infinite;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Arial', sans-serif;
+    }
+
+    h1 {
+      font-size: 80px;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      background: linear-gradient(45deg, #ff4081, #ff9800, #00e5ff, #8e24aa);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    h1:hover {
+      transform: scale(1.2) rotate(-10deg);
+      text-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+      background: linear-gradient(45deg, #8e24aa, #ff4081, #00e5ff, #ff9800);
+      -webkit-background-clip: text;
+    }
+
+    h1:active {
+      transform: scale(1) rotate(0deg);
+      color: #ffffff;
+      text-shadow: none;
+      background: #00e5ff;
+      -webkit-background-clip: text;
+    }
+
+    @keyframes gradientBackground {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .copyright {
+      border-radius: 100px;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0, 123, 255, 0.95);
+      color: white;
+      text-align: center;
+      padding: 15px;
+      font-size: 16px;
+      font-weight: bold;
+      box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.2);
+      transition: background 0.3s ease-in-out;
+      animation: bounce 0.5s infinite alternate ease-in-out;
+    }
+
+    .cat-container {
+      display: none;
+      position: absolute;
+      left: 50%;
+      bottom: 50px;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+
+    .cat-img {
+      width: 100px;
+      animation: bounce 1s infinite alternate ease-in-out;
+    }
+
+    .speech-bubble {
+      background: white;
+      color: black;
+      padding: 8px 12px;
+      border-radius: 10px;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+      margin-top: 10px;
+    }
+
+    @keyframes bounce {
+      0% {
+        transform: translateY(0px);
+      }
+      100% {
+        transform: translateY(-5px);
+      }
+    }  </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-4">
+  <div class="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full">
+    <h1 class="text-3xl font-bold mb-6 text-center text-indigo-600">Tạo mã QR cùng khanhPC</h1>
+
+    <input id="text-input" type="text" placeholder="Nhập văn bản hoặc URL..." class="w-full p-3 border border-gray-300 rounded-xl mb-4 focus:ring-2 focus:ring-indigo-400 focus:outline-none" autocomplete="off">
+
+    <label for="color-input" class="block mb-2 text-sm font-medium text-gray-700">Màu sắc mã QR</label>
+    <input id="color-input" type="color" value="#000000" class="w-full mb-4 p-3 border border-gray-300 rounded-xl">
+
+    <label for="size-input" class="block mb-2 text-sm font-medium text-gray-700">Kích thước mã QR (px)</label>
+    <input id="size-input" type="number" value="200" min="100" max="500" class="w-full mb-4 p-3 border border-gray-300 rounded-xl">
+
+    <label for="icon-input" class="block mb-2 text-sm font-medium text-gray-700">Chọn Icon (png, jpg, jpeg)</label>
+<div class="relative">
+  <input id="icon-input" type="file" accept="image/png, image/jpg, image/jpeg" class="absolute inset-0 w-full opacity-0 cursor-pointer">
+  <button class="w-full bg-indigo-500 text-white py-3 px-6 rounded-xl flex justify-center items-center hover:bg-indigo-600 transition duration-300">
+    <span class="mr-2">Chọn Tệp</span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7"></path>
+    </svg>
+  </button>
+</div>
+<br>
+
+    <button onclick="generateQRCode()" class="w-full bg-indigo-500 text-white py-3 rounded-xl text-lg font-semibold hover:bg-indigo-600 transition">
+      Tạo mã QR
+    </button>
+
+    <div id="loading-bar-container" class="w-full mt-6 hidden">
+      <div class="w-full bg-gray-200 rounded-full h-2.5">
+        <div id="loading-bar" class="bg-indigo-500 h-2.5 rounded-full" style="width: 0%"></div>
+      </div>
+      <p id="loading-text" class="text-center text-gray-500 mt-2">Đang tạo mã QR...</p>
+    </div>
+
+    <div id="qrcode" class="mt-6 flex justify-center"></div>
+
+    <div id="download-container" class="mt-6 hidden text-center">
+      <a id="download-btn" href="#" download="QRCode.png" class="bg-green-500 text-white py-2 px-4 rounded-xl font-semibold hover:bg-green-600 transition" onclick="showDownloadSuccess()">
+        Tải mã QR
+      </a>
+    </div>
+  </div>
+<br>
+<br>
+<br>
+  <div class="copyright" id="copyright">
+    © KhanhPC 2025 - Mọi quyền được bảo lưu
+    <div class="cat-container" id="cat">
+      <img src="meo.gif" alt="Mèo đáng yêu" class="cat-img">
+      <div class="speech-bubble">Này! Tôi biết bạn đang làm gì... Đây là web của Hoàng Quốc Khánh đấy!</div>
+    </div>
+  </div>
+
+  <script>
+    let qrGenerated = false;
+    let iconImage = null;
+
+    function generateQRCode() {
+      const textInput = document.getElementById('text-input');
+      const colorInput = document.getElementById('color-input').value;
+      const sizeInput = document.getElementById('size-input').value;
+      const text = textInput.value;
+      const qrCodeContainer = document.getElementById('qrcode');
+      const loadingBarContainer = document.getElementById('loading-bar-container');
+      const loadingBar = document.getElementById('loading-bar');
+      const loadingText = document.getElementById('loading-text');
+      const downloadContainer = document.getElementById('download-container');
+      const downloadBtn = document.getElementById('download-btn');
+      const generateBtn = document.querySelector('button'); 
+
+      // Xử lý file icon
+      const iconInput = document.getElementById('icon-input');
+      const file = iconInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          iconImage = new Image();
+          iconImage.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      if (text.trim() === '') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi!',
+          text: 'Vui lòng nhập văn bản hoặc URL trước khi tạo mã QR.',
+        });
+        return;
+      }
+
+      generateBtn.disabled = true;
+      textInput.disabled = true;
+      generateBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+      qrCodeContainer.innerHTML = '';
+      loadingBarContainer.classList.remove('hidden');
+      loadingBar.style.width = '0%';
+      loadingText.textContent = 'Khánh đang tạo cho bạn một mã QR... 0%';
+      qrGenerated = false;
+      downloadContainer.classList.add('hidden');
+
+      let progress = 0;
+      const randomLoadTime = Math.floor(Math.random() * (10000 - 7000 + 1)) + 7000;
+      const intervalTime = randomLoadTime / 100;
+      const interval = setInterval(() => {
+        progress += 1;
+        loadingBar.style.width = progress + '%';
+        loadingText.textContent = `Khánh đang tạo cho bạn một mã QR... ${progress}%`;
+
+        if (progress >= 100) {
+          clearInterval(interval);
+          setTimeout(() => {
+            QRCode.toCanvas(text, { 
+              width: parseInt(sizeInput), 
+              color: {
+                dark: colorInput,  // Màu của mã QR
+                light: "#ffffff"   // Màu nền
+              }
+            }, function (error, canvas) {
+              if (error) {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Đã xảy ra lỗi!',
+                  text: 'Không thể tạo mã QR. Vui lòng thử lại.',
+                });
+
+                generateBtn.disabled = false;
+                textInput.disabled = false;
+                generateBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                return;
+              }
+
+              if (iconImage) {
+                const ctx = canvas.getContext('2d');
+                const qrSize = canvas.width;
+                const iconSize = qrSize / 5; // Điều chỉnh kích thước icon
+                const x = (qrSize - iconSize) / 2;
+                const y = (qrSize - iconSize) / 2;
+                
+                // Vẽ icon vào chính giữa mã QR
+                ctx.drawImage(iconImage, x, y, iconSize, iconSize);
+              }
+
+              qrCodeContainer.appendChild(canvas);
+              loadingBarContainer.classList.add('hidden');
+              Swal.fire({
+                icon: 'success',
+                title: 'Thành công!',
+                text: 'Mã QR đã được tạo thành công!',
+                timer: 2000,
+                showConfirmButton: false,
+              });
+              downloadContainer.classList.remove('hidden');
+
+              const imageUrl = canvas.toDataURL('image/png');
+              downloadBtn.href = imageUrl;
+
+              qrGenerated = true;
+
+              generateBtn.disabled = false;
+              textInput.disabled = false;
+              generateBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            });
+          }, 500);
+        }
+      }, intervalTime);
+    }
+
+    document.getElementById('download-btn').addEventListener('click', function(event) {
+      if (!qrGenerated) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi!',
+          text: 'Chưa có mã QR để tải. Vui lòng tạo mã QR trước!',
+        });
+        event.preventDefault();
+        return;
+      }
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Thành công!',
+        text: 'Mã QR đã được tải xuống!',
+        timer: 1500,
+        showConfirmButton: false,
+      });
+    });
+
+    document.getElementById("copyright").addEventListener("mouseover", () => {
+      document.getElementById("cat").style.display = "block";
+    });
+
+    document.getElementById("copyright").addEventListener("mouseleave", () => {
+      document.getElementById("cat").style.display = "none";
+    });
+
+    document.addEventListener("keydown", function(event) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
+      }
+    }, true);
+  </script>
+
+<script>
+const chaosChars = "!@#$%^&*()_+=-{}[]|:;<>,.?/~`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+// 🔐 Tạo độ dài ngẫu nhiên cố định 1 lần khi tải
+const FIXED_LENGTH = Math.floor(Math.random() * 91) + 60;
+let urlArr = Array.from({ length: FIXED_LENGTH }, () =>
+  chaosChars.charAt(Math.floor(Math.random() * chaosChars.length))
+);
+
+// ➤ Gắn hash ban đầu (phần sau # trên URL)
+const initialHash = "#" + urlArr.join("");
+history.replaceState(null, '', location.pathname + initialHash);
+
+// 🔁 Loạn từng ký tự trong hash, giữ nguyên độ dài
+function updateHashPerChar() {
+  for (let i = 0; i < urlArr.length; i++) {
+    if (Math.random() < 0.25) {
+      urlArr[i] = chaosChars.charAt(Math.floor(Math.random() * chaosChars.length));
+    }
+  }
+  const newHash = "#" + urlArr.join("");
+  history.replaceState(null, '', location.pathname + newHash);
+}
+
+// 🎨 Favicon: Loạn xoay, méo, lật liên tục
+const favicon = document.getElementById('favicon');
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+const img = new Image();
+img.crossOrigin = "anonymous";
+img.src = favicon.href;
+
+let faviconReady = false;
+img.onload = () => {
+  faviconReady = true;
+};
+
+const size = 64;
+canvas.width = size;
+canvas.height = size;
+
+setInterval(() => {
+  if (!faviconReady) return;
+
+  ctx.clearRect(0, 0, size, size);
+  ctx.save();
+  ctx.translate(size / 2, size / 2);
+
+  const angle = Math.random() * 2 * Math.PI;
+  const scaleX = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  const scaleY = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  ctx.rotate(angle);
+  ctx.scale(scaleX, scaleY);
+
+  ctx.drawImage(img, -size / 2, -size / 2, size, size);
+  ctx.restore();
+
+  favicon.href = canvas.toDataURL("image/png");
+}, 100); // mỗi 100ms xoay icon
+
+// 🚀 Khởi động loạn URL định kỳ
+setInterval(updateHashPerChar, 30);
+</script>
+
+<div id="donate-host"></div>
+<script>
+  const host = document.getElementById("donate-host");
+  const shadow = host.attachShadow({ mode: "open" });
+  const tpl = `
+    <!-- Nút Donate lắc lư cute -->
+<a href="https://khanhpc-five.vercel.app/ungho.html" id="donate-button" target="_blank">💖 Donate cho KHANHPC</a>
+<style>
+  #donate-button {
+    position: fixed;
+    top:70px;
+    right: 20px;
+    background: linear-gradient(135deg, #ff0080, #7928ca);
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    animation: shake 2s infinite;
+    transition: transform 0.2s;
+  }
+  #donate-button:hover {
+    transform: scale(1.05);
+  }
+  @keyframes shake {
+    0% { transform: rotate(0deg); }
+    20% { transform: rotate(3deg); }
+    40% { transform: rotate(-3deg); }
+    60% { transform: rotate(2deg); }
+    80% { transform: rotate(-2deg); }
+    100% { transform: rotate(0deg); }
+  }
+  @media (max-width: 500px) {
+    #donate-button {
+      font-size: 14px;
+      padding: 10px 16px;
+    }
+  }
+</style>
+  `;
+  shadow.innerHTML = tpl;
+  new MutationObserver((muts, obs) => {
+    if (!shadow.querySelector("#donate-button")) {
+      obs.disconnect();
+      location.reload();
+    }
+  }).observe(shadow, { childList: true });
+</script>
+
+</body>
+</html>
