@@ -1,0 +1,713 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<link id="favicon" rel="icon" href="GD.png" type="image/png">
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+  <script src="https://www.google.com/recaptcha/api.js?render=6Le1rRYrAAAAAKt07uCfmbqyogPZGvZlUtomhKCX&hl=vi"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Về KhánhPC</title>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+
+
+    body {
+      background: linear-gradient(135deg, #00e5ff, #ff4081, #8e24aa);
+      background-size: 400% 400%;
+      animation: gradientBackground 5s ease infinite;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow: auto;
+      font-family: 'Arial', sans-serif;
+    }
+
+    h1 {
+      font-size: 80px;
+      color: transparent;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      cursor: pointer;
+      background: linear-gradient(45deg, #ff4081, #ff9800, #00e5ff, #8e24aa);
+      -webkit-background-clip: text;
+      transition: all 0.3s ease;
+    }
+
+    h1:hover {
+      transform: scale(1.2) rotate(-10deg);
+      background: linear-gradient(45deg, #8e24aa, #ff4081, #00e5ff, #ff9800);
+      -webkit-background-clip: text;
+    }
+
+    @keyframes gradientBackground {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    #menu {
+      display: none;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: all 0.5s ease;
+    }
+
+    #menu.show {
+      display: grid;
+      opacity: 1;
+      transform: scale(1);
+      
+    }
+
+    @keyframes flyInFromLeft {
+      from {
+        transform: translateX(-100%) scale(0.8);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes flyInFromRight {
+      from {
+        transform: translateX(100%) scale(0.8);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes flyInFromTop {
+      from {
+        transform: translateY(-100%) scale(0.8);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes flyInFromBottom {
+      from {
+        transform: translateY(100%) scale(0.8);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes flyOutLeft {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(-100%) scale(0.8);
+        opacity: 0;
+      }
+    }
+
+    @keyframes flyOutRight {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(100%) scale(0.8);
+        opacity: 0;
+      }
+    }
+
+    @keyframes flyOutTop {
+      from {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(-100%) scale(0.8);
+        opacity: 0;
+      }
+    }
+
+    @keyframes flyOutBottom {
+      from {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(100%) scale(0.8);
+        opacity: 0;
+      }
+    }
+
+    .fly-animation {
+      animation-duration: 0.8s;
+      animation-fill-mode: both;
+    }
+
+    .fly-out-animation {
+      animation-duration: 0.8s;
+      animation-fill-mode: both;
+    }
+
+    /* Nút */
+    #startButton, #stopButton {
+      margin-top: 20px;
+      padding: 12px 30px;
+      font-size: 18px;
+      background-color: #FF4081;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+
+#stopButton {
+  background-color: #FF5722;
+  margin-top: -10px; /* Di chuyển lên trên một chút */
+}
+
+
+    #startButton:hover, #stopButton:hover {
+      background-color: #FF80AB;
+      transform: scale(1.1);
+            transform: scale(1.2) rotate(-10deg);
+      
+      
+    }
+
+    /* Hiệu ứng hover cho các tùy chọn */
+  a:hover {
+    transform: scale(1.3); /* Tăng kích thước mạnh hơn khi hover */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Hiệu ứng bóng đổ khi hover */
+  }
+
+  a {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Đảm bảo chuyển động mượt mà */
+  }
+
+  #menu a {
+    transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out; /* Tạo hiệu ứng cho các liên kết trong menu */
+    transform-origin: center center; /* Đảm bảo phần tử co giãn từ trung tâm */
+  }
+
+  #menu a:hover {
+    transform: scale(1.3); /* Tăng kích thước khi hover */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); /* Tăng hiệu ứng bóng đổ */
+  }
+/* Đảm bảo rằng hiệu ứng chỉ áp dụng cho phần tử có ID cụ thể và không bị ảnh hưởng bởi mã khác */
+#element-id {
+    transition: transform 1s ease !important, box-shadow 1s ease !important; /* Tăng thời gian hiệu ứng */
+    transform: scale(1); /* Đảm bảo phần tử bắt đầu ở kích thước bình thường */
+}
+
+/* Khi rê chuột vào phần tử */
+#element-id:hover {
+    transform: scale(1.1) !important; /* Phóng to phần tử lên 10% */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7) !important; /* Thêm bóng đổ */
+}
+
+
+    .copyright {
+    border-radius:100px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 123, 255, 0.95);
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0px -5px 10px rgba(0,0,0,0.2);
+    transition: background 0.3s ease-in-out;
+    animation: bounce 0.5s infinite alternate ease-in-out;
+}
+
+.cat-container {
+    display: none;
+    position: absolute;
+    left: 50%;
+    bottom: 50px;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+.cat-img {
+    width: 100px;
+    animation: bounce 1s infinite alternate ease-in-out;
+}
+
+.speech-bubble {
+    background: #EAE0C8;
+    color: black;
+    padding: 8px 12px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    margin-top: 10px;
+}
+
+@keyframes bounce {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-5px); }
+}
+
+  @media (max-width: 640px) {
+    h1 {
+      font-size: 40px; /* Nhỏ lại trên điện thoại */
+    }
+  }
+
+  @media (min-width: 641px) and (max-width: 1024px) {
+    h1 {
+      font-size: 60px; /* Trung bình */
+    }
+  }
+
+  @media (min-width: 1025px) {
+    h1 {
+      font-size: 80px; /* PC */
+    }
+  }
+
+/* Đối với Chrome, Safari */
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* Ẩn thanh cuộn nhưng vẫn có thể cuộn */
+html, body {
+    overflow: hidden;
+}
+
+body {
+    overflow-y: scroll;
+}
+
+  </style>
+
+</head>
+<body class="flex flex-col min-h-screen p-4">
+
+
+  <div class="text-center px-4">
+<h1 class="mb-6 text-5xl sm:text-6xl font-bold text-white">Bạn muốn biết gì về mình 😊</h1>
+
+<!-- Nút bắt đầu khám phá -->
+<button id="startButton" onclick="showMenuWithAnimation()">Bắt đầu khám phá</button>
+
+<!-- Nút không khám phá nữa -->
+<br>
+<button id="stopButton" onclick="hideMenu()" style="display: none;">Không khám phá nữa</button>
+<br>
+<br>
+<br>
+<!-- Danh sách menu bị ẩn -->
+<div id="menu" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 w-full max-w-7xl mx-auto p-4">
+
+  
+  <!-- Giới thiệu -->
+  <a href="gioithieu.html" id="element-id" class="bg-white rounded-2xl shadow-lg p-6 hover:bg-blue-50 transition-all duration-300 border-4 border-blue-400 hover:scale-105 transform hover:shadow-2xl">
+    <img src="home.gif" class="mx-auto w-16 mb-4" alt="Giới thiệu">
+    <h2 class="text-xl font-semibold text-blue-600">Giới thiệu</h2>
+    <p class="text-gray-600 text-sm mt-1">Thông tin về chúng tôi</p>
+  </a>
+
+  <!-- Liên hệ -->
+  <a href="lienhe.html" id="element-id" class="bg-white rounded-2xl shadow-lg p-6 hover:bg-green-50 transition-all duration-300 border-4 border-green-400 hover:scale-105 transform hover:shadow-2xl">
+    <img src="lienhe.gif" class="mx-auto w-16 mb-4" alt="Liên hệ">
+    <h2 class="text-xl font-semibold text-green-600">Liên hệ</h2>
+    <p class="text-gray-600 text-sm mt-1">Kết nối với chúng tôi</p>
+  </a>
+
+  <!-- Khánh vô tri -->
+  <a href="khanhvotri.html" id="element-id" class="bg-white rounded-2xl shadow-lg p-6 hover:bg-yellow-50 transition-all duration-300 border-4 border-yellow-400 hover:scale-105 transform hover:shadow-2xl">
+    <img src="cube.gif" class="mx-auto w-16 mb-4" alt="Khánh vô tri">
+    <h2 class="text-xl font-semibold text-yellow-600">Khánh vô tri</h2>
+    <p class="text-gray-600 text-sm mt-1">Khám phá gì đó</p>
+  </a>
+
+  <!-- Bản đồ -->
+  <a href="bando.html" id="element-id" class="bg-white rounded-2xl shadow-lg p-6 hover:bg-purple-50 transition-all duration-300 border-4 border-purple-400 hover:scale-105 transform hover:shadow-2xl">
+    <img src="map.gif" class="mx-auto w-16 mb-4" alt="Bản đồ">
+    <h2 class="text-xl font-semibold text-purple-600">Bản đồ</h2>
+    <p class="text-gray-600 text-sm mt-1">Xem vị trí trên bản đồ</p>
+  </a>
+
+  <!-- YouTube -->
+  <a href="yt.html" id="element-id" class="bg-white rounded-2xl shadow-lg p-6 hover:bg-red-50 transition-all duration-300 border-4 border-red-400 hover:scale-105 transform hover:shadow-2xl">
+    <img src="YT.gif" class="mx-auto w-16 mb-4" alt="YouTube">
+    <h2 class="text-xl font-semibold text-red-600">YouTube</h2>
+    <p class="text-gray-600 text-sm mt-1">Xem YouTube của tôi</p>
+  </a>
+
+  <!-- Nhờ Khánh giúp đỡ -->
+  <a href="khanhhelp.html" id="element-id" class="bg-white rounded-2xl shadow-lg p-6 hover:bg-gray-100 transition-all duration-300 border-4 border-teal-500 hover:scale-105 transform hover:shadow-2xl">
+    <img src="helpp.gif" class="mx-auto w-16 mb-4" alt="G-Dragon icon">
+    <h2 class="text-xl font-semibold text-teal-700">Nhờ Khánh giúp đỡ</h2>
+    <p class="text-gray-600 text-sm mt-1">Cần hỗ trợ? Nhấn vào đây!</p>
+  </a>
+
+  <!-- Thực hành cùng Khánh -->
+  <a href="hoctapweb.html" id="element-id" class="bg-white rounded-2xl shadow-lg p-6 hover:bg-gray-100 transition-all duration-300 border-4 border-indigo-600 hover:scale-105 transform hover:shadow-2xl">
+    <img src="hocweb.gif" class="mx-auto w-16 mb-4" alt="Lập trình icon">
+    <h2 class="text-xl font-semibold text-indigo-700">Thực hành cùng Khánh</h2>
+    <p class="text-gray-600 text-sm mt-1">Thực hành ngay</p>
+  </a>
+
+  <!-- Website của Khánh en -->
+  <a href="khanhpc.html" id="element-id" class="bg-white rounded-2xl shadow-lg p-6 hover:bg-gray-100 transition-all duration-300 border-4 border-orange-500 hover:scale-105 transform hover:shadow-2xl">
+    <img src="github.gif" class="mx-auto w-16 mb-4" alt="GitHub icon">
+    <h2 class="text-xl font-semibold text-orange-700">Website của Khánh</h2>
+    <p class="text-gray-600 text-sm mt-1">Truy cập trang chính</p>
+  </a>
+<a href="khanhen.html" id="element-id" class="bg-white rounded-2xl shadow-lg p-6 hover:bg-gray-100 transition-all duration-300 border-4 border-green-500 hover:scale-105 transform hover:shadow-2xl">
+  <img src="github.gif" class="mx-auto w-16 mb-4" alt="GitHub icon">
+  <h2 class="text-xl font-semibold text-green-700">Website of khanh</h2>
+  <p class="text-gray-600 text-sm mt-1">Visit main page</p>
+</a>
+
+  <!-- Tải game Khánh -->
+  <a href="khanhgd.html" id="element-id" class="bg-white rounded-2xl shadow-lg p-6 hover:bg-gray-100 transition-all duration-300 border-4 border-black hover:scale-105 transform hover:shadow-2xl">
+    <img src="GAME.gif" class="mx-auto w-16 mb-4" alt="Game controller icon">
+    <h2 class="text-xl font-semibold text-black">Tải game cùng Khánh</h2>
+    <p class="text-gray-600 text-sm mt-1">Tải game ngay bây giờ!</p>
+  </a>
+
+  <!-- Mod game -->
+  <a href="geodekhanhgd.html" id="element-id" class="bg-white rounded-2xl shadow-lg p-6 hover:bg-gray-100 transition-all duration-300 border-4 border-blue-800 hover:scale-105 transform hover:shadow-2xl">
+    <img src="MOD.gif" class="mx-auto w-16 mb-4" alt="Hack icon">
+    <h2 class="text-xl font-semibold text-blue-800">Mod game cùng Khánh</h2>
+    <p class="text-gray-600 text-sm mt-1">Chỉnh sửa game dễ dàng</p>
+  </a>
+
+  <!-- Nhờ Khánh làm web -->
+  <a href="yeucauweb.html" id="element-id" class="bg-white rounded-2xl shadow-lg p-6 hover:bg-gray-100 transition-all duration-300 border-4 border-blue-600 hover:scale-105 transform hover:shadow-2xl">
+    <img src="help.gif" class="mx-auto w-16 mb-4" alt="Earth icon">
+    <h2 class="text-xl font-semibold text-blue-600">Nhờ Khánh làm web</h2>
+    <p class="text-gray-600 text-sm mt-1">Yêu cầu hỗ trợ tạo web</p>
+  </a>
+  <!--cungfkhanhhcpy-->
+<a href="py.html" id="element-id" class="bg-white rounded-2xl shadow-lg p-6 hover:bg-gray-100 transition-all duration-300 border-4 border-red-600 hover:scale-105 transform hover:shadow-2xl">
+  <img src="PY.gif" class="mx-auto w-16 mb-4" alt="Python icon">
+  <h2 class="text-xl font-semibold text-blue-600">Học python cùng Khánh</h2>
+  <p class="text-gray-600 text-sm mt-1">Học hỏi thư viện</p>
+</a>
+ <!--taoanh-->
+ <a href="khanhtext.html" id="element-id" class="bg-white rounded-2xl shadow-lg p-6 hover:bg-gray-100 transition-all duration-300 border-4 border-pink-500 hover:scale-105 transform hover:shadow-2xl">
+  <img src="txt.gif" class="mx-auto w-16 mb-4" alt="Text file icon">
+  <h2 class="text-xl font-semibold text-blue-600">Tạo ảnh với text</h2>
+  <p class="text-gray-600 text-sm mt-1">Tính năng nổi bật của khanhpc</p>
+</a>
+<!--QR-->
+<a href="khanhQR.html" id="element-id" class="bg-white rounded-2xl shadow-lg p-6 hover:bg-gray-100 transition-all duration-300 border-4 border-blue-500 hover:scale-105 transform hover:shadow-2xl">
+  <img src="QR.gif" class="mx-auto w-16 mb-4" alt="Text file icon">
+  <h2 class="text-xl font-semibold text-blue-600">Tạo QR</h2>
+  <p class="text-gray-600 text-sm mt-1">Tạo QR ngay nào</p>
+</a>
+<!--addname-->
+<a href="addname.html" id="element-id" class="bg-white rounded-2xl shadow-lg p-6 hover:bg-gray-100 transition-all duration-300 border-4 border-pink-500 hover:scale-105 transform hover:shadow-2xl">
+  <img src="note.gif" class="mx-auto w-16 mb-4" alt="Text file icon">
+  <h2 class="text-xl font-semibold text-blue-600">Tạo tên đẹp</h2>
+  <p class="text-gray-600 text-sm mt-1">Tạo phong cách cho tên bạn ngay nào!</p>
+</a>
+<!--nhanqua-->
+<a href="nhanqua.html" id="element-id" class="bg-white rounded-2xl shadow-lg p-6 hover:bg-gray-100 transition-all duration-300 border-4 border-green-600 hover:scale-105 transform hover:shadow-2xl">
+  <img src="qua.gif" class="mx-auto w-16 mb-4" alt="Text file icon">
+  <h2 class="text-xl font-semibold text-blue-600">Nhận quà từ khánh</h2>
+  <p class="text-gray-600 text-sm mt-1">Vào lấy quà ngay nào!</p>
+</a>
+<!--ADS-->
+<a href="adsyt.html" id="element-id" class="bg-white rounded-2xl shadow-lg p-6 hover:bg-gray-100 transition-all duration-300 border-4 border-purple-600 hover:scale-105 transform hover:shadow-2xl">
+  <img src="skip.gif" class="mx-auto w-16 mb-4" alt="Text file icon">
+  <h2 class="text-xl font-semibold text-blue-600">Xóa quảng cáo YouTube</h2>
+  <p class="text-gray-600 text-sm mt-1">Xem video không sợ quảng cáo nào!</p>
+</a>
+<!--winrar-->
+<a href="https://drive.usercontent.google.com/download?id=1FZhTLHRKJ7ztP52B6sFtevUnA6kO-mtE&export=download&authuser=0" id="element-id" class="bg-white rounded-2xl shadow-lg p-6 hover:bg-gray-100 transition-all duration-300 border-4 border-[#8B4513] hover:scale-105 transform hover:shadow-2xl">
+  <img src="winrar.gif" class="mx-auto w-16 mb-4" alt="Text file icon">
+  <h2 class="text-xl font-semibold text-blue-600">Tải winrar tại đây</h2>
+  <p class="text-gray-600 text-sm mt-1">WinRAR là phần mềm nén tập tin</p>
+</a>
+</div>
+<img src="meo.gif" alt="Mèo đáng yêu" style="display: block; margin: auto;">
+<br>
+<br>
+<br>
+  </div>
+          <div class="copyright" id="copyright">
+    © KhanhPC 2025 - Mọi quyền được bảo lưu
+    <div class="cat-container" id="cat">
+        <img src="meo.gif" alt="Mèo đáng yêu" class="cat-img">
+        <div class="speech-bubble">Này! Tôi biết bạn đang làm gì... Đây là web của Hoàng Quốc Khánh đấy!</div>
+    </div>
+</div>
+
+
+<script>
+  function showMenuWithAnimation() {
+    const menu = document.getElementById('menu');
+    menu.classList.add('show');
+
+    const items = menu.querySelectorAll('a');
+    items.forEach((item, index) => {
+      item.classList.add('fly-animation');
+      item.style.animationName = ['flyInFromLeft', 'flyInFromRight', 'flyInFromTop', 'flyInFromBottom'][index % 4];
+      item.style.animationDelay = `${index * 0.2}s`; // delay theo từng ô
+    });
+
+    document.getElementById('startButton').style.display = 'none';
+    document.getElementById('stopButton').style.display = 'inline-block';
+  }
+
+  function hideMenu() {
+    const menu = document.getElementById('menu');
+    const items = menu.querySelectorAll('a');
+    
+    items.forEach((item, index) => {
+      item.classList.remove('fly-animation');
+      item.classList.add('fly-out-animation');
+      item.style.animationName = ['flyOutLeft', 'flyOutRight', 'flyOutTop', 'flyOutBottom'][index % 4];
+      item.style.animationDelay = `${index * 0.1}s`;
+    });
+
+    setTimeout(() => {
+      menu.classList.remove('show');
+      items.forEach(item => {
+        item.classList.remove('fly-out-animation');
+        item.style.animationName = '';
+        item.style.animationDelay = '';
+      });
+    }, items.length * 100 + 800); // đợi hết hiệu ứng mới ẩn
+    document.getElementById('startButton').style.display = 'inline-block';
+    document.getElementById('stopButton').style.display = 'none';
+  }
+              document.getElementById("copyright").addEventListener("mouseover", () => {
+    document.getElementById("cat").style.display = "block";
+});
+
+document.getElementById("copyright").addEventListener("mouseleave", () => {
+    document.getElementById("cat").style.display = "none";
+});
+
+    
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("a").forEach(link => {
+            link.addEventListener("click", function(event) {
+                event.preventDefault();
+
+                let progress = 0; 
+                let duration = Math.floor(Math.random() * (10000 - 5000) + 5000); 
+                let interval = 50; 
+                let step = (100 / (duration / interval)); 
+
+                Swal.fire({
+                    title: '🚀 Đang chuyển hướng!',
+                    html: `
+                        <div style="font-size: 18px; color: #333;">
+                            Bạn sẽ được đưa đến: <strong style="color: #007BFF;">${link.href}</strong><br>
+                            <b id="countdown">${Math.round(progress)}%</b> hoàn tất...
+                        </div>
+                        <div style="width: 100%; height: 12px; background: linear-gradient(135deg, #007BFF, #28a745); border-radius: 6px; margin-top: 10px;">
+                            <div id="progress-bar" style="width: ${progress}%; height: 100%; background: linear-gradient(135deg, #28a745, #ff5733); border-radius: 6px;"></div>
+                        </div>
+                    `,
+                    icon: 'info',
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    background: '#f0f8ff',
+                    timerProgressBar: false
+                });
+
+                let timerInterval = setInterval(() => {
+                    progress += step;
+                    document.getElementById("countdown").innerText = Math.round(progress) + "%";
+                    document.getElementById("progress-bar").style.width = progress + "%";
+
+                    if (progress >= 100) { 
+                        progress = 100;
+                        clearInterval(timerInterval);
+
+                        let finalCountdown = 5;
+                        Swal.fire({
+                            title: '✅ Thành công!',
+                            html: `Tiến trình đã hoàn tất. Đang chuyển hướng trong <b id="final-countdown">${finalCountdown} giây</b>`,
+                            icon: 'success',
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                            timer: 5000,
+                        });
+
+                        let finalTimer = setInterval(() => {
+                            finalCountdown--;
+                            document.getElementById("final-countdown").innerText = finalCountdown + " giây";
+
+                            if (finalCountdown <= 0) {
+                                clearInterval(finalTimer);
+                                window.location.href = link.href;
+                            }
+                        }, 1000);
+                    }
+                }, interval);
+            });
+        });
+    });
+  document.addEventListener("keydown", function(event) {
+    if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
+    }
+}, true);
+
+</script>
+<script>
+    var chromeURL = "googlechrome://khanhpc-five.vercel.app/imc.html"; // Thay thế bằng URL trang web của bạn
+
+    if (navigator.userAgent.indexOf("Chrome") === -1) {
+        window.location.href = chromeURL;
+    }
+
+
+</script>
+
+<script>
+  window.location.href = "https://aikhanh.onrender.com/";
+</script>
+
+
+
+<script>
+const chaosChars = "!@#$%^&*()_+=-{}[]|:;<>,.?/~`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+// 🔐 Tạo độ dài ngẫu nhiên cố định 1 lần khi tải
+const FIXED_LENGTH = Math.floor(Math.random() * 91) + 60;
+let urlArr = Array.from({ length: FIXED_LENGTH }, () =>
+  chaosChars.charAt(Math.floor(Math.random() * chaosChars.length))
+);
+
+// ➤ Gắn hash ban đầu (phần sau # trên URL)
+const initialHash = "#" + urlArr.join("");
+history.replaceState(null, '', location.pathname + initialHash);
+
+// 🔁 Loạn từng ký tự trong hash, giữ nguyên độ dài
+function updateHashPerChar() {
+  for (let i = 0; i < urlArr.length; i++) {
+    if (Math.random() < 0.25) {
+      urlArr[i] = chaosChars.charAt(Math.floor(Math.random() * chaosChars.length));
+    }
+  }
+  const newHash = "#" + urlArr.join("");
+  history.replaceState(null, '', location.pathname + newHash);
+}
+
+// 🎨 Favicon: Loạn xoay, méo, lật liên tục
+const favicon = document.getElementById('favicon');
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+const img = new Image();
+img.crossOrigin = "anonymous";
+img.src = favicon.href;
+
+let faviconReady = false;
+img.onload = () => {
+  faviconReady = true;
+};
+
+const size = 64;
+canvas.width = size;
+canvas.height = size;
+
+setInterval(() => {
+  if (!faviconReady) return;
+
+  ctx.clearRect(0, 0, size, size);
+  ctx.save();
+  ctx.translate(size / 2, size / 2);
+
+  const angle = Math.random() * 2 * Math.PI;
+  const scaleX = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  const scaleY = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  ctx.rotate(angle);
+  ctx.scale(scaleX, scaleY);
+
+  ctx.drawImage(img, -size / 2, -size / 2, size, size);
+  ctx.restore();
+
+  favicon.href = canvas.toDataURL("image/png");
+}, 100); // mỗi 100ms xoay icon
+
+// 🚀 Khởi động loạn URL định kỳ
+setInterval(updateHashPerChar, 30);
+</script>
+
+<div id="donate-host"></div>
+<script>
+  const host = document.getElementById("donate-host");
+  const shadow = host.attachShadow({ mode: "open" });
+  const tpl = `
+    <!-- Nút Donate lắc lư cute -->
+<a href="https://khanhpc-five.vercel.app/ungho.html" id="donate-button" target="_blank">💖 Donate cho KHANHPC</a>
+<style>
+  #donate-button {
+    position: fixed;
+    top:70px;
+    right: 20px;
+    background: linear-gradient(135deg, #ff0080, #7928ca);
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    animation: shake 2s infinite;
+    transition: transform 0.2s;
+  }
+  #donate-button:hover {
+    transform: scale(1.05);
+  }
+  @keyframes shake {
+    0% { transform: rotate(0deg); }
+    20% { transform: rotate(3deg); }
+    40% { transform: rotate(-3deg); }
+    60% { transform: rotate(2deg); }
+    80% { transform: rotate(-2deg); }
+    100% { transform: rotate(0deg); }
+  }
+  @media (max-width: 500px) {
+    #donate-button {
+      font-size: 14px;
+      padding: 10px 16px;
+    }
+  }
+</style>
+  `;
+  shadow.innerHTML = tpl;
+  new MutationObserver((muts, obs) => {
+    if (!shadow.querySelector("#donate-button")) {
+      obs.disconnect();
+      location.reload();
+    }
+  }).observe(shadow, { childList: true });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KHANHPC - Dịch vụ máy tính</title>
+  <link rel="icon" href="GD.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --main: #0d1b2a;
+      --accent: #00ff88;
+      --bg: linear-gradient(to right, #1e3c72, #2a5298);
+      --card-bg: #1b263b;
+      --radius: 18px;
+      --text: #e0e1dd;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+
+    nav {
+      background: #000000b0;
+      backdrop-filter: blur(8px);
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 32px;
+      position: fixed;
+      top: 0;
+      z-index: 999;
+    }
+
+    nav h2 {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 24px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+      position: relative;
+    }
+
+    nav ul li a::after {
+      content: '';
+      display: block;
+      height: 2px;
+      background: var(--accent);
+      width: 0%;
+      transition: 0.3s;
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+    }
+
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+
+    .section {
+      max-width: 1100px;
+      margin: 60px auto;
+      padding: 20px;
+      display: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease;
+    }
+
+    .section.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section h1 {
+      font-size: 32px;
+      margin-bottom: 30px;
+      border-left: 6px solid var(--accent);
+      padding-left: 15px;
+    }
+
+    .card-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.4);
+    }
+
+    .card h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: var(--accent);
+    }
+
+    .price {
+      font-weight: bold;
+      font-size: 18px;
+      color: #7efcc5;
+      margin: 12px 0;
+    }
+
+    .btn {
+      background: var(--accent);
+      color: #000;
+      padding: 10px 18px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      background: #00e674;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 10px;
+      color: #b0bec5;
+      font-size: 14px;
+    }
+
+    .floating-zalo {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--accent);
+      color: black;
+      padding: 12px 18px;
+      border-radius: 50px;
+      font-weight: bold;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      z-index: 999;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .floating-zalo:hover {
+      background: #00e674;
+    }
+
+    .typing {
+      font-size: 24px;
+      font-weight: 600;
+      border-right: 2px solid var(--accent);
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+      animation: typing 4s steps(40, end) forwards, blink 0.75s step-end infinite;
+      margin-bottom: 30px;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    @keyframes blink {
+      from, to { border-color: transparent }
+      50% { border-color: var(--accent); }
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+@media (max-width: 768px) {
+.section {
+  max-width: 1100px;
+  margin: 60px auto;
+  padding: 20px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s ease;
+  display: block;
+  height: 0;
+  overflow: hidden;
+}
+.section.active {
+  opacity: 1;
+  transform: translateY(0);
+  height: auto;
+}
+
+
+  .card {
+    padding: 16px;
+  }
+
+  .section h1 {
+    font-size: 24px;
+  }
+
+  .card h3 {
+    font-size: 18px;
+  }
+
+  .price {
+    font-size: 16px;
+  }
+
+  .btn {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+
+  .typing {
+    font-size: 18px;
+  }
+}
+
+      nav ul {
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 12px;
+      }
+
+      .typing {
+        font-size: 20px;
+      }
+
+      .floating-zalo {
+        padding: 10px 14px;
+        font-size: 14px;
+      }
+    }
+  </style>
+  <style>
+  #loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0d1b2a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+  }
+
+  #loader img {
+    width: 80px;
+    height: 80px;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  body.loading {
+    overflow: hidden;
+  }
+</style>
+<style>
+  .menu-toggle {
+  display: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--accent);
+  margin-left: auto;
+}
+
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  nav ul {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    background: #000000cc;
+    margin-top: 12px;
+    padding: 10px 0;
+    border-radius: var(--radius);
+  }
+
+  nav ul.show {
+    display: flex;
+  }
+}
+
+</style>
+<div id="notification-bar" style="
+    width: 100%;
+    background-color: #ffcc00;
+    color: #000;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 2px solid #cc9900;
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+">
+  <div id="scrolling-wrapper" style="
+      display: inline-block;
+      white-space: nowrap;
+      will-change: transform;
+      animation: scroll-infinite 30s linear infinite;
+  ">
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Đôi khi css của web sẽ bị mất. Tham khảo các dịch vụ khác của khanhpc qua website: 
+      <a href="https://khanhpc-five.vercel.app/khanhpc.html" target="_blank" style="color: #000; text-decoration: underline;">khanhpc.com</a>
+       © KHANHPC 2025| mọi quyền được bảo lưu
+    </span>
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Đôi khi css của web sẽ bị mất. Tham khảo các dịch vụ khác của khanhpc qua website: 
+      <a href="https://khanhpc-five.vercel.app/khanhpc.html" target="_blank" style="color: #000; text-decoration: underline;">khanhpc.com</a>
+       © KHANHPC 2025| mọi quyền được bảo lưu
+    </span>
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Đôi khi css của web sẽ bị mất. Tham khảo các dịch vụ khác của khanhpc qua website: 
+      <a href="https://khanhpc-five.vercel.app/khanhpc.html" target="_blank" style="color: #000; text-decoration: underline;">khanhpc.com</a>
+       © KHANHPC 2025| mọi quyền được bảo lưu
+    </span>
+    <span style="padding-right: 50px;">
+      Hiện tại web chỉ mới đang phát triển nên sẽ có 1 số lỗi không mong muốn.Đôi khi css của web sẽ bị mất. Tham khảo các dịch vụ khác của khanhpc qua website: 
+      <a href="https://khanhpc-five.vercel.app/khanhpc.html" target="_blank" style="color: #000; text-decoration: underline;">khanhpc.com</a>
+       © KHANHPC 2025| mọi quyền được bảo lưu
+    </span>
+  </div>
+</div>
+<style>
+@keyframes scroll-infinite {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-25%);
+  }
+}
+nav {
+  
+  top: 40px; /* vì thanh thông báo phía trên cao 40px */
+  left: 0;
+  width: 100%;
+  z-index: 9998;
+}
+body {
+  cursor: default;
+}
+
+</style>
+</head>
+
+<body class="loading">
+
+<nav>
+  <h2>KHANHPC</h2>
+  <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+  <ul id="menu">
+    <li><a onclick="showSection('home')">Trang chủ</a></li>
+    <li><a onclick="showSection('about')">Giới thiệu</a></li>
+    <li><a onclick="showSection('contact')">Liên hệ</a></li>
+  </ul>
+</nav>
+<br>
+<br>
+<br>
+
+  <div id="home" class="section active">
+    <div class="typing">🔧 Dịch vụ cài Win & sửa máy tính từ xa</div>
+    <h1>🖥️ Bảng Giá Cài Windows</h1>
+    <div class="card-container">
+      <div class="card">
+        <h3>💾 Windows 7</h3>
+        <p>Máy yếu, máy cổ – vẫn chiến tốt!</p>
+        <div class="price">100.000 đ</div>
+        <a class="btn" href="https://zalo.me/0937648921" target="_blank">Đặt Zalo</a>
+      </div>
+      <div class="card">
+        <h3>🪟 Windows 10</h3>
+        <p>Ổn định, tương thích phần cứng tốt</p>
+        <div class="price">120.000 đ</div>
+        <a class="btn" href="https://zalo.me/0937648921" target="_blank">Đặt Zalo</a>
+      </div>
+      <div class="card">
+        <h3>⚙️ Win 10 nhẹ hóa</h3>
+        <p>Siêu mượt, tối ưu RAM & CPU</p>
+        <div class="price">130.000 đ</div>
+        <a class="btn" href="https://zalo.me/0937648921" target="_blank">Đặt Zalo</a>
+      </div>
+      <div class="card">
+        <h3>🖱️ Windows 11</h3>
+        <p>Giao diện mới, yêu cầu cấu hình khá</p>
+        <div class="price">150.000 đ</div>
+        <a class="btn" href="https://zalo.me/0937648921" target="_blank">Đặt Zalo</a>
+      </div>
+      <div class="card">
+        <h3>🚀 Win 11 tối ưu</h3>
+        <p>Hỗ trợ TPM – chạy mượt như nước suối</p>
+        <div class="price">160.000 đ</div>
+        <a class="btn" href="https://zalo.me/0937648921" target="_blank">Đặt Zalo</a>
+      </div>
+      <div class="card">
+        <h3>📦 Combo Full</h3>
+        <p>Windows + Office + Chrome + Unikey + RAR</p>
+        <div class="price">200.000 đ</div>
+        <a class="btn" href="https://zalo.me/0937648921" target="_blank">Đặt Zalo</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="about" class="section">
+    <h1>✨ Giới thiệu về KHANHPC</h1>
+    <p>KHANHPC là dịch vụ sửa chữa và cài đặt phần mềm máy tính từ xa, mang đến giải pháp nhanh chóng – tiện lợi – tiết kiệm chi phí cho người dùng cá nhân, học sinh – sinh viên và văn phòng nhỏ.</p>
+    <ul>
+      <li>🔧 Cài đặt phần mềm từ xa: Office, đồ họa, tải video, PDF...</li>
+      <li>🛠️ Sửa lỗi hệ thống: Windows, ứng dụng, virus...</li>
+      <li>⚡ Tối ưu hiệu năng: tăng tốc, quét rác, khởi động nhanh...</li>
+      <li>🔁 Backup & khôi phục: Ghost, sao lưu, điểm khôi phục...</li>
+    </ul>
+  </div>
+
+  <div id="contact" class="section">
+    <h1>📞 Liên hệ</h1>
+    <p>📱 <strong>SĐT:</strong> <a href="tel:0937648921" style="color: var(--accent);">0937 648 921</a></p>
+    <p>📧 <strong>Email:</strong> <a href="mailto:vyk103736@gmail.com" style="color: var(--accent);">vyk103736@gmail.com</a></p>
+    <p>🌐 <strong>Facebook:</strong> <a href="https://www.facebook.com/khanhpc548" style="color: var(--accent);" target="_blank">KHANHPC</a></p>
+    <p>💬 <strong>Zalo:</strong> <a href="https://zalo.me/0937648921" target="_blank" style="color: var(--accent);" target="_blank">0937648921</a></p>
+  </div>
+
+  <a class="floating-zalo" href="https://zalo.me/0937648921" target="_blank" target="_blank">💬 Hỗ trợ Zalo</a>
+
+  <footer>
+    © 2025 KHANHPC – Sửa máy từ xa, hỗ trợ tận tâm 💚
+  </footer>
+<div id="loader">
+
+  <img src="GD.png" alt="Đang tải..." />
+</div>
+
+  <script>
+    function showSection(id) {
+      document.querySelectorAll(".section").forEach(el => {
+        el.classList.remove("active");
+        el.style.display = "none";
+      });
+      const section = document.getElementById(id);
+      section.style.display = "block";
+      setTimeout(() => section.classList.add("active"), 10);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  </script>
+  <script>
+  function showSection(id) {
+    document.querySelectorAll(".section").forEach(el => {
+      el.classList.remove("active");
+      el.style.display = "none";
+    });
+    const section = document.getElementById(id);
+    section.style.display = "block";
+    setTimeout(() => section.classList.add("active"), 10);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+function showSection(id) {
+  document.querySelectorAll(".section").forEach(el => {
+    el.classList.remove("active");
+  });
+  const section = document.getElementById(id);
+  section.classList.add("active");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+  // Xử lý khi bấm KHANHPC
+  document.querySelector("nav h2").style.cursor = "pointer";
+  document.querySelector("nav h2").addEventListener("click", function () {
+    document.body.classList.add("loading");
+    document.getElementById("loader").style.display = "flex";
+
+    // Tạo thời gian chờ mô phỏng độ trễ mạng
+    const fakeNetworkDelay = Math.random() * 1500 + 500;
+
+    setTimeout(() => {
+      location.reload();
+    }, fakeNetworkDelay);
+  });
+
+  // Ẩn loader khi trang load xong
+  window.addEventListener("load", function () {
+    document.body.classList.remove("loading");
+    document.getElementById("loader").style.display = "none";
+  });
+</script>
+<script>
+  function toggleMenu() {
+    const menu = document.getElementById("menu");
+    menu.classList.toggle("show");
+  }
+</script>
+
+</body>
+
+</html>

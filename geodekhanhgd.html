@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<link id="favicon" rel="icon" href="GD.png" type="image/png">
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://www.google.com/recaptcha/api.js?render=6Le1rRYrAAAAAKt07uCfmbqyogPZGvZlUtomhKCX&hl=vi"></script>
+  
+  <title>Tải Geode - Geometry Dash</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(45deg, #ff5c5c, #ffcc00);
+      animation: fadeIn 2s ease-out;
+      color: #fff;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-section {
+      padding: 20px 20px;
+      text-align: center;
+      border-bottom: 5px solid #ffcc00;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+      border-radius: 100000px;
+      background: linear-gradient(45deg, #704b27, #3f9c37);
+    }
+
+    h1 {
+  font-size: clamp(4rem, 10vw, 8rem); /* tự co giãn từ 4rem đến 8rem tùy kích thước màn hình */
+  font-weight: bold;
+  color: #ffcc00;
+  text-shadow: 4px 4px 20px rgba(0, 0, 0, 0.9);
+  animation: slideIn 1s ease-out;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: clamp(2rem, 5vw, 3.5rem); /* co giãn tiêu đề phụ */
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6);
+  animation: slideIn 1s ease-out;
+  line-height: 1.4;
+}
+
+
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 20px;
+      flex: 1;
+    }
+
+    .section {
+      background-color: #fff;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      margin-bottom: 50px;
+    }
+
+    .section h2 {
+      font-size: 2.3rem;
+      color: #ff5c5c;
+    }
+
+    .section p {
+      font-size: 1.5rem;
+      line-height: 2;
+      color: #333;
+    }
+
+    .section img {
+      border-radius: 16px;
+      margin-top: 25px;
+      width: 100%;
+      height: auto;
+    }
+
+    .button {
+      background: #ff5c5c;
+      padding: 18px 45px;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      border-radius: 50px;
+      font-weight: bold;
+      color: white;
+      margin: 12px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .button:hover {
+      background: #ff3f3f;
+      transform: scale(1.1);
+    }
+
+
+    .container {
+  max-width: 1200px;
+  margin: 50px auto;
+  padding: 20px;
+  flex: 1;
+  padding-bottom: 180px; /* tăng để đủ chỗ cho footer */
+}
+
+    .copyright {
+    border-radius:100px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 123, 255, 0.95);
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0px -5px 10px rgba(0,0,0,0.2);
+    transition: background 0.3s ease-in-out;
+    animation: bounce 0.5s infinite alternate ease-in-out;
+}
+
+.cat-container {
+    display: none;
+    position: absolute;
+    left: 50%;
+    bottom: 50px;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+.cat-img {
+    width: 100px;
+    animation: bounce 1s infinite alternate ease-in-out;
+}
+
+.speech-bubble {
+    background: #EAE0C8;
+    color: black;
+    padding: 8px 12px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    margin-top: 10px;
+}
+
+@keyframes bounce {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-5px); }
+}
+    div {
+  opacity: 0;
+  transform: translateY(50px);
+  animation: fadeUp 1.5s ease-in-out forwards;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <section class="hero-section">
+    <h1>🌟 Tải Geode cho Geometry Dash</h1>
+    <h2>Đăng ký kênh YouTube để mở khoá link tải nhanh chóng!</h2>
+  </section>
+
+  <!-- Nội dung -->
+  <div class="container">
+    <div class="section">
+      <h2>Geode là gì?</h2>
+      <p><strong>Geode</strong> là một nền tảng mở rộng cho <strong>Geometry Dash</strong>, cho phép bạn tùy chỉnh, nâng cấp và thêm tính năng cực kỳ tiện lợi vào game. Với Geode, bạn có thể:</p>
+      <ul class="list-disc ml-8 mt-4 text-[1.3rem] text-gray-700">
+        <li>Giao diện tuỳ chỉnh theo phong cách riêng</li>
+        <li>Tăng FPS, mượt hơn nhiều trên máy yếu</li>
+        <li>Thêm nhiều tiện ích như Mod, Hack Speed, Editor</li>
+        <li>Dễ sử dụng, hỗ trợ cả PC lẫn Android</li>
+      </ul>
+      <img src="geo.png" alt="Hình ảnh Geode">
+    </div>
+
+    <!-- Nút tải -->
+    <div class="text-center mt-10">
+      <p class="text-xl mb-4 font-semibold">Chọn nền tảng của bạn để tiếp tục:</p>
+      <div class="flex justify-center gap-6 flex-wrap">
+        <button class="button" onclick="redirectToYoutube('pc')">💻 Tải cho PC</button>
+        <button class="button" onclick="redirectToYoutube('android')">📱 Tải cho Android</button>
+      </div>
+    </div>
+  </div>
+
+        <div class="copyright" id="copyright">
+    <p>© 2025 <a href="https://www.youtube.com/@Kh%C3%A1nhGD-2k8" target="_blank">KhánhPC</a> Mọi quyền được bảo lưu</p>
+    <div class="cat-container" id="cat">
+        <img src="meo.gif" alt="Mèo đáng yêu" class="cat-img">
+        <div class="speech-bubble">Này! Tôi biết bạn đang làm gì... Đây là web của Hoàng Quốc Khánh đấy!</div>
+    </div>
+</div>
+
+
+  <!-- Script xử lý -->
+  <script>
+    const pcDownload = "https://bom.so/Mvzw8E";
+    const androidDownload = "https://bom.so/GrMCPK";
+
+    function redirectToYoutube(platform) {
+      localStorage.setItem("geode_download", platform);
+      window.location.href = "https://www.youtube.com/@KhanhPC-k8?sub_confirmation=1";
+    }
+
+    window.onload = function () {
+      const selected = localStorage.getItem("geode_download");
+      if (selected) {
+        localStorage.removeItem("geode_download");
+        setTimeout(() => {
+          if (selected === "pc") window.location.href = pcDownload;
+          else if (selected === "android") window.location.href = androidDownload;
+        }, 500);
+      }
+    };
+                document.getElementById("copyright").addEventListener("mouseover", () => {
+    document.getElementById("cat").style.display = "block";
+});
+
+document.getElementById("copyright").addEventListener("mouseleave", () => {
+    document.getElementById("cat").style.display = "none";
+});
+  </script>
+
+
+<script>
+const chaosChars = "!@#$%^&*()_+=-{}[]|:;<>,.?/~`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+// 🔐 Tạo độ dài ngẫu nhiên cố định 1 lần khi tải
+const FIXED_LENGTH = Math.floor(Math.random() * 91) + 60;
+let urlArr = Array.from({ length: FIXED_LENGTH }, () =>
+  chaosChars.charAt(Math.floor(Math.random() * chaosChars.length))
+);
+
+// ➤ Gắn hash ban đầu (phần sau # trên URL)
+const initialHash = "#" + urlArr.join("");
+history.replaceState(null, '', location.pathname + initialHash);
+
+// 🔁 Loạn từng ký tự trong hash, giữ nguyên độ dài
+function updateHashPerChar() {
+  for (let i = 0; i < urlArr.length; i++) {
+    if (Math.random() < 0.25) {
+      urlArr[i] = chaosChars.charAt(Math.floor(Math.random() * chaosChars.length));
+    }
+  }
+  const newHash = "#" + urlArr.join("");
+  history.replaceState(null, '', location.pathname + newHash);
+}
+
+// 🎨 Favicon: Loạn xoay, méo, lật liên tục
+const favicon = document.getElementById('favicon');
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+const img = new Image();
+img.crossOrigin = "anonymous";
+img.src = favicon.href;
+
+let faviconReady = false;
+img.onload = () => {
+  faviconReady = true;
+};
+
+const size = 64;
+canvas.width = size;
+canvas.height = size;
+
+setInterval(() => {
+  if (!faviconReady) return;
+
+  ctx.clearRect(0, 0, size, size);
+  ctx.save();
+  ctx.translate(size / 2, size / 2);
+
+  const angle = Math.random() * 2 * Math.PI;
+  const scaleX = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  const scaleY = (Math.random() * 0.5 + 0.75) * (Math.random() < 0.5 ? -1 : 1);
+  ctx.rotate(angle);
+  ctx.scale(scaleX, scaleY);
+
+  ctx.drawImage(img, -size / 2, -size / 2, size, size);
+  ctx.restore();
+
+  favicon.href = canvas.toDataURL("image/png");
+}, 100); // mỗi 100ms xoay icon
+
+// 🚀 Khởi động loạn URL định kỳ
+setInterval(updateHashPerChar, 30);
+</script>
+
+<div id="donate-host"></div>
+<script>
+  const host = document.getElementById("donate-host");
+  const shadow = host.attachShadow({ mode: "open" });
+  const tpl = `
+    <!-- Nút Donate lắc lư cute -->
+<a href="https://khanhpc-five.vercel.app/ungho.html" id="donate-button" target="_blank">💖 Donate cho KHANHPC</a>
+<style>
+  #donate-button {
+    position: fixed;
+    top:70px;
+    right: 20px;
+    background: linear-gradient(135deg, #ff0080, #7928ca);
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    animation: shake 2s infinite;
+    transition: transform 0.2s;
+  }
+  #donate-button:hover {
+    transform: scale(1.05);
+  }
+  @keyframes shake {
+    0% { transform: rotate(0deg); }
+    20% { transform: rotate(3deg); }
+    40% { transform: rotate(-3deg); }
+    60% { transform: rotate(2deg); }
+    80% { transform: rotate(-2deg); }
+    100% { transform: rotate(0deg); }
+  }
+  @media (max-width: 500px) {
+    #donate-button {
+      font-size: 14px;
+      padding: 10px 16px;
+    }
+  }
+</style>
+  `;
+  shadow.innerHTML = tpl;
+  new MutationObserver((muts, obs) => {
+    if (!shadow.querySelector("#donate-button")) {
+      obs.disconnect();
+      location.reload();
+    }
+  }).observe(shadow, { childList: true });
+</script>
+
+</body>
+</html>

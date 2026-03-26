@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Extractor Pro - Lấy HTML & Ảnh chụp website</title>
+    <link rel="icon" href="GD.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .warning-banner {
+            background: #fff3cd;
+            border-left: 6px solid #ffc107;
+            color: #856404;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .warning-icon {
+            font-size: 2.5em;
+            background: #ffc107;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .warning-content h3 {
+            margin-bottom: 5px;
+            color: #856404;
+        }
+
+        .warning-content ul {
+            margin-left: 20px;
+            line-height: 1.6;
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .input-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .url-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .url-input-group input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1em;
+            transition: all 0.3s;
+            min-width: 250px;
+        }
+
+        .url-input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+        }
+
+        .url-input-group button {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102,126,234,0.4);
+        }
+
+        .url-input-group button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102,126,234,0.6);
+        }
+
+        .url-input-group button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 25px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .format-controls {
+            background: #2d2d2d;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            color: white;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #4CAF50;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        .format-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .format-select {
+            padding: 8px 15px;
+            border-radius: 6px;
+            border: 1px solid #404040;
+            background: #1e1e1e;
+            color: white;
+            font-size: 0.9em;
+        }
+
+        .format-button {
+            padding: 8px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .format-button:hover {
+            background: #45a049;
+            transform: translateY(-1px);
+        }
+
+        .format-info {
+            color: #888;
+            font-size: 0.85em;
+        }
+
+        .result-section {
+            background: #1e1e1e;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+
+        .result-header {
+            background: #2d2d2d;
+            padding: 15px 20px;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #404040;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .result-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-header button {
+            padding: 8px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .result-header button:hover {
+            background: #45a049;
+            transform: translateY(-1px);
+        }
+
+        .result-header button.secondary {
+            background: #ff9800;
+        }
+
+        .result-header button.secondary:hover {
+            background: #f57c00;
+        }
+
+        .result-header button.danger {
+            background: #f44336;
+        }
+
+        .result-header button.danger:hover {
+            background: #da190b;
+        }
+
+        pre {
+            margin: 0;
+            padding: 20px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: auto;
+            max-height: 500px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .screenshot-container {
+            background: #f0f0f0;
+            padding: 20px;
+            text-align: center;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .screenshot-container img {
+            max-width: 100%;
+            max-height: 600px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .screenshot-container img:hover {
+            transform: scale(1.02);
+        }
+
+        .screenshot-placeholder {
+            color: #666;
+            font-size: 1.2em;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        .small-spinner {
+            width: 20px;
+            height: 20px;
+            border-width: 3px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .screenshot-info {
+            background: #e3f2fd;
+            color: #0d47a1;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            overflow: auto;
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90%;
+            margin-top: 50px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .beauty-stats {
+            display: flex;
+            gap: 15px;
+            color: #888;
+            font-size: 0.85em;
+            margin-left: auto;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .warning-banner {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .url-input-group {
+                flex-direction: column;
+            }
+            
+            .url-input-group button {
+                width: 100%;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab {
+                text-align: center;
+            }
+
+            .result-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .format-controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 Web Extractor Pro</h1>
+            <p>Lấy mã nguồn HTML và ảnh chụp màn hình website trực tiếp</p>
+        </div>
+
+        <div class="warning-banner">
+            <div class="warning-icon">⚠️</div>
+            <div class="warning-content">
+                <h3>CẢNH BÁO LẠM DỤNG</h3>
+                <ul>
+                    <li>Chỉ sử dụng cho mục đích học tập và nghiên cứu</li>
+                    <li>Không sử dụng để thu thập dữ liệu trái phép</li>
+                    <li>Tôn trọng robots.txt và điều khoản sử dụng của website</li>
+                    <li>Giới hạn <strong>60 lần/giờ</strong> để tránh quá tải</li>
+                    <li>Chịu trách nhiệm về mục đích sử dụng</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="input-section">
+                <div class="url-input-group">
+                    <input type="url" id="urlInput" placeholder="Nhập URL cần lấy thông tin (VD: https://example.com)" 
+                           value="https://example.com">
+                    <button id="fetchBtn" onclick="fetchData()">
+                        <span id="btnText">Lấy thông tin</span>
+                        <span id="btnLoader" style="display: none;">⏳</span>
+                    </button>
+                </div>
+                <div id="errorMessage" class="error-message"></div>
+                <div id="successMessage" class="success-message"></div>
+            </div>
+
+            <!-- Format Controls -->
+            <div class="format-controls">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="autoFormatToggle" checked onchange="toggleAutoFormat()">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span>Tự động làm đẹp code</span>
+                </div>
+                
+                <div class="format-options">
+                    <select id="formatStyle" class="format-select" onchange="applyFormatting()">
+                        <option value="pretty">🌈 Đẹp (2 spaces)</option>
+                        <option value="pretty-tab">📐 Đẹp (Tab)</option>
+                        <option value="compact">📦 Gọn nhẹ</option>
+                        <option value="minify">⚡ Minify (1 dòng)</option>
+                        <option value="raw">📄 Giữ nguyên</option>
+                    </select>
+                    
+                    <button class="format-button" onclick="applyFormatting()">🔄 Áp dụng</button>
+                    <button class="format-button" onclick="removeComments()">🗑️ Xóa comment</button>
+                    <button class="format-button" onclick="removeScripts()">📜 Xóa scripts</button>
+                </div>
+                
+                <div class="beauty-stats" id="beautyStats">
+                    <span>📊 Dòng: <span id="lineCount">0</span></span>
+                    <span>📦 Ký tự: <span id="charCount">0</span></span>
+                </div>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('html', event)">📄 Mã nguồn HTML</button>
+                <button class="tab" onclick="switchTab('screenshot', event)">📸 Ảnh chụp màn hình</button>
+                <button class="tab" onclick="switchTab('both', event)">🖥️ Cả hai</button>
+            </div>
+
+            <!-- Tab HTML -->
+            <div id="tab-html" class="tab-content active">
+                <div class="result-section">
+                    <div class="result-header">
+                        <h3>
+                            <span>📄 Mã nguồn HTML</span>
+                            <span id="htmlStatus"></span>
+                        </h3>
+                        <div class="action-buttons">
+                            <button onclick="downloadHTML()" class="secondary">💾 Tải xuống</button>
+                            <button onclick="copyHTML()" id="copyBtn">📋 Sao chép</button>
+                        </div>
+                    </div>
+                    <pre id="htmlOutput">&lt;!-- Nhập URL và nhấn "Lấy thông tin" để xem kết quả --&gt;</pre>
+                </div>
+            </div>
+
+            <!-- Tab Screenshot -->
+            <div id="tab-screenshot" class="tab-content">
+                <div class="result-section">
+                    <div class="result-header">
+                        <h3>
+                            <span>📸 Ảnh chụp màn hình</span>
+                            <span id="screenshotStatus"></span>
+                        </h3>
+                        <div class="action-buttons">
+                            <button onclick="downloadScreenshot()" class="secondary" id="downloadScreenshotBtn">💾 Tải ảnh</button>
+                        </div>
+                    </div>
+                    <div class="screenshot-container" id="screenshotContainer">
+                        <div class="screenshot-placeholder" id="screenshotPlaceholder">
+                            <div class="loading-spinner" style="display: none;" id="screenshotLoader"></div>
+                            <p>Ảnh chụp màn hình sẽ hiển thị tại đây</p>
+                            <p style="font-size: 0.9em; margin-top: 10px;">👆 Click vào ảnh để phóng to</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Both -->
+            <div id="tab-both" class="tab-content">
+                <div class="result-section">
+                    <div class="result-header">
+                        <h3>📄 Mã nguồn HTML</h3>
+                        <button onclick="copyBothHTML()">📋 Sao chép</button>
+                    </div>
+                    <pre id="bothHtmlOutput">&lt;!-- Đang chờ... --&gt;</pre>
+                </div>
+                <div class="result-section">
+                    <div class="result-header">
+                        <h3>📸 Ảnh chụp màn hình</h3>
+                        <button onclick="downloadScreenshot()" class="secondary">💾 Tải ảnh</button>
+                    </div>
+                    <div class="screenshot-container" id="bothScreenshotContainer">
+                        <div class="screenshot-placeholder">Ảnh chụp sẽ hiển thị tại đây</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="requestCount">0</div>
+                    <div class="stat-label">Request hôm nay</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="limitCount">60</div>
+                    <div class="stat-label">Giới hạn/giờ</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="remainingCount">60</div>
+                    <div class="stat-label">Còn lại</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="sizeCount">0</div>
+                    <div class="stat-label">Dung lượng (KB)</div>
+                </div>
+            </div>
+
+            <div class="screenshot-info">
+                <strong>ℹ️ Thông tin:</strong> 
+                <span id="apiStatus">Đang kiểm tra API...</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            ⚠️ Công cụ này chỉ lấy HTML giao diện và ảnh chụp màn hình, không bao gồm tài nguyên nội bộ
+        </div>
+    </div>
+
+    <!-- Modal phóng to ảnh -->
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script>
+        // Cấu hình
+        const MAX_REQUESTS_PER_HOUR = 60;
+        
+        // Lưu trữ request count trong localStorage
+        let requestCount = parseInt(localStorage.getItem('requestCount')) || 0;
+        let lastRequestTime = parseInt(localStorage.getItem('lastRequestTime')) || 0;
+        let currentScreenshotUrl = '';
+        let currentHtml = '';
+        let originalHtml = '';
+        let screenshotUrls = [];
+        let currentApiIndex = 0;
+        let autoFormatEnabled = true;
+        
+        // Danh sách API screenshot
+        const screenshotApis = [
+            {
+                name: 'Thum.io',
+                url: (url) => `https://image.thum.io/get/width/1200/crop/800/noanimate/${url}`,
+                timeout: 10000
+            },
+            {
+                name: 'Mini Shot',
+                url: (url) => `https://mini.s-shot.ru/1024x768/JPEG/1024/Z100/?${encodeURIComponent(url)}`,
+                timeout: 8000
+            },
+            {
+                name: 'Screenshot Machine',
+                url: (url) => `https://api.screenshotmachine.com/?key=8c84f0&url=${encodeURIComponent(url)}&dimension=1024x768&format=jpg`,
+                timeout: 10000
+            },
+            {
+                name: 'PageSpeed',
+                url: (url) => `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&screenshot=true`,
+                timeout: 15000
+            }
+        ];
+
+        // Cập nhật hiển thị
+        function updateStats() {
+            document.getElementById('requestCount').textContent = requestCount;
+            document.getElementById('limitCount').textContent = MAX_REQUESTS_PER_HOUR;
+            document.getElementById('remainingCount').textContent = Math.max(0, MAX_REQUESTS_PER_HOUR - requestCount);
+        }
+
+        // Kiểm tra và reset request count nếu qua giờ mới
+        function checkAndResetCount() {
+            const currentTime = Date.now();
+            const oneHour = 60 * 60 * 1000;
+            
+            if (currentTime - lastRequestTime > oneHour) {
+                requestCount = 0;
+                localStorage.setItem('requestCount', '0');
+                updateStats();
+            }
+        }
+
+        // Gọi hàm kiểm tra khi tải trang
+        checkAndResetCount();
+        updateStats();
+        
+        document.getElementById('apiStatus').textContent = `Sẵn sàng sử dụng ${screenshotApis.length} API chụp ảnh khác nhau`;
+
+        function toggleAutoFormat() {
+            autoFormatEnabled = document.getElementById('autoFormatToggle').checked;
+            if (autoFormatEnabled && originalHtml) {
+                applyFormatting();
+            }
+        }
+
+        function applyFormatting() {
+            if (!originalHtml) return;
+            
+            const style = document.getElementById('formatStyle').value;
+            let formatted = originalHtml;
+            
+            switch(style) {
+                case 'pretty':
+                    formatted = prettyPrintHtml(originalHtml, 2);
+                    break;
+                case 'pretty-tab':
+                    formatted = prettyPrintHtml(originalHtml, '\t');
+                    break;
+                case 'compact':
+                    formatted = compactHtml(originalHtml);
+                    break;
+                case 'minify':
+                    formatted = minifyHtml(originalHtml);
+                    break;
+                case 'raw':
+                    formatted = originalHtml;
+                    break;
+            }
+            
+            currentHtml = formatted;
+            updateHtmlDisplay(formatted);
+            updateBeautyStats(formatted);
+        }
+
+        function prettyPrintHtml(html, indentSize = 2) {
+            let formatted = '';
+            let indent = 0;
+            const tab = indentSize === '\t' ? '\t' : ' '.repeat(indentSize);
+            
+            // Xử lý từng thẻ
+            html = html.replace(/>\s+</g, '><'); // Xóa khoảng trắng giữa các thẻ
+            
+            const tokens = html.split(/(<[^>]+>)/g);
+            
+            for (let token of tokens) {
+                if (token.startsWith('<')) {
+                    if (token.startsWith('</')) {
+                        // Thẻ đóng
+                        indent = Math.max(0, indent - 1);
+                        formatted += '\n' + tab.repeat(indent) + token;
+                    } else if (token.endsWith('/>') || token.includes('<!--')) {
+                        // Thẻ tự đóng hoặc comment
+                        formatted += '\n' + tab.repeat(indent) + token;
+                    } else {
+                        // Thẻ mở
+                        formatted += '\n' + tab.repeat(indent) + token;
+                        indent++;
+                    }
+                } else {
+                    // Nội dung text
+                    if (token.trim()) {
+                        formatted += '\n' + tab.repeat(indent) + token.trim();
+                    }
+                }
+            }
+            
+            return formatted.trim();
+        }
+
+        function compactHtml(html) {
+            // Giữ cấu trúc nhưng gọn hơn
+            return html
+                .replace(/>\s+</g, '>\n<') // Xuống dòng giữa các thẻ
+                .replace(/\s{2,}/g, ' ') // Giảm khoảng trắng
+                .replace(/\n\s+\n/g, '\n'); // Xóa dòng trống
+        }
+
+        function minifyHtml(html) {
+            // Nén thành 1 dòng
+            return html
+                .replace(/>\s+</g, '><')
+                .replace(/\s{2,}/g, ' ')
+                .replace(/\n/g, '')
+                .replace(/\t/g, '')
+                .trim();
+        }
+
+        function removeComments() {
+            if (!originalHtml) return;
+            originalHtml = originalHtml.replace(/<!--[\s\S]*?-->/g, '');
+            applyFormatting();
+            showSuccess('Đã xóa tất cả comments!');
+        }
+
+        function removeScripts() {
+            if (!originalHtml) return;
+            originalHtml = originalHtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+            applyFormatting();
+            showSuccess('Đã xóa tất cả scripts!');
+        }
+
+        function updateBeautyStats(html) {
+            const lines = html.split('\n').length;
+            const chars = html.length;
+            
+            document.getElementById('lineCount').textContent = lines;
+            document.getElementById('charCount').textContent = chars;
+        }
+
+        function updateHtmlDisplay(html) {
+            document.getElementById('htmlOutput').textContent = html;
+            document.getElementById('bothHtmlOutput').textContent = html;
+        }
+
+        function switchTab(tabName, event) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        async function fetchData() {
+            const urlInput = document.getElementById('urlInput');
+            const url = urlInput.value.trim();
+            const fetchBtn = document.getElementById('fetchBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoader = document.getElementById('btnLoader');
+            
+            if (!url) {
+                showError('Vui lòng nhập URL');
+                return;
+            }
+
+            if (requestCount >= MAX_REQUESTS_PER_HOUR) {
+                const waitTime = getWaitTime();
+                showError(`Bạn đã đạt giới hạn ${MAX_REQUESTS_PER_HOUR} request mỗi giờ. Vui lòng đợi ${waitTime} phút!`);
+                return;
+            }
+
+            let finalUrl = url;
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                finalUrl = 'https://' + url;
+            }
+
+            fetchBtn.disabled = true;
+            btnText.style.display = 'none';
+            btnLoader.style.display = 'inline-block';
+            
+            document.getElementById('htmlStatus').innerHTML = '<span class="loading-spinner small-spinner"></span>';
+            document.getElementById('screenshotStatus').innerHTML = '<span class="loading-spinner small-spinner"></span>';
+            document.getElementById('screenshotLoader').style.display = 'block';
+            document.getElementById('screenshotPlaceholder').querySelector('p').style.display = 'none';
+            
+            document.getElementById('screenshotContainer').innerHTML = '<div class="screenshot-placeholder" id="screenshotPlaceholder"><div class="loading-spinner" style="display: block;" id="screenshotLoader"></div><p style="display: none;">Đang tải ảnh...</p></div>';
+            document.getElementById('bothScreenshotContainer').innerHTML = '<div class="screenshot-placeholder">Đang tải ảnh...</div>';
+
+            try {
+                await fetchHTML(finalUrl);
+                await fetchScreenshotWithRetry(finalUrl);
+                
+                requestCount++;
+                lastRequestTime = Date.now();
+                
+                localStorage.setItem('requestCount', requestCount.toString());
+                localStorage.setItem('lastRequestTime', lastRequestTime.toString());
+                
+                updateStats();
+                showSuccess('Lấy thông tin thành công!');
+                
+            } catch (error) {
+                showError('Lỗi: ' + error.message);
+            } finally {
+                fetchBtn.disabled = false;
+                btnText.style.display = 'inline';
+                btnLoader.style.display = 'none';
+                document.getElementById('htmlStatus').innerHTML = '';
+                document.getElementById('screenshotStatus').innerHTML = '';
+            }
+        }
+
+        function getWaitTime() {
+            const waitMs = (60 * 60 * 1000) - (Date.now() - lastRequestTime);
+            const waitMinutes = Math.ceil(waitMs / (60 * 1000));
+            return waitMinutes;
+        }
+
+        async function fetchHTML(url) {
+            try {
+                const proxyUrls = [
+                    'https://api.allorigins.win/get?url=',
+                    'https://corsproxy.io/?',
+                    'https://api.codetabs.com/v1/proxy/?quest='
+                ];
+                
+                let html = null;
+                let lastError = null;
+                
+                for (let proxy of proxyUrls) {
+                    try {
+                        const response = await fetch(proxy + encodeURIComponent(url), {
+                            timeout: 8000
+                        });
+                        
+                        if (response.ok) {
+                            const data = await response.json();
+                            html = data.contents || data;
+                            break;
+                        }
+                    } catch (e) {
+                        lastError = e;
+                        continue;
+                    }
+                }
+                
+                if (!html) {
+                    throw new Error('Không thể kết nối đến các proxy');
+                }
+                
+                originalHtml = html;
+                
+                if (autoFormatEnabled) {
+                    applyFormatting();
+                } else {
+                    currentHtml = html;
+                    updateHtmlDisplay(html);
+                }
+                
+                const sizeKB = Math.round(new Blob([html]).size / 1024);
+                document.getElementById('sizeCount').textContent = sizeKB;
+                
+            } catch (error) {
+                throw new Error('Không thể lấy HTML: ' + error.message);
+            }
+        }
+
+        async function fetchScreenshotWithRetry(url, apiIndex = 0) {
+            if (apiIndex >= screenshotApis.length) {
+                showDefaultScreenshot();
+                return;
+            }
+            
+            const api = screenshotApis[apiIndex];
+            document.getElementById('apiStatus').textContent = `Đang thử API ${api.name}...`;
+            
+            try {
+                const imageUrl = api.url(url);
+                
+                const imagePromise = new Promise((resolve, reject) => {
+                    const img = new Image();
+                    let timeoutId = setTimeout(() => {
+                        img.src = '';
+                        reject(new Error(`Timeout với API ${api.name}`));
+                    }, api.timeout);
+                    
+                    img.onload = () => {
+                        clearTimeout(timeoutId);
+                        resolve(imageUrl);
+                    };
+                    
+                    img.onerror = () => {
+                        clearTimeout(timeoutId);
+                        reject(new Error(`Lỗi tải ảnh từ API ${api.name}`));
+                    };
+                    
+                    img.src = imageUrl;
+                });
+                
+                const workingUrl = await imagePromise;
+                currentScreenshotUrl = workingUrl;
+                
+                displayScreenshot(workingUrl, url);
+                document.getElementById('apiStatus').textContent = `✅ Đang dùng API: ${api.name}`;
+                
+            } catch (error) {
+                console.log(`API ${api.name} thất bại:`, error.message);
+                await fetchScreenshotWithRetry(url, apiIndex + 1);
+            }
+        }
+
+        function displayScreenshot(imageUrl, websiteUrl) {
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            img.alt = `Screenshot of ${websiteUrl}`;
+            img.title = 'Click để phóng to';
+            img.onclick = () => openModal(imageUrl);
+            
+            const container = document.getElementById('screenshotContainer');
+            container.innerHTML = '';
+            container.appendChild(img);
+            
+            const img2 = img.cloneNode(true);
+            img2.onclick = () => openModal(imageUrl);
+            document.getElementById('bothScreenshotContainer').innerHTML = '';
+            document.getElementById('bothScreenshotContainer').appendChild(img2);
+        }
+
+        function showDefaultScreenshot() {
+            const defaultMessage = `
+                <div class="screenshot-placeholder">
+                    <p>⚠️ Không thể chụp ảnh từ các API</p>
+                    <p style="font-size: 0.9em; margin-top: 10px;">Có thể do:</p>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>Website chặn chụp ảnh</li>
+                        <li>API giới hạn request</li>
+                        <li>URL không hợp lệ</li>
+                    </ul>
+                </div>
+            `;
+            
+            document.getElementById('screenshotContainer').innerHTML = defaultMessage;
+            document.getElementById('bothScreenshotContainer').innerHTML = defaultMessage;
+            document.getElementById('apiStatus').textContent = '❌ Tất cả API đều thất bại';
+        }
+
+        function copyHTML() {
+            const htmlOutput = document.getElementById('htmlOutput');
+            copyToClipboard(htmlOutput.textContent, 'copyBtn');
+        }
+
+        function copyBothHTML() {
+            const htmlOutput = document.getElementById('bothHtmlOutput');
+            copyToClipboard(htmlOutput.textContent, 'copyBothBtn');
+        }
+
+        function copyToClipboard(text, buttonId) {
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById(buttonId);
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Đã sao chép!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            }).catch(err => {
+                alert('Không thể sao chép tự động');
+            });
+        }
+
+        function downloadHTML() {
+            if (!currentHtml) {
+                alert('Chưa có HTML để tải xuống!');
+                return;
+            }
+            
+            const blob = new Blob([currentHtml], { type: 'text/html' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'webpage.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        function downloadScreenshot() {
+            if (!currentScreenshotUrl) {
+                alert('Chưa có ảnh chụp để tải xuống!');
+                return;
+            }
+            
+            const a = document.createElement('a');
+            a.href = currentScreenshotUrl;
+            a.download = 'screenshot.jpg';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function openModal(imageUrl) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modal.style.display = 'block';
+            modalImg.src = imageUrl;
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        document.getElementById('urlInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                fetchData();
+            }
+        });
+
+        window.addEventListener('load', function() {
+            if (requestCount > 50) {
+                alert('⚠️ Cảnh báo: Bạn đã sử dụng gần hết giới hạn 60 lần!');
+            }
+        });
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('imageModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

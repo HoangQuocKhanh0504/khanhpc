@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trích Xuất Văn Bản Từ HTML KhanhPC</title>
+    <link rel="icon" href="GD.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: monospace;
+            resize: vertical;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #5a6fd8;
+        }
+        #output {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            min-height: 150px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .highlight {
+            background: #fff3cd;
+        }
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            .card {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-3xl font-bold text-center mb-6 text-white">Công Cụ Trích Xuất Văn Bản Từ HTML</h1>
+        <div class="card">
+            <h2 class="text-xl font-semibold mb-4">Nhập Code HTML</h2>
+            <textarea id="htmlInput" placeholder="Dán mã HTML vào đây (ví dụ: &lt;div&gt;&lt;span&gt;word&lt;/span&gt;&lt;/div&gt;)" class="mb-4"></textarea>
+            <button id="extractBtn" class="mb-4">Trích Xuất Văn Bản</button>
+            <div id="outputContainer" style="display: none;">
+                <h2 class="text-xl font-semibold mb-2">Kết Quả Trích Xuất:</h2>
+                <div id="output"></div>
+                <button id="copyBtn" class="mt-4 bg-green-500 hover:bg-green-700">Sao Chép Kết Quả</button>
+            </div>
+        </div>
+        <div class="card">
+            <h3 class="text-lg font-semibold">Hướng Dẫn:</h3>
+            <ul class="list-disc list-inside">
+                <li>Dán mã HTML chứa các thẻ &lt;span&gt; với nội dung văn bản.</li>
+                <li>Nhấn "Trích Xuất Văn Bản" để lấy văn bản thuần túy, loại bỏ HTML.</li>
+                <li>Kết quả sẽ hiển thị ở dưới, với từ được đánh dấu (class="highlight") được làm nổi bật.</li>
+                <li>Sử dụng tính năng sao chép để lấy kết quả.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('extractBtn').addEventListener('click', extractText);
+        document.getElementById('copyBtn').addEventListener('click', copyToClipboard);
+
+        function extractText() {
+            const htmlInput = document.getElementById('htmlInput').value;
+            if (!htmlInput) {
+                alert('Vui lòng nhập mã HTML!');
+                return;
+            }
+
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlInput, 'text/html');
+            const spans = doc.querySelectorAll('span');
+            let extractedText = '';
+            let highlightedWords = '';
+
+            spans.forEach(span => {
+                const text = span.textContent || '';
+                if (span.classList.contains('highlight')) {
+                    highlightedWords += text + ' ';
+                }
+                extractedText += text + ' ';
+            });
+
+            extractedText = extractedText.trim();
+            highlightedWords = highlightedWords.trim();
+
+            const output = document.getElementById('output');
+            const outputContainer = document.getElementById('outputContainer');
+
+            if (highlightedWords) {
+                output.innerHTML = `<strong>Từ đánh dấu:</strong> ${highlightedWords}<br><br><strong>Toàn bộ văn bản:</strong><br>${extractedText}`;
+            } else {
+                output.innerHTML = `${extractedText}`;
+            }
+
+            outputContainer.style.display = 'block';
+        }
+
+        function copyToClipboard() {
+            const outputText = document.getElementById('output').innerText;
+            navigator.clipboard.writeText(outputText).then(() => {
+                alert('Đã sao chép vào clipboard!');
+            }).catch(err => {
+                console.error('Lỗi khi sao chép: ', err);
+                alert('Không thể sao chép. Vui lòng chọn và sao chép thủ công.');
+            });
+        }
+
+        // Add example data on load for demonstration
+        window.addEventListener('load', () => {
+            const exampleHtml = `
+<div id="row1" style="top: 1px;">
+    <span wordnr="0" class="highlight">thơ</span>
+    <span wordnr="1" class="">thanh</span>
+    <span wordnr="2" class="">niên</span>
+    <span wordnr="3" class="">gì</span>
+    <span wordnr="4" class="">đánh</span>
+    <span wordnr="5" class="">cảm</span>
+    <span wordnr="6" class="">ơn</span>
+</div>
+            `;
+            document.getElementById('htmlInput').value = exampleHtml;
+        });
+    </script>
+</body>
+</html>
+</content>
+</create_file>
