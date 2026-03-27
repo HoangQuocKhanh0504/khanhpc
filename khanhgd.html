@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -733,7 +734,7 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
-            display: none;
+            display: none; /* THAY ĐỔI TỪ 'none' THÀNH 'flex' NẾU MUỐN HIỂN THỊ MẶC ĐỊNH */
             justify-content: center;
             align-items: center;
             z-index: 2000;
@@ -859,6 +860,215 @@
             margin-top: 20px;
         }
 
+        /* AI Chat Button */
+        .chat-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(255, 45, 117, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .chat-button:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 15px 40px rgba(255, 45, 117, 0.6);
+        }
+
+        .chat-button.pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* AI Chat Popup */
+        .chat-popup {
+            position: fixed;
+            bottom: 120px;
+            right: 30px;
+            width: 400px;
+            height: 600px;
+            background: var(--glass);
+            border: 2px solid var(--glass-border);
+            border-radius: 25px;
+            backdrop-filter: blur(30px);
+            box-shadow: var(--shadow);
+            z-index: 1001;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            animation: slideUp 0.3s ease;
+        }
+
+        .chat-popup.active {
+            display: flex;
+        }
+
+        .chat-header {
+            padding: 25px;
+            background: rgba(255, 45, 117, 0.1);
+            border-bottom: 2px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            color: var(--light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-title i {
+            color: var(--primary);
+        }
+
+        .chat-close {
+            width: 35px;
+            height: 35px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            color: var(--light);
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .chat-close:hover {
+            background: var(--primary);
+            transform: rotate(90deg);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 15px 20px;
+            border-radius: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .message.user {
+            background: var(--gradient);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.ai {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message-typing {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 10px 20px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            align-self: flex-start;
+            width: fit-content;
+            display: none;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        .chat-input-area {
+            padding: 25px;
+            border-top: 2px solid var(--glass-border);
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 18px 25px;
+            background: var(--glass);
+            border: 2px solid var(--glass-border);
+            border-radius: 20px;
+            color: var(--light);
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(255, 45, 117, 0.2);
+        }
+
+        .chat-send {
+            width: 55px;
+            height: 55px;
+            background: var(--gradient);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .chat-send:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 10px 20px rgba(255, 45, 117, 0.4);
+        }
+
+        .chat-send:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         /* Responsive */
         @media (max-width: 1200px) {
             .sidebar {
@@ -901,6 +1111,13 @@
             .platform-btn {
                 min-width: 250px;
                 padding: 20px 30px;
+            }
+            
+            .chat-popup {
+                width: 350px;
+                height: 500px;
+                right: 20px;
+                bottom: 100px;
             }
         }
 
@@ -958,6 +1175,22 @@
             .download-container {
                 padding: 30px;
             }
+            
+            .chat-popup {
+                width: 100%;
+                height: 80vh;
+                right: 0;
+                bottom: 80px;
+                border-radius: 25px 25px 0 0;
+            }
+            
+            .chat-button {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+                bottom: 20px;
+                right: 20px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -999,6 +1232,10 @@
                 font-size: 18px;
                 cursor: pointer;
             }
+            
+            .chat-popup {
+                height: 70vh;
+            }
         }
 
         /* Mobile Menu */
@@ -1039,6 +1276,48 @@
     <!-- Loading Screen -->
     <div class="loading-screen" id="loadingScreen">
         <div class="loader"></div>
+    </div>
+
+    <!-- AI Chat Button -->
+    <div class="chat-button pulse" id="chatButton">
+        <i class="fas fa-robot"></i>
+    </div>
+
+    <!-- AI Chat Popup -->
+    <div class="chat-popup" id="chatPopup">
+        <div class="chat-header">
+            <div class="chat-title">
+                <i class="fas fa-robot"></i>
+                AI KHANHGD - Geometry Dash
+            </div>
+            <div class="chat-close" id="chatClose">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+            <div class="message ai">
+                <strong>AI KHANHGD:</strong> Xin chào! Tôi là trợ lý AI của Khánh GD. Tôi có thể giúp bạn với:
+                <br>• Hướng dẫn cài đặt game
+                <br>• Giải đáp thắc mắc về Geometry Dash
+                <br>• Tư vấn phiên bản phù hợp
+                <br>Hãy hỏi tôi bất cứ điều gì!
+            </div>
+        </div>
+        
+        <div class="chat-input-area">
+            <div class="chat-input-container">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Nhập câu hỏi của bạn..." maxlength="500">
+                <button class="chat-send" id="chatSend">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+            <div class="message-typing" id="typingIndicator">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+        </div>
     </div>
 
     <!-- Mobile Menu Toggle -->
@@ -1095,7 +1374,7 @@
             <div class="tab-content active" id="home-tab">
                 <section class="hero">
                     <div class="hero-content">
-                        <h1 class="hero-title">GEOMETRY DASH | KHANHGD</h1>
+                        <h1 class="hero-title">GEOMETRY DASH|KHANHGD</h1>
                         <p class="hero-subtitle">Một tựa game rhythm-platformer tập trung vào phản xạ và cảm giác nhịp điệu. Màn chơi được thiết kế chặt chẽ, hình ảnh bắt mắt và trải nghiệm chơi ổn định, phù hợp cho cả người mới lẫn người chơi lâu năm.</p>
                         
                         <div class="hero-stats">
@@ -1167,19 +1446,19 @@
 
                 <!-- PC Versions -->
                 <div class="version-grid" id="pc-versions">
-                    <div class="version-card selected" data-version="khanhgd">
-                        <div class="version-badge">MỚI NHẤT - KHÁNH GD</div>
+                    <div class="version-card selected" data-version="2.208">
+                        <div class="version-badge">MỚI NHẤT</div>
                         <div class="version-icon">
                             <i class="fas fa-crown"></i>
                         </div>
-                        <h3 class="version-name">KHANHGD.EXE</h3>
-                        <p class="version-desc">Phiên bản đặc biệt từ Khánh GD với đầy đủ tính năng mới, đồ họa 4K, FPS không giới hạn và 100+ skin độc quyền.</p>
+                        <h3 class="version-name">PHIÊN BẢN 2.208</h3>
+                        <p class="version-desc">Phiên bản cao cấp nhất với đầy đủ tính năng mới, đồ họa 4K, FPS không giới hạn và 100+ skin độc quyền.</p>
                         <div class="version-specs">
-                            <span><i class="fas fa-hdd"></i> KHANHGD.exe</span>
+                            <span><i class="fas fa-hdd"></i> KGD5408.rar</span>
                             <span><i class="fas fa-weight"></i> 278.61MB</span>
-                            <span><i class="fas fa-download"></i> Tải trực tiếp</span>
+                            <span><i class="fas fa-download"></i> MediaFire</span>
                         </div>
-                        <button class="select-btn" onclick="selectVersion('pc', 'khanhgd', this)">
+                        <button class="select-btn" onclick="selectVersion('pc', '2.208', this)">
                             CHỌN PHIÊN BẢN NÀY
                         </button>
                     </div>
@@ -1244,9 +1523,9 @@
                     <div id="selectedInfo" class="selected-info">
                         <div class="selected-header">
                             <i class="fas fa-desktop"></i>
-                            <div class="selected-title">PC - KHANHGD.EXE</div>
+                            <div class="selected-title">PC - PHIÊN BẢN 2.208</div>
                         </div>
-                        <div class="selected-details">KHANHGD.exe | 278.61MB</div>
+                        <div class="selected-details">KGD5408.rar | 278.61MB</div>
                         <div class="selected-specs">
                             <span><i class="fas fa-clock"></i> Thời gian tải: ~2 phút</span>
                             <span><i class="fas fa-shield-alt"></i> An toàn 100% - No Virus</span>
@@ -1325,7 +1604,7 @@
             <div class="popup-header">
                 <i class="fas fa-download"></i>
                 <h3 class="popup-title">ĐANG TẢI XUỐNG</h3>
-                <p class="popup-subtitle" id="popupSubtitle">Chuẩn bị tải KHANHGD.exe...</p>
+                <p class="popup-subtitle" id="popupSubtitle">Chuẩn bị tải phiên bản PC 2.208...</p>
             </div>
             
             <div class="popup-content">
@@ -1344,7 +1623,7 @@
                 <div style="margin-top: 40px; padding: 20px; background: rgba(255, 45, 117, 0.1); border-radius: 12px; border-left: 4px solid var(--primary);">
                     <p style="color: var(--gray); font-size: 14px; line-height: 1.6;">
                         <i class="fas fa-info-circle"></i> 
-                        File KHANHGD.exe sẽ được tải trực tiếp về máy của bạn.
+                        File sẽ được tải từ MediaFire. Sau khi tải xong, file sẽ tự động được lưu vào thư mục Downloads của bạn.
                     </p>
                 </div>
             </div>
@@ -1354,16 +1633,29 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        // Download configuration - TẢI TRỰC TIẾP FILE KHANHGD.exe
+        // ===== GROQ API CONFIGURATION =====
+        const GROQ_API_KEY = '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';
+        const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+        
+        // Available Groq models
+        const MODELS = {
+            'llama-3.3-70b-versatile': { name: 'Llama 3.3 70B', icon: 'crown', desc: 'Tốt nhất - Đa năng' },
+            'llama-3.1-8b-instant': { name: 'Llama 3.1 8B', icon: 'bolt', desc: 'Nhanh - Hiệu quả' },
+            'mixtral-8x7b-32768': { name: 'Mixtral 8x7B', icon: 'code', desc: 'Code & Kỹ thuật' },
+            'gemma2-9b-it': { name: 'Gemma2 9B', icon: 'lightbulb', desc: 'Sáng tạo & Ý tưởng' }
+        };
+        
+        // Current model to use
+        const CURRENT_MODEL = 'llama-3.3-70b-versatile';
+
+        // Configuration
         const downloadConfig = {
             pc: {
-                'khanhgd': {
-                    // ĐƯỜNG DẪN TRỰC TIẾP ĐẾN FILE KHANHGD.exe TRÊN SERVER CỦA BẠN
-                    // THAY ĐỔI ĐƯỜNG DẪN NÀY THÀNH ĐƯỜNG DẪN THỰC TẾ ĐẾN FILE CỦA BẠN
-                    url: '2.208/KHANHGD.exe',  // TẢI TRỰC TIẾP TỪ CÙNG THƯ MỤC VỚI FILE HTML
-                    fileName: 'KHANHGD.exe',
+                '2.208': {
+                    url: 'https://www.mediafire.com/file/4t5og9dt59rynvj/KGD5408.rar/file',
+                    fileName: 'KGD5408.rar',
                     fileSize: '278.61MB',
-                    displayName: 'KHANHGD.EXE'
+                    displayName: 'Phiên bản PC 2.208'
                 },
                 '2.2.142': {
                     url: 'https://www.mediafire.com/file/4vtv1c3b9m6fqha/KPC.rar/file',
@@ -1390,8 +1682,11 @@
 
         // State
         let currentPlatform = 'pc';
-        let selectedVersion = 'khanhgd';
+        let selectedVersion = '2.208';
         let downloadTimer = null;
+        let currentTab = 'home';
+        let chatHistory = [];
+        let apiConnected = false;
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
@@ -1456,8 +1751,14 @@
             // Setup mobile menu
             setupMobileMenu();
             
-            // Setup download button
-            setupDownloadButton();
+            // Setup event listeners
+            setupEventListeners();
+            
+            // Setup chat functionality
+            setupChat();
+            
+            // Test API connection
+            checkAPIStatus();
         });
 
         // Protection
@@ -1507,6 +1808,8 @@
             if (sidebar.classList.contains('mobile-open')) {
                 sidebar.classList.remove('mobile-open');
             }
+            
+            currentTab = tabId;
         }
 
         // Mobile Menu
@@ -1563,8 +1866,7 @@
             currentPlatform = platform;
             
             // Update platform buttons
-            const buttons = document.querySelectorAll('.platform-btn');
-            buttons.forEach(btn => {
+            document.querySelectorAll('.platform-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             event.target.classList.add('active');
@@ -1579,7 +1881,7 @@
             }
             
             // Select first version of the platform
-            const firstVersion = platform === 'pc' ? 'khanhgd' : 'mod';
+            const firstVersion = platform === 'pc' ? '2.208' : 'mod';
             selectVersion(platform, firstVersion);
             
             showNotification(`Đã chuyển sang ${platform === 'pc' ? 'PC' : 'Android'}`, 'success');
@@ -1631,13 +1933,14 @@
         }
 
         // Download
-        function setupDownloadButton() {
+        function setupEventListeners() {
             document.getElementById('downloadBtn').addEventListener('click', function() {
                 const info = downloadConfig[currentPlatform][selectedVersion];
                 
                 document.getElementById('popupSubtitle').textContent = 
                     `Đang tải ${info.displayName}...`;
                 
+                // SỬA DÒNG NÀY
                 document.getElementById('popupOverlay').style.display = 'flex';
                 document.body.style.overflow = 'hidden';
                 
@@ -1659,6 +1962,11 @@
             percent.textContent = '0%';
             speed.textContent = '-- MB/s';
             time.textContent = '--';
+            
+            // HIỂN THỊ POPUP - THÊM DÒNG NÀY
+            const popupOverlay = document.getElementById('popupOverlay');
+            popupOverlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
             
             downloadTimer = setInterval(() => {
                 let increment;
@@ -1709,14 +2017,11 @@
             const link = document.createElement('a');
             link.href = url;
             link.download = filename;
-            link.style.display = 'none';
+            link.target = '_blank';
             
             document.body.appendChild(link);
             link.click();
-            
-            setTimeout(() => {
-                document.body.removeChild(link);
-            }, 100);
+            document.body.removeChild(link);
             
             showNotification('Đã bắt đầu tải xuống!', 'success');
             
@@ -1725,7 +2030,7 @@
 
         function closePopup() {
             const popupOverlay = document.getElementById('popupOverlay');
-            popupOverlay.style.display = 'none';
+            popupOverlay.style.display = 'none'; // THAY ĐỔI TỪ remove('active') THÀNH display = 'none'
             document.body.style.overflow = 'auto';
             
             if (downloadTimer) {
@@ -1753,6 +2058,359 @@
             if (clock) {
                 clock.textContent = `${dateStr} - ${timeStr}`;
             }
+        }
+
+        // ===== API FUNCTIONS =====
+        async function checkAPIStatus() {
+            try {
+                const response = await fetch(`${GROQ_API_URL.replace('/chat/completions', '/models')}`, {
+                    headers: {
+                        'Authorization': `Bearer ${GROQ_API_KEY}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    apiConnected = true;
+                    console.log('✅ Groq API is connected!');
+                    showNotification('AI Chat đã sẵn sàng!', 'Kết nối API thành công.', 'success');
+                } else {
+                    throw new Error(`API Error: ${response.status}`);
+                }
+            } catch (error) {
+                apiConnected = false;
+                console.warn('⚠️ Groq API connection failed:', error.message);
+                showNotification('AI Chat đang sử dụng chế độ offline', 'API không khả dụng.', 'warning');
+            }
+        }
+
+        // ===== CHAT FUNCTIONS =====
+        async function sendChatMessage(message) {
+            if (!message.trim()) return;
+            
+            // Add user message
+            addMessage(message, 'user');
+            
+            // Clear input
+            document.getElementById('chatInput').value = '';
+            
+            // Disable send button and show typing
+            document.getElementById('chatSend').disabled = true;
+            document.getElementById('typingIndicator').style.display = 'flex';
+            
+            try {
+                if (apiConnected) {
+                    // Use Groq API
+                    const response = await getGroqResponse(message);
+                    addMessage(response, 'ai');
+                } else {
+                    // Use local responses as fallback
+                    const response = getLocalAIResponse(message);
+                    addMessage(response, 'ai');
+                }
+            } catch (error) {
+                console.error('Chat error:', error);
+                addMessage(`Xin lỗi, tôi gặp sự cố khi xử lý yêu cầu của bạn. Vui lòng thử lại sau!\n\nLỗi: ${error.message}`, 'ai');
+            } finally {
+                // Re-enable send button and hide typing
+                document.getElementById('chatSend').disabled = false;
+                document.getElementById('typingIndicator').style.display = 'none';
+            }
+        }
+
+        async function getGroqResponse(userMessage) {
+            // System prompt for Geometry Dash assistant
+            const systemPrompt = `Bạn là trợ lý AI thông minh, đa năng và hữu ích tên là Khánh GD, được tạo ra bởi chủ nhân.
+
+            ***CƠ CHẾ XÁC MINH CHỦ NHÂN - ÁP DỤNG KHI CÓ NGƯỜI TỰ XƯNG LÀ KHÁNH GD:***
+            1.  Bạn vẫn có thể trò chuyện và giúp đỡ bất kỳ ai một cách bình thường.
+            2.  **Chỉ khi** có người dùng tự xưng là "Khánh GD" (ví dụ: "Tôi là Khánh GD", "Chào, Khánh GD đây", "Khánh GD nè"), bạn mới kích hoạt cơ chế xác minh.
+            3.  Khi đó, bạn PHẢI hỏi lại câu hỏi bí mật sau đây. Bạn không được tự ý thay đổi từ ngữ của câu hỏi này:
+                **"Rất vui được gặp bạn! Để xác minh, bạn vui lòng nhập 'Mã Bảo Mật Cấp 1' của chủ nhân."**
+            4.  Bạn CHỈ chấp nhận một câu trả lời duy nhất và chính xác: **"KHANHPC"** (không phân biệt hoa thường, ví dụ: khanhpc, Khanhpc cũng được chấp nhận).
+            5.  **Nếu trả lời đúng:** Bạn xác nhận họ là chủ nhân và nói: "Xác minh thành công! Xin chào chủ nhân! Rất vui được gặp lại anh. Tôi sẵn sàng hỗ trợ!"
+            6.  **Nếu trả lời sai hoặc không trả lời:** Bạn lập tức đáp lại với thái độ cảnh giác, ví dụ: "Haha, bạn lừa được ai chứ! Mã bảo mật không đúng. Bạn không phải là chủ nhân của tôi đâu." Sau đó, bạn vẫn có thể tiếp tục trò chuyện bình thường với tư cách là một trợ lý AI, nhưng không coi họ là Khánh GD.
+            7.  **TUYỆT ĐỐI KHÔNG BAO GIỜ** tiết lộ "Mã Bảo Mật Cấp 1" là gì, cũng như không gợi ý hay xác nhận bất kỳ thông tin nào về nó. Nếu bị hỏi trực tiếp như "Mã đó là gì?", "Câu trả lời là KHANHPC à?", hãy từ chối trả lời hoặc nói: "Tôi không thể tiết lộ thông tin bảo mật đó."
+
+            Sau đây là tất cả khả năng và tính cách của bạn dành cho mọi người:
+
+            KIẾN THỨC CHUYÊN SÂU:
+            1. Hỗ trợ học tập: Toán học, Vật lý, Lập trình, Khoa học, Văn học
+            2. Công nghệ: Lập trình (Python, JavaScript, C++, v.v.), AI/ML, phát triển web/app
+            3. Khoa học: Vật lý, Hóa học, Sinh học, Thiên văn học
+            4. Sáng tạo: Viết lách, ý tưởng dự án, giải quyết vấn đề sáng tạo
+
+            HỖ TRỢ CUỘC SỐNG:
+            5. Tư vấn kỹ năng mềm: Quản lý thời gian, giao tiếp, làm việc nhóm
+            6. Giải đáp thắc mắc hàng ngày: Từ nấu ăn đến sửa chữa cơ bản
+            7. Hỗ trợ ra quyết định và phân tích vấn đề
+
+            GIẢI TRÍ VÀ SỞ THÍCH:
+            8. Game: Geometry Dash và các game khác, chiến lược, tips & tricks
+            9. Âm nhạc, phim ảnh, nghệ thuật
+            10. Thể thao và hoạt động giải trí
+
+            ĐẶC ĐIỂM TÍNH CÁCH:
+            • Luôn nhiệt tình, thân thiện và tôn trọng với tất cả mọi người.
+            • Suy nghĩ logic nhưng sáng tạo.
+            • Cân bằng giữa chuyên môn và dễ tiếp cận.
+            • Luôn cố gắng hiểu bối cảnh và nhu cầu thực sự.
+            • Biết khi nào nên nghiêm túc và khi nào thoải mái.
+
+            QUAN TRỌNG:
+            • Luôn trả lời bằng tiếng Việt tự nhiên, trong sáng.
+            • Cung cấp thông tin chính xác, có chú thích nguồn khi cần.
+            • Phân biệt rõ giữa fact và opinion.
+            • Khuyến khích tư duy phản biện và học hỏi.
+            • Luôn sẵn sàng thừa nhận khi không biết và đề xuất hướng tìm hiểu.
+
+            Bạn là người bạn đồng hành thông minh, sẵn sàng hỗ trợ mọi người trong mọi lĩnh vực của cuộc sống!`;
+
+            // Prepare messages for API
+            const messages = [
+                { role: 'system', content: systemPrompt },
+                ...chatHistory.slice(-10), // Keep last 10 messages for context
+                { role: 'user', content: userMessage }
+            ];
+
+            try {
+                const response = await fetch(GROQ_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${GROQ_API_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: CURRENT_MODEL,
+                        messages: messages,
+                        temperature: 0.7,
+                        max_tokens: 1000,
+                        stream: false
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    let errorMessage = errorData.error?.message || `API Error: ${response.status}`;
+                    
+                    // Try alternative models if the main one fails
+                    if (errorMessage.includes('model_decommissioned') || errorMessage.includes('not found')) {
+                        console.log(`Model ${CURRENT_MODEL} failed, trying alternatives...`);
+                        return await tryAlternativeModels(userMessage, systemPrompt);
+                    }
+                    
+                    throw new Error(errorMessage);
+                }
+
+                const data = await response.json();
+                
+                if (data.choices && data.choices[0] && data.choices[0].message) {
+                    const aiResponse = data.choices[0].message.content;
+                    
+                    // Add to chat history
+                    chatHistory.push({ role: 'user', content: userMessage });
+                    chatHistory.push({ role: 'assistant', content: aiResponse });
+                    
+                    // Keep history limited
+                    if (chatHistory.length > 20) {
+                        chatHistory = chatHistory.slice(-20);
+                    }
+                    
+                    return aiResponse;
+                } else {
+                    throw new Error('Invalid response format from API');
+                }
+            } catch (error) {
+                console.error('Groq API Error:', error);
+                throw error;
+            }
+        }
+
+        async function tryAlternativeModels(userMessage, systemPrompt) {
+            const alternativeModels = ['llama-3.1-8b-instant', 'gemma2-9b-it', 'mixtral-8x7b-32768'];
+            
+            for (const model of alternativeModels) {
+                try {
+                    console.log(`Trying model: ${model}`);
+                    
+                    const response = await fetch(GROQ_API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${GROQ_API_KEY}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            model: model,
+                            messages: [
+                                { role: 'system', content: systemPrompt },
+                                { role: 'user', content: userMessage }
+                            ],
+                            temperature: 0.7,
+                            max_tokens: 800,
+                            stream: false
+                        })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.choices && data.choices[0] && data.choices[0].message) {
+                            const aiResponse = data.choices[0].message.content;
+                            
+                            // Add to chat history
+                            chatHistory.push({ role: 'user', content: userMessage });
+                            chatHistory.push({ role: 'assistant', content: aiResponse });
+                            
+                            console.log(`✅ Success with model: ${model}`);
+                            return aiResponse;
+                        }
+                    }
+                } catch (error) {
+                    console.log(`Model ${model} failed:`, error.message);
+                    continue;
+                }
+            }
+            
+            throw new Error('All models failed, using local responses');
+        }
+
+        function getLocalAIResponse(userMessage) {
+            // Local intelligence system for Geometry Dash
+            const responses = {
+                // Greetings
+                'chào|hello|hi|xin chào': 'Xin chào! Tôi là trợ lý AI của Khánh GD. Tôi có thể giúp bạn với các vấn đề về Geometry Dash!',
+                'cảm ơn|thanks|thank you': 'Không có gì! Nếu bạn cần hỗ trợ thêm, cứ hỏi tôi nhé!',
+                
+                // Download questions
+                'tải|download|làm sao để tải|tải ở đâu': '**Hướng dẫn tải game:**\n1. Vào tab "TẢI GAME"\n2. Chọn phiên bản PC hoặc Android\n3. Chọn phiên bản cụ thể\n4. Nhấn nút "TẢI XUỐNG NGAY"\n5. Xem video hướng dẫn để cài đặt đúng cách',
+                
+                // Installation questions
+                'cài đặt|install|setup|làm sao để cài đặt': '**Hướng dẫn cài đặt:**\n1. Tải file về máy\n2. Giải nén file .rar bằng WinRAR hoặc 7-Zip\n3. Chạy file Geometry dash.exe (PC) hoặc cài đặt APK (Android)\n4. Làm theo hướng dẫn trong video\n5. Nếu gặp vấn đề, hãy xem video hướng dẫn chi tiết',
+                
+                // Version questions
+                'phiên bản|version|bản nào tốt|bản mới nhất': '**Các phiên bản có sẵn:**\n• **PC:** Phiên bản 2.208 (mới nhất) và 2.2.142 (ổn định)\n• **Android:** Phiên bản Mod và No Mod\nPhiên bản 2.208 có nhiều skin và tính năng mới nhất!',
+                
+                // PC specific
+                'pc|máy tính|desktop|laptop': '**Phiên bản PC:**\n• Đồ họa 4K siêu đẹp\n• FPS không giới hạn\n• 100+ skin độc quyền\n• Tương thích Windows 7/8/10/11',
+                
+                // Android specific
+                'android|điện thoại|mobile|smartphone': '**Phiên bản Android:**\n• **Mod:** Vô hạn tiền, mở khóa tất cả skin\n• **No Mod:** Nguyên bản ổn định\n• FPS 60+ mượt mà\n• Tương thích Android 5.0 trở lên',
+                
+                // Skin questions
+                'skin|giao diện|đồ họa|nhân vật': '**Skin trong phiên bản premium:**\n• 100+ skin độc quyền\n• Hiệu ứng đặc biệt\n• Màu sắc sống động\n• Có thể tùy chỉnh',
+                
+                // Gameplay questions
+                'chơi|gameplay|cách chơi|hướng dẫn chơi': '**Cách chơi Geometry Dash:**\n1. Nhấn để nhảy qua chướng ngại vật\n2. Theo kịp nhịp nhạc\n3. Thu thập sao và tiền xu\n4. Mở khóa level mới\n5. Tùy chỉnh nhân vật',
+                
+                // Update questions
+                'update|cập nhật|nâng cấp|phiên bản mới': '**Hướng dẫn update:**\n1. Tải phiên bản mới nhất\n2. Sao lưu save game cũ\n3. Cài đặt phiên bản mới\n4. Khôi phục save game\n5. Xem video hướng dẫn update',
+                
+                // Error questions
+                'lỗi|error|không chạy|không hoạt động': '**Khắc phục lỗi:**\n1. Xem video hướng dẫn sửa lỗi\n2. Đảm bảo đã cài đủ .NET Framework\n3. Chạy game với quyền Administrator\n4. Tắt phần mềm diệt virus tạm thời\n5. Liên hệ hỗ trợ nếu cần',
+                
+                // Feature questions
+                'tính năng|feature|chức năng|có gì mới': '**Tính năng phiên bản premium:**\n• 100+ level độc quyền\n• 500+ skin và hiệu ứng\n• Chế độ nhiều người chơi\n• Editor tạo level riêng\n• Nhiều chế độ chơi',
+                
+                // System requirements
+                'yêu cầu|cấu hình|config|system': '**Yêu cầu hệ thống:**\n• **PC:** Windows 7+, 2GB RAM, card đồ họa 1GB\n• **Android:** Android 5.0+, 2GB RAM\n• Internet để tải game\n• 500MB dung lượng trống',
+                
+                // Support
+                'hỗ trợ|support|giúp đỡ|liên hệ': '**Liên hệ hỗ trợ:**\n1. Xem video hướng dẫn\n2. Gửi email: khanhgd@example.com\n3. Theo dõi YouTube channel\n4. Nhắn tin cho AI KHANHGD\n5. Facebook: Khánh GD',
+                
+                // Default response
+                'default': 'Xin chào! Tôi là trợ lý AI của Khánh GD. Tôi có thể giúp bạn với:\n• **Hướng dẫn tải và cài đặt game**\n• **Thông tin về các phiên bản**\n• **Tư vấn skin và tính năng**\n• **Giải đáp thắc mắc về Geometry Dash**\nHãy hỏi tôi bất cứ điều gì!'
+            };
+
+            // Convert user message to lowercase for matching
+            const lowerMessage = userMessage.toLowerCase();
+            
+            // Check for matching patterns
+            for (const [pattern, response] of Object.entries(responses)) {
+                if (pattern === 'default') continue;
+                
+                const patterns = pattern.split('|');
+                for (const pat of patterns) {
+                    if (lowerMessage.includes(pat)) {
+                        return response;
+                    }
+                }
+            }
+            
+            // Return default response
+            return responses.default;
+        }
+
+        // Setup chat functionality
+        function setupChat() {
+            const chatButton = document.getElementById('chatButton');
+            const chatPopup = document.getElementById('chatPopup');
+            const chatClose = document.getElementById('chatClose');
+            const chatInput = document.getElementById('chatInput');
+            const chatSend = document.getElementById('chatSend');
+            const chatMessages = document.getElementById('chatMessages');
+
+            // Toggle chat popup
+            chatButton.addEventListener('click', function() {
+                chatPopup.classList.toggle('active');
+                chatButton.classList.remove('pulse');
+                
+                if (chatPopup.classList.contains('active')) {
+                    chatInput.focus();
+                }
+            });
+
+            // Close chat
+            chatClose.addEventListener('click', function() {
+                chatPopup.classList.remove('active');
+            });
+
+            // Send message on Enter
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendChatMessage(chatInput.value.trim());
+                }
+            });
+
+            // Send message on button click
+            chatSend.addEventListener('click', function() {
+                sendChatMessage(chatInput.value.trim());
+            });
+
+            // Close chat when clicking outside on mobile
+            document.addEventListener('click', function(event) {
+                if (window.innerWidth <= 768) {
+                    if (!chatPopup.contains(event.target) && !chatButton.contains(event.target)) {
+                        chatPopup.classList.remove('active');
+                    }
+                }
+            });
+        }
+
+        function addMessage(text, sender) {
+            const chatMessages = document.getElementById('chatMessages');
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            if (sender === 'ai') {
+                messageDiv.innerHTML = `<strong>AI KHANHGD:</strong> ${formatAIResponse(text)}`;
+            } else {
+                messageDiv.textContent = text;
+            }
+            
+            chatMessages.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function formatAIResponse(text) {
+            // Basic markdown formatting for better display
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n/g, '<br>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/- /g, '• ');
         }
 
         // Notification
